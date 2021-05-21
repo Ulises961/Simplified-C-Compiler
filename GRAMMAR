@@ -1,0 +1,20 @@
+program -> typeSpec varDeclInit; | stmt
+varDeclInit -> varDeclId | varDeclId : simpleExp
+varDeclId -> ID | ID[NUMCONST]
+typeSpec -> int | bool | char
+stmt -> exp; | ; | if simpleExp stmt | if simpleExp stmt else stmt | while simpleExp do stmt |break;| return;|return exp ;
+
+compoundStmt -> {localDecls stmt}
+localDecls -> localDecls scopedVarDecl | scopedVarDecl
+scopedVarDecl -> typeSpec varDeclInit;
+
+exp -> varDeclId = exp | simpleExp
+simpleExp -> simpleExp or andExp | andExp
+andExp -> andExp and unaryRelExp | unaryRelExp
+unaryRelExp -> not unaryRelExp | sumExp relOp sumExp
+relOp -> <= | < | >| >= | == | != 
+sumExp ->  sumExp sumOp mulExp | mulExp
+sumOp -> + | -
+mulExp -> mulExp mulOp unaryExp | unaryExp
+mulOp -> * | / | %
+unaryExp -> - unaryExp | ID | true | false
