@@ -16,18 +16,17 @@ ID          {LETTER}({LETTER}|{DIGIT})*
           return INT;}
 {ID}     {yylval.lexeme = strdup(yytext);
           return ID;}
-
+":"     {return ':';}
 "+"     {return '+';}
 "-"     {return '-';}
 "*"     {return '*';}
 "/"     {return '/';}
-"%"     {return '%';}
+
 "bool"  {return BOOL;}
-"char"  {return CHAR;}
 "break" {return BREAK;}
-"&&"    {return AND;}
+"and"    {return AND;}
 "or"    {return OR;}
-"!"     {return NOT;}
+"not"     {return NOT;}
 "if"    {return IF;}
 "else"  {return ELSE;}
 "while" {return WHILE;}
@@ -46,5 +45,9 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "}"     {return '}';}
 "("     {return '(';}
 ")"     {return ')';}
-
+"return" {return RETURN;}
 %%
+
+main(){
+
+}

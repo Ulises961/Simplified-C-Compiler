@@ -1,20 +1,35 @@
-program -> typeSpec varDeclInit; | stmt
+program -> typeSpec varDeclInit; program | stmt program
 varDeclInit -> varDeclId | varDeclId : simpleExp
-varDeclId -> ID | ID[NUMCONST]
+varDeclId -> ID | ID[INT]
 typeSpec -> int | bool | char
-stmt -> exp; | ; | if simpleExp stmt | if simpleExp stmt else stmt | while simpleExp do stmt |break;| return;|return exp ;
+stmt -> exp; 
+        |stmt;
+        | ; 
+        | if (simpleExp) compoundStmt 
+        | if (simpleExp) compundStmt else compundStmt 
+        | while simpleExp do compoundStmt 
+        | break;
+        | return;
+        | return exp ;
 
 compoundStmt -> {localDecls stmt}
 localDecls -> localDecls scopedVarDecl | scopedVarDecl
 scopedVarDecl -> typeSpec varDeclInit;
-
-exp -> varDeclId = exp | simpleExp
-simpleExp -> simpleExp or andExp | andExp
-andExp -> andExp and unaryRelExp | unaryRelExp
-unaryRelExp -> not unaryRelExp | sumExp relOp sumExp
+exp -> program | simpleExp
+simpleExp -> simpleExp or simpleExp | andExp | true | false
+andExp -> andExp and unaryRelExp | unaryRelExp 
+unaryRelExp -> not unaryRelExp | sumExp relOp sumExp | unaryExp
 relOp -> <= | < | >| >= | == | != 
 sumExp ->  sumExp sumOp mulExp | mulExp
 sumOp -> + | -
 mulExp -> mulExp mulOp unaryExp | unaryExp
-mulOp -> * | / | %
-unaryExp -> - unaryExp | ID | true | false
+mulOp -> * | / 
+unaryExp -> - unaryExp | ID 
+
+
+
+bool x : true;
+bool y : false;
+if (x or y) { x = false;}
+return;
+
