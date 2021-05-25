@@ -54,6 +54,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "}"     {return '}';}
 "("     {return '(';}
 ")"     {return ')';}
+"return" {return RETURN;}
 
 
 "int"  {yylval.lexeme = strdup(yytext);
