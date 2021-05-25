@@ -48,6 +48,7 @@ int symbols[26];
 %type <integer> intExpr
 %type <boolean> boolExpr
 %type <lexeme> typeSpec
+%type <boolean> relOp
 
 %left '-' '+'
 %left '*' '/'
@@ -67,6 +68,13 @@ program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1))
       | ID '\n'            {printf("ID: %s\n", $1); exit(0);}
       | INT '\n' {printf("Int type recognized\n"); exit(0);}
       | declaration
+      | relOp '\n' {
+           if ($1 == 1)
+                  printf("Result: true (size: %lu)\n", sizeof($1));
+            else
+                printf("Result: false (size: %lu)\n", sizeof($1));  
+            exit(0);
+      }
       ;
 
 declaration: typeSpec ID ':' intExpr'\n' {
@@ -105,7 +113,14 @@ boolExpr : boolExpr AND boolExpr {$$ = $1 && $3;}
       | BOOL {$$ = $1;}
       | '(' boolExpr ')' { $$ = $2; }
       ;
-   
+
+relOp : intExpr SMEQ intExpr  {if ($1 <= $3) $$ = 1;else $$ = 0;}
+      | intExpr SM intExpr  {if ($1 < $3) $$ = 1;else $$ = 0;}
+      | intExpr GR intExpr  {if ($1 > $3) $$ = 1;else $$ = 0;}
+      | intExpr GREQ intExpr  {if ($1 >= $3) $$ = 1;else $$ = 0;}
+      | intExpr EQ intExpr  {if ($1 == $3) $$ = 1;else $$ = 0;}
+      | intExpr NEQ intExpr  {if ($1 != $3) $$ = 1;else $$ = 0;}
+      ;
 
 %%
 
