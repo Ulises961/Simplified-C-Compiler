@@ -60,7 +60,35 @@ int symbols[26];
 
 
 %%
-program  : intExpr ';'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
+program: program statement '\n'
+      |
+      ;
+
+statement: expr 
+      ;
+
+expr : intExpr { printf("Result: %d\n", $1); }
+      | boolExpr { if ($1 == 1) printf("Result: true\n"); else printf("Result: false\n");}
+      ;
+
+intExpr  : intExpr '+' intExpr  {$$ = $1 + $3;}
+      | intExpr '-' intExpr  {$$ = $1 - $3;}
+      | intExpr '*' intExpr  {$$ = $1 * $3;}
+      | intExpr '/' intExpr  {$$ = $1 / $3;}
+      | NUM            {$$ = $1;}
+      | '-' intExpr %prec UMINUS {$$ = -$2;}
+      | '(' intExpr ')' { $$ = $2; }
+      ;
+
+boolExpr : boolExpr AND boolExpr { $$ = $1 && $3; }
+      | boolExpr OR boolExpr { $$ = $1 || $3; }
+      | NOT boolExpr { if ($2==1) { $$ = 0; } else { $$ = 1; } } 
+      | BOOL { $$  = $1; }
+      | '(' boolExpr ')' { $$ = $2; }
+      ;
+
+/*
+.. : intExpr ';'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
       | boolExpr ';' {
             if ($1 == 1)
                   printf("Result: true (size: %lu)\n", sizeof($1));
@@ -100,15 +128,6 @@ declaration: typeSpec ID ':' intExpr {
 typeSpec: INT 
       | BOOLEAN ;
 
-intExpr  : intExpr '+' intExpr  {$$ = $1 + $3;}
-      | intExpr '-' intExpr  {$$ = $1 - $3;}
-      | intExpr '*' intExpr  {$$ = $1 * $3;}
-      | intExpr '/' intExpr  {$$ = $1 / $3;}
-      | NUM            {$$ = $1;}
-      | '-' intExpr %prec UMINUS {$$ = -$2;}
-      | '(' intExpr ')' { $$ = $2; }
-      ;
-
 boolExpr : boolExpr AND boolExpr {$$ = $1 && $3;}
       | boolExpr OR boolExpr {$$ = $1 || $3;}
       | NOT boolExpr { if($2==1){ $$=0; }else{ $$=1;} } 
@@ -123,7 +142,7 @@ relOp : intExpr SMEQ intExpr  {if ($1 <= $3) $$ = 1;else $$ = 0;}
       | intExpr EQ intExpr  {if ($1 == $3) $$ = 1;else $$ = 0;}
       | intExpr NEQ intExpr  {if ($1 != $3) $$ = 1;else $$ = 0;}
       ;
-
+*/
 %%
 
 #include "lex.yy.c"
