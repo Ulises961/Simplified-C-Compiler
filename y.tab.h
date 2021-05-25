@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.3.2.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -61,12 +61,12 @@ extern int yydebug;
     ELSE = 267,
     WHILE = 268,
     DO = 269,
-    EQ = 270,
-    NEQ = 271,
-    GREQ = 272,
-    GR = 273,
-    SM = 274,
-    SMEQ = 275,
+    SMEQ = 270,
+    SM = 271,
+    GR = 272,
+    GREQ = 273,
+    EQ = 274,
+    NEQ = 275,
     TRUE = 276,
     FALSE = 277,
     RETURN = 278,
@@ -88,12 +88,12 @@ extern int yydebug;
 #define ELSE 267
 #define WHILE 268
 #define DO 269
-#define EQ 270
-#define NEQ 271
-#define GREQ 272
-#define GR 273
-#define SM 274
-#define SMEQ 275
+#define SMEQ 270
+#define SM 271
+#define GR 272
+#define GREQ 273
+#define EQ 274
+#define NEQ 275
 #define TRUE 276
 #define FALSE 277
 #define RETURN 278
@@ -103,23 +103,16 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
 union YYSTYPE
 {
-#line 17 "Parser.y" /* yacc.c:1921  */
+#line 17 "Parser.y"
 
-<<<<<<< HEAD
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
-       bool boolean;
-       
-=======
-#line 116 "y.tab.h"
->>>>>>> 45fce7213896131422c54fcb7c043bd8ab2686c5
 
-#line 115 "y.tab.h" /* yacc.c:1921  */
+#line 114 "y.tab.h"
+
 };
-
 typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
