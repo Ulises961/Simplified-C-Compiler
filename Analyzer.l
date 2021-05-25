@@ -1,7 +1,8 @@
-%option noyywrap
 %{
 #include <stdlib.h>
 #include <string.h>
+void yyerror(char *);
+#include "y.tab.h"
 %}
 
 DIGIT       [0-9]
@@ -11,11 +12,10 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 
 %%
 
-[ \t\n] {/* skip blanks */}
+[ \t] {/* skip blanks */}
 {INT}    {yylval.value = atoi(yytext);
           return INT;}
-{ID}     {yylval.lexeme = strdup(yytext);
-          return ID;}
+
 ":"     {return ':';}
 "+"     {return '+';}
 "-"     {return '-';}
@@ -37,17 +37,24 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 ">="    {return GREQ;}
 "=="    {return EQ;}
 "!="    {return NEQ;}
-"true"  {return 'true';}
-"false" {return 'false';}
+"true"  {return TRUE;}
+"false" {return FALSE;}
 "["     {return '[';}
 "]"     {return ']';}
 "{"     {return '{';}
 "}"     {return '}';}
 "("     {return '(';}
 ")"     {return ')';}
-"return" {return RETURN;}
+\n      {return '\n';}
+
+{ID}     {yylval.lexeme = strdup(yytext);
+          return ID;}
+
+
+. yyerror("invalid character"); // error for all not recognized characters
+
 %%
 
-main(){
-
+int yywrap(void) {
+    return 1;
 }

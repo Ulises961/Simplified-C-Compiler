@@ -1,9 +1,9 @@
-program -> typeSpec varDeclInit; program | stmt program
+program -> typeSpec varDeclInit; | stmt | program program
 varDeclInit -> varDeclId | varDeclId : simpleExp
 varDeclId -> ID | ID[INT]
-typeSpec -> int | bool | char
+typeSpec -> int | bool 
 stmt -> exp; 
-        |stmt;
+      /*  |stmt;  */
         | ; 
         | if (simpleExp) compoundStmt 
         | if (simpleExp) compundStmt else compundStmt 
@@ -16,7 +16,7 @@ compoundStmt -> {localDecls stmt}
 localDecls -> localDecls scopedVarDecl | scopedVarDecl
 scopedVarDecl -> typeSpec varDeclInit;
 exp -> program | simpleExp
-simpleExp -> simpleExp or simpleExp | andExp | true | false
+simpleExp -> simpleExp or simpleExp | andExp |unaryExp
 andExp -> andExp and unaryRelExp | unaryRelExp 
 unaryRelExp -> not unaryRelExp | sumExp relOp sumExp | unaryExp
 relOp -> <= | < | >| >= | == | != 
@@ -24,7 +24,7 @@ sumExp ->  sumExp sumOp mulExp | mulExp
 sumOp -> + | -
 mulExp -> mulExp mulOp unaryExp | unaryExp
 mulOp -> * | / 
-unaryExp -> - unaryExp | ID 
+unaryExp -> - unaryExp | ID |  true | false 
 
 
 
@@ -32,4 +32,5 @@ bool x : true;
 bool y : false;
 if (x or y) { x = false;}
 return;
+
 
