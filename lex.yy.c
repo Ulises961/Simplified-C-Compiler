@@ -950,7 +950,7 @@ YY_RULE_SETUP
 case 35:
 YY_RULE_SETUP
 #line 69 "Analyzer.l"
-yyerror("invalid character"); // error for all not recognized characters
+yyerror("Parsing error, invalid character"); // error for all not recognized characters
 	YY_BREAK
 case 36:
 YY_RULE_SETUP

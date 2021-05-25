@@ -105,7 +105,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "Parser.y"
+#line 17 "Parser.y"
 
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int

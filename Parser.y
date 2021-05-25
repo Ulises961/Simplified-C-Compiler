@@ -10,7 +10,6 @@
 void yyerror(char *);
 int yylex(void);
 
-symbol symbols;
 
 %}
 
@@ -93,7 +92,7 @@ boolExpr : boolExpr AND boolExpr    { $$ = $1 && $3; }
       ;
 
 varDecl: typeSpec ID ':' expr {                                   // assignment of true or false values to int variable makes automatic conversion
-            if (strcmp($1,"bool")==0 && ($4 != 0 && $4 != 1)){    // for bool variables only true, false, 0 a nd 1 are accepted
+            if (strcmp($1,"bool")==0 && ($4 != 0 && $4 != 1)){    // for bool variables only true, false, 0 and 1 are accepted
                   yyerror("TypeError, cannot assign int value to bool variable...\n");
                   exit(1);
             }
@@ -130,6 +129,8 @@ void yyerror(char *s) {
 }
 
 int main(void) {
+
       yyparse();
+
       return 0;
 }
