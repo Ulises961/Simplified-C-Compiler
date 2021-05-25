@@ -61,12 +61,12 @@ extern int yydebug;
     ELSE = 267,
     WHILE = 268,
     DO = 269,
-    EQ = 270,
-    NEQ = 271,
-    GREQ = 272,
-    GR = 273,
-    SM = 274,
-    SMEQ = 275,
+    SMEQ = 270,
+    SM = 271,
+    GR = 272,
+    GREQ = 273,
+    EQ = 274,
+    NEQ = 275,
     TRUE = 276,
     FALSE = 277,
     RETURN = 278,
@@ -88,12 +88,12 @@ extern int yydebug;
 #define ELSE 267
 #define WHILE 268
 #define DO 269
-#define EQ 270
-#define NEQ 271
-#define GREQ 272
-#define GR 273
-#define SM 274
-#define SMEQ 275
+#define SMEQ 270
+#define SM 271
+#define GR 272
+#define GREQ 273
+#define EQ 274
+#define NEQ 275
 #define TRUE 276
 #define FALSE 277
 #define RETURN 278

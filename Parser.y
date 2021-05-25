@@ -33,12 +33,12 @@ int symbols[26];
 %token ELSE
 %token WHILE
 %token DO
-%token EQ
-%token NEQ
-%token GREQ
-%token GR
-%token SM
 %token SMEQ
+%token SM 
+%token GR 
+%token GREQ 
+%token EQ 
+%token NEQ 
 %token TRUE
 %token FALSE
 %token RETURN
@@ -50,11 +50,12 @@ int symbols[26];
 %type <integer> boolExpr
 %type <integer> expr
 %type <lexeme> typeSpec
-%type <boolean> relOp
+%type <integer> relExpr
 
 %left '-' '+'
 %left '*' '/'
 %left AND OR
+%left SMEQ SM GR GREQ EQ NEQ
 %right NOT
 %right UMINUS
 
@@ -68,24 +69,25 @@ statement: expr
       | varDecl
       ;
 
-expr : intExpr { printf("Result: %d\n", $1); }
-      | boolExpr { if ($1 == 1) printf("Result: true\n"); else printf("Result: false\n");}
+expr : intExpr    { printf("Integer expression result: %d\n", $1); }
+      | boolExpr  { if ($1 == 1) printf("Boolean expression result: true\n"); else printf("Boolean expression result: false\n");}
+      | relExpr   { if ($1 == 1) printf("Relation expression result: true\n"); else printf("Relation expression result: false\n");}
       ;
 
-intExpr  : intExpr '+' intExpr  {$$ = $1 + $3;}
-      | intExpr '-' intExpr  {$$ = $1 - $3;}
-      | intExpr '*' intExpr  {$$ = $1 * $3;}
-      | intExpr '/' intExpr  {$$ = $1 / $3;}
-      | NUM            {$$ = $1;}
-      | '-' intExpr %prec UMINUS {$$ = -$2;}
-      | '(' intExpr ')' { $$ = $2; }
+intExpr  : intExpr '+' intExpr      {$$ = $1 + $3;}
+      | intExpr '-' intExpr         {$$ = $1 - $3;}
+      | intExpr '*' intExpr         {$$ = $1 * $3;}
+      | intExpr '/' intExpr         {$$ = $1 / $3;}
+      | NUM                         {$$ = $1;}
+      | '-' intExpr %prec UMINUS    {$$ = -$2;}
+      | '(' intExpr ')'             { $$ = $2; }
       ;
 
-boolExpr : boolExpr AND boolExpr { $$ = $1 && $3; }
-      | boolExpr OR boolExpr { $$ = $1 || $3; }
-      | NOT boolExpr { if ($2==1) { $$ = 0; } else { $$ = 1; } } 
-      | BOOL { $$  = $1; }
-      | '(' boolExpr ')' { $$ = $2; }
+boolExpr : boolExpr AND boolExpr    { $$ = $1 && $3; }
+      | boolExpr OR boolExpr        { $$ = $1 || $3; }
+      | NOT boolExpr                { if ($2==1) { $$ = 0; } else { $$ = 1; } } 
+      | BOOL                        { $$  = $1; }
+      | '(' boolExpr ')'            { $$ = $2; }
       ;
 
 varDecl: typeSpec ID ':' expr {                             // assignment of true or false values to int variable makes automatic conversion
@@ -99,63 +101,16 @@ varDecl: typeSpec ID ':' expr {                             // assignment of tru
 typeSpec: INT 
       | BOOLEAN ;
 
-
-/*
-.. : intExpr ';'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
-      | boolExpr ';' {
-            if ($1 == 1)
-                  printf("Result: true (size: %lu)\n", sizeof($1));
-            else
-                printf("Result: false (size: %lu)\n", sizeof($1));  
-            exit(0);}
-      | ID ';'            {printf("ID: %s\n", $1); exit(0);}
-      | INT ';' {printf("Int type recognized\n"); exit(0);}
-      | declaration ';'
-      | relOp ';' {
-           if ($1 == 1)
-                  printf("Result: true (size: %lu)\n", sizeof($1));
-            else
-                printf("Result: false (size: %lu)\n", sizeof($1));  
-            exit(0);
-      }
+relExpr : expr SMEQ expr      {if ($1 <= $3) $$ = 1;else $$ = 0;}
+      | expr SM expr          {if ($1 < $3) $$ = 1;else $$ = 0;}
+      | expr GR expr          {if ($1 > $3) $$ = 1;else $$ = 0;}
+      | expr GREQ expr        {if ($1 >= $3) $$ = 1;else $$ = 0;}
+      | expr EQ expr          {if ($1 == $3) $$ = 1;else $$ = 0;}
+      | expr NEQ expr         {if ($1 != $3) $$ = 1;else $$ = 0;}
+      | '(' relExpr ')'            { $$ = $2; }
       ;
 
-declaration: typeSpec ID ':' intExpr {
-      if (sizeof($4) == 4 && strcmp($1,"int") != 0){
-            yyerror("Type is not an int\n");
-            exit(1);
-      }
-      
-      printf("Type: %s Variable %s, of type int, value: %d\n", $1, $2, $4); exit(0);
-      }
-      | typeSpec ID ':' boolExpr {
-            if (sizeof($4) == 1 && strcmp($1,"bool") != 0){
-                  yyerror("Type is not a bool\n");
-                  exit(1);
-            }
 
-            printf("Type: %s Variable %s, of type bool, value: %d\n", $1 , $2, $4); exit(0);
-            }
-      ;
-
-typeSpec: INT 
-      | BOOLEAN ;
-
-boolExpr : boolExpr AND boolExpr {$$ = $1 && $3;}
-      | boolExpr OR boolExpr {$$ = $1 || $3;}
-      | NOT boolExpr { if($2==1){ $$=0; }else{ $$=1;} } 
-      | BOOL {$$ = $1;}
-      | '(' boolExpr ')' { $$ = $2; }
-      ;
-
-relOp : intExpr SMEQ intExpr  {if ($1 <= $3) $$ = 1;else $$ = 0;}
-      | intExpr SM intExpr  {if ($1 < $3) $$ = 1;else $$ = 0;}
-      | intExpr GR intExpr  {if ($1 > $3) $$ = 1;else $$ = 0;}
-      | intExpr GREQ intExpr  {if ($1 >= $3) $$ = 1;else $$ = 0;}
-      | intExpr EQ intExpr  {if ($1 == $3) $$ = 1;else $$ = 0;}
-      | intExpr NEQ intExpr  {if ($1 != $3) $$ = 1;else $$ = 0;}
-      ;
-*/
 %%
 
 #include "lex.yy.c"
