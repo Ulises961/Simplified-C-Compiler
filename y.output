@@ -23,41 +23,47 @@ Grammar
     1 program: intExpr '\n'
     2        | boolExpr '\n'
     3        | ID '\n'
+    4        | INT '\n'
+    5        | declaration
 
-    4 intExpr: intExpr '+' intExpr
-    5        | intExpr '-' intExpr
-    6        | intExpr '*' intExpr
-    7        | intExpr '/' intExpr
-    8        | INT
-    9        | '-' intExpr
-   10        | '(' intExpr ')'
+    6 declaration: INT ID ':' intExpr '\n'
+    7            | BOOLEAN ID ':' boolExpr '\n'
 
-   11 boolExpr: boolExpr AND boolExpr
-   12         | boolExpr OR boolExpr
-   13         | NOT boolExpr
-   14         | BOOL
-   15         | '(' boolExpr ')'
+    8 intExpr: intExpr '+' intExpr
+    9        | intExpr '-' intExpr
+   10        | intExpr '*' intExpr
+   11        | intExpr '/' intExpr
+   12        | NUM
+   13        | '-' intExpr
+   14        | '(' intExpr ')'
+
+   15 boolExpr: boolExpr AND boolExpr
+   16         | boolExpr OR boolExpr
+   17         | NOT boolExpr
+   18         | BOOL
+   19         | '(' boolExpr ')'
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    '\n' (10) 1 2 3
-    '(' (40) 10 15
-    ')' (41) 10 15
-    '*' (42) 6
-    '+' (43) 4
-    '-' (45) 5 9
-    '/' (47) 7
+    '\n' (10) 1 2 3 4 6 7
+    '(' (40) 14 19
+    ')' (41) 14 19
+    '*' (42) 10
+    '+' (43) 8
+    '-' (45) 9 13
+    '/' (47) 11
+    ':' (58) 6 7
     error (256)
-    INT <integer> (258) 8
-    BOOL <boolean> (259) 14
-    ID <lexeme> (260) 3
+    NUM <integer> (258) 12
+    BOOL <boolean> (259) 18
+    ID <lexeme> (260) 3 6 7
     CHAR (261)
     BREAK (262)
-    AND (263) 11
-    OR (264) 12
-    NOT (265) 13
+    AND (263) 15
+    OR (264) 16
+    NOT (265) 17
     IF (266)
     ELSE (267)
     WHILE (268)
@@ -70,370 +76,484 @@ Terminals, with rules where they appear
     SMEQ (275)
     TRUE (276)
     FALSE (277)
-    UMINUS (278)
+    INT (278) 4 6
+    BOOLEAN (279) 7
+    UMINUS (280)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (31)
+    $accept (34)
         on left: 0
-    program (32)
-        on left: 1 2 3
+    program (35)
+        on left: 1 2 3 4 5
         on right: 0
-    intExpr <integer> (33)
-        on left: 4 5 6 7 8 9 10
-        on right: 1 4 5 6 7 9 10
-    boolExpr <boolean> (34)
-        on left: 11 12 13 14 15
-        on right: 2 11 12 13 15
+    declaration (36)
+        on left: 6 7
+        on right: 5
+    intExpr <integer> (37)
+        on left: 8 9 10 11 12 13 14
+        on right: 1 6 8 9 10 11 13 14
+    boolExpr <boolean> (38)
+        on left: 15 16 17 18 19
+        on right: 2 7 15 16 17 19
 
 
 State 0
 
     0 $accept: . program $end
 
-    INT   shift, and go to state 1
-    BOOL  shift, and go to state 2
-    ID    shift, and go to state 3
-    NOT   shift, and go to state 4
-    '-'   shift, and go to state 5
-    '('   shift, and go to state 6
+    NUM      shift, and go to state 1
+    BOOL     shift, and go to state 2
+    ID       shift, and go to state 3
+    NOT      shift, and go to state 4
+    INT      shift, and go to state 5
+    BOOLEAN  shift, and go to state 6
+    '-'      shift, and go to state 7
+    '('      shift, and go to state 8
 
-    program   go to state 7
-    intExpr   go to state 8
-    boolExpr  go to state 9
+    program      go to state 9
+    declaration  go to state 10
+    intExpr      go to state 11
+    boolExpr     go to state 12
 
 
 State 1
 
-    8 intExpr: INT .
+   12 intExpr: NUM .
 
-    $default  reduce using rule 8 (intExpr)
+    $default  reduce using rule 12 (intExpr)
 
 
 State 2
 
-   14 boolExpr: BOOL .
+   18 boolExpr: BOOL .
 
-    $default  reduce using rule 14 (boolExpr)
+    $default  reduce using rule 18 (boolExpr)
 
 
 State 3
 
     3 program: ID . '\n'
 
-    '\n'  shift, and go to state 10
+    '\n'  shift, and go to state 13
 
 
 State 4
 
-   13 boolExpr: NOT . boolExpr
+   17 boolExpr: NOT . boolExpr
 
     BOOL  shift, and go to state 2
     NOT   shift, and go to state 4
-    '('   shift, and go to state 11
+    '('   shift, and go to state 14
 
-    boolExpr  go to state 12
+    boolExpr  go to state 15
 
 
 State 5
 
-    9 intExpr: '-' . intExpr
+    4 program: INT . '\n'
+    6 declaration: INT . ID ':' intExpr '\n'
 
-    INT  shift, and go to state 1
-    '-'  shift, and go to state 5
-    '('  shift, and go to state 13
-
-    intExpr  go to state 14
+    ID    shift, and go to state 16
+    '\n'  shift, and go to state 17
 
 
 State 6
 
-   10 intExpr: '(' . intExpr ')'
-   15 boolExpr: '(' . boolExpr ')'
+    7 declaration: BOOLEAN . ID ':' boolExpr '\n'
 
-    INT   shift, and go to state 1
-    BOOL  shift, and go to state 2
-    NOT   shift, and go to state 4
-    '-'   shift, and go to state 5
-    '('   shift, and go to state 6
-
-    intExpr   go to state 15
-    boolExpr  go to state 16
+    ID  shift, and go to state 18
 
 
 State 7
 
-    0 $accept: program . $end
+   13 intExpr: '-' . intExpr
 
-    $end  shift, and go to state 17
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
+
+    intExpr  go to state 20
 
 
 State 8
 
-    1 program: intExpr . '\n'
-    4 intExpr: intExpr . '+' intExpr
-    5        | intExpr . '-' intExpr
-    6        | intExpr . '*' intExpr
-    7        | intExpr . '/' intExpr
+   14 intExpr: '(' . intExpr ')'
+   19 boolExpr: '(' . boolExpr ')'
 
-    '-'   shift, and go to state 18
-    '+'   shift, and go to state 19
-    '*'   shift, and go to state 20
-    '/'   shift, and go to state 21
-    '\n'  shift, and go to state 22
+    NUM   shift, and go to state 1
+    BOOL  shift, and go to state 2
+    NOT   shift, and go to state 4
+    '-'   shift, and go to state 7
+    '('   shift, and go to state 8
+
+    intExpr   go to state 21
+    boolExpr  go to state 22
 
 
 State 9
 
-    2 program: boolExpr . '\n'
-   11 boolExpr: boolExpr . AND boolExpr
-   12         | boolExpr . OR boolExpr
+    0 $accept: program . $end
 
-    AND   shift, and go to state 23
-    OR    shift, and go to state 24
-    '\n'  shift, and go to state 25
+    $end  shift, and go to state 23
 
 
 State 10
+
+    5 program: declaration .
+
+    $default  reduce using rule 5 (program)
+
+
+State 11
+
+    1 program: intExpr . '\n'
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+
+    '-'   shift, and go to state 24
+    '+'   shift, and go to state 25
+    '*'   shift, and go to state 26
+    '/'   shift, and go to state 27
+    '\n'  shift, and go to state 28
+
+
+State 12
+
+    2 program: boolExpr . '\n'
+   15 boolExpr: boolExpr . AND boolExpr
+   16         | boolExpr . OR boolExpr
+
+    AND   shift, and go to state 29
+    OR    shift, and go to state 30
+    '\n'  shift, and go to state 31
+
+
+State 13
 
     3 program: ID '\n' .
 
     $default  reduce using rule 3 (program)
 
 
-State 11
+State 14
 
-   15 boolExpr: '(' . boolExpr ')'
+   19 boolExpr: '(' . boolExpr ')'
 
     BOOL  shift, and go to state 2
     NOT   shift, and go to state 4
-    '('   shift, and go to state 11
+    '('   shift, and go to state 14
 
-    boolExpr  go to state 16
-
-
-State 12
-
-   11 boolExpr: boolExpr . AND boolExpr
-   12         | boolExpr . OR boolExpr
-   13         | NOT boolExpr .
-
-    $default  reduce using rule 13 (boolExpr)
-
-
-State 13
-
-   10 intExpr: '(' . intExpr ')'
-
-    INT  shift, and go to state 1
-    '-'  shift, and go to state 5
-    '('  shift, and go to state 13
-
-    intExpr  go to state 15
-
-
-State 14
-
-    4 intExpr: intExpr . '+' intExpr
-    5        | intExpr . '-' intExpr
-    6        | intExpr . '*' intExpr
-    7        | intExpr . '/' intExpr
-    9        | '-' intExpr .
-
-    $default  reduce using rule 9 (intExpr)
+    boolExpr  go to state 22
 
 
 State 15
 
-    4 intExpr: intExpr . '+' intExpr
-    5        | intExpr . '-' intExpr
-    6        | intExpr . '*' intExpr
-    7        | intExpr . '/' intExpr
-   10        | '(' intExpr . ')'
+   15 boolExpr: boolExpr . AND boolExpr
+   16         | boolExpr . OR boolExpr
+   17         | NOT boolExpr .
 
-    '-'  shift, and go to state 18
-    '+'  shift, and go to state 19
-    '*'  shift, and go to state 20
-    '/'  shift, and go to state 21
-    ')'  shift, and go to state 26
+    $default  reduce using rule 17 (boolExpr)
 
 
 State 16
 
-   11 boolExpr: boolExpr . AND boolExpr
-   12         | boolExpr . OR boolExpr
-   15         | '(' boolExpr . ')'
+    6 declaration: INT ID . ':' intExpr '\n'
 
-    AND  shift, and go to state 23
-    OR   shift, and go to state 24
-    ')'  shift, and go to state 27
+    ':'  shift, and go to state 32
 
 
 State 17
+
+    4 program: INT '\n' .
+
+    $default  reduce using rule 4 (program)
+
+
+State 18
+
+    7 declaration: BOOLEAN ID . ':' boolExpr '\n'
+
+    ':'  shift, and go to state 33
+
+
+State 19
+
+   14 intExpr: '(' . intExpr ')'
+
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
+
+    intExpr  go to state 21
+
+
+State 20
+
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+   13        | '-' intExpr .
+
+    $default  reduce using rule 13 (intExpr)
+
+
+State 21
+
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+   14        | '(' intExpr . ')'
+
+    '-'  shift, and go to state 24
+    '+'  shift, and go to state 25
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+    ')'  shift, and go to state 34
+
+
+State 22
+
+   15 boolExpr: boolExpr . AND boolExpr
+   16         | boolExpr . OR boolExpr
+   19         | '(' boolExpr . ')'
+
+    AND  shift, and go to state 29
+    OR   shift, and go to state 30
+    ')'  shift, and go to state 35
+
+
+State 23
 
     0 $accept: program $end .
 
     $default  accept
 
 
-State 18
+State 24
 
-    5 intExpr: intExpr '-' . intExpr
+    9 intExpr: intExpr '-' . intExpr
 
-    INT  shift, and go to state 1
-    '-'  shift, and go to state 5
-    '('  shift, and go to state 13
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
 
-    intExpr  go to state 28
-
-
-State 19
-
-    4 intExpr: intExpr '+' . intExpr
-
-    INT  shift, and go to state 1
-    '-'  shift, and go to state 5
-    '('  shift, and go to state 13
-
-    intExpr  go to state 29
+    intExpr  go to state 36
 
 
-State 20
+State 25
 
-    6 intExpr: intExpr '*' . intExpr
+    8 intExpr: intExpr '+' . intExpr
 
-    INT  shift, and go to state 1
-    '-'  shift, and go to state 5
-    '('  shift, and go to state 13
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
 
-    intExpr  go to state 30
-
-
-State 21
-
-    7 intExpr: intExpr '/' . intExpr
-
-    INT  shift, and go to state 1
-    '-'  shift, and go to state 5
-    '('  shift, and go to state 13
-
-    intExpr  go to state 31
+    intExpr  go to state 37
 
 
-State 22
+State 26
+
+   10 intExpr: intExpr '*' . intExpr
+
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
+
+    intExpr  go to state 38
+
+
+State 27
+
+   11 intExpr: intExpr '/' . intExpr
+
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
+
+    intExpr  go to state 39
+
+
+State 28
 
     1 program: intExpr '\n' .
 
     $default  reduce using rule 1 (program)
 
 
-State 23
+State 29
 
-   11 boolExpr: boolExpr AND . boolExpr
-
-    BOOL  shift, and go to state 2
-    NOT   shift, and go to state 4
-    '('   shift, and go to state 11
-
-    boolExpr  go to state 32
-
-
-State 24
-
-   12 boolExpr: boolExpr OR . boolExpr
+   15 boolExpr: boolExpr AND . boolExpr
 
     BOOL  shift, and go to state 2
     NOT   shift, and go to state 4
-    '('   shift, and go to state 11
+    '('   shift, and go to state 14
 
-    boolExpr  go to state 33
+    boolExpr  go to state 40
 
 
-State 25
+State 30
+
+   16 boolExpr: boolExpr OR . boolExpr
+
+    BOOL  shift, and go to state 2
+    NOT   shift, and go to state 4
+    '('   shift, and go to state 14
+
+    boolExpr  go to state 41
+
+
+State 31
 
     2 program: boolExpr '\n' .
 
     $default  reduce using rule 2 (program)
 
 
-State 26
-
-   10 intExpr: '(' intExpr ')' .
-
-    $default  reduce using rule 10 (intExpr)
-
-
-State 27
-
-   15 boolExpr: '(' boolExpr ')' .
-
-    $default  reduce using rule 15 (boolExpr)
-
-
-State 28
-
-    4 intExpr: intExpr . '+' intExpr
-    5        | intExpr . '-' intExpr
-    5        | intExpr '-' intExpr .
-    6        | intExpr . '*' intExpr
-    7        | intExpr . '/' intExpr
-
-    '*'  shift, and go to state 20
-    '/'  shift, and go to state 21
-
-    $default  reduce using rule 5 (intExpr)
-
-
-State 29
-
-    4 intExpr: intExpr . '+' intExpr
-    4        | intExpr '+' intExpr .
-    5        | intExpr . '-' intExpr
-    6        | intExpr . '*' intExpr
-    7        | intExpr . '/' intExpr
-
-    '*'  shift, and go to state 20
-    '/'  shift, and go to state 21
-
-    $default  reduce using rule 4 (intExpr)
-
-
-State 30
-
-    4 intExpr: intExpr . '+' intExpr
-    5        | intExpr . '-' intExpr
-    6        | intExpr . '*' intExpr
-    6        | intExpr '*' intExpr .
-    7        | intExpr . '/' intExpr
-
-    $default  reduce using rule 6 (intExpr)
-
-
-State 31
-
-    4 intExpr: intExpr . '+' intExpr
-    5        | intExpr . '-' intExpr
-    6        | intExpr . '*' intExpr
-    7        | intExpr . '/' intExpr
-    7        | intExpr '/' intExpr .
-
-    $default  reduce using rule 7 (intExpr)
-
-
 State 32
 
-   11 boolExpr: boolExpr . AND boolExpr
-   11         | boolExpr AND boolExpr .
-   12         | boolExpr . OR boolExpr
+    6 declaration: INT ID ':' . intExpr '\n'
 
-    $default  reduce using rule 11 (boolExpr)
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 7
+    '('  shift, and go to state 19
+
+    intExpr  go to state 42
 
 
 State 33
 
-   11 boolExpr: boolExpr . AND boolExpr
-   12         | boolExpr . OR boolExpr
-   12         | boolExpr OR boolExpr .
+    7 declaration: BOOLEAN ID ':' . boolExpr '\n'
 
-    $default  reduce using rule 12 (boolExpr)
+    BOOL  shift, and go to state 2
+    NOT   shift, and go to state 4
+    '('   shift, and go to state 14
+
+    boolExpr  go to state 43
+
+
+State 34
+
+   14 intExpr: '(' intExpr ')' .
+
+    $default  reduce using rule 14 (intExpr)
+
+
+State 35
+
+   19 boolExpr: '(' boolExpr ')' .
+
+    $default  reduce using rule 19 (boolExpr)
+
+
+State 36
+
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+    9        | intExpr '-' intExpr .
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 9 (intExpr)
+
+
+State 37
+
+    8 intExpr: intExpr . '+' intExpr
+    8        | intExpr '+' intExpr .
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+
+    '*'  shift, and go to state 26
+    '/'  shift, and go to state 27
+
+    $default  reduce using rule 8 (intExpr)
+
+
+State 38
+
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   10        | intExpr '*' intExpr .
+   11        | intExpr . '/' intExpr
+
+    $default  reduce using rule 10 (intExpr)
+
+
+State 39
+
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+   11        | intExpr '/' intExpr .
+
+    $default  reduce using rule 11 (intExpr)
+
+
+State 40
+
+   15 boolExpr: boolExpr . AND boolExpr
+   15         | boolExpr AND boolExpr .
+   16         | boolExpr . OR boolExpr
+
+    $default  reduce using rule 15 (boolExpr)
+
+
+State 41
+
+   15 boolExpr: boolExpr . AND boolExpr
+   16         | boolExpr . OR boolExpr
+   16         | boolExpr OR boolExpr .
+
+    $default  reduce using rule 16 (boolExpr)
+
+
+State 42
+
+    6 declaration: INT ID ':' intExpr . '\n'
+    8 intExpr: intExpr . '+' intExpr
+    9        | intExpr . '-' intExpr
+   10        | intExpr . '*' intExpr
+   11        | intExpr . '/' intExpr
+
+    '-'   shift, and go to state 24
+    '+'   shift, and go to state 25
+    '*'   shift, and go to state 26
+    '/'   shift, and go to state 27
+    '\n'  shift, and go to state 44
+
+
+State 43
+
+    7 declaration: BOOLEAN ID ':' boolExpr . '\n'
+   15 boolExpr: boolExpr . AND boolExpr
+   16         | boolExpr . OR boolExpr
+
+    AND   shift, and go to state 29
+    OR    shift, and go to state 30
+    '\n'  shift, and go to state 45
+
+
+State 44
+
+    6 declaration: INT ID ':' intExpr '\n' .
+
+    $default  reduce using rule 6 (declaration)
+
+
+State 45
+
+    7 declaration: BOOLEAN ID ':' boolExpr '\n' .
+
+    $default  reduce using rule 7 (declaration)

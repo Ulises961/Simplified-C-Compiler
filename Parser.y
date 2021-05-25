@@ -21,7 +21,7 @@ int symbols[26];
        }
 
 
-%token <integer>  INT //
+%token <integer>  NUM //
 %token <boolean>  BOOL
 %token <lexeme> ID
 
@@ -42,7 +42,8 @@ int symbols[26];
 %token SMEQ
 %token TRUE
 %token FALSE
-
+%token INT
+%token BOOLEAN
 %type <integer> intExpr
 %type <boolean> boolExpr
 
@@ -61,13 +62,21 @@ program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1))
                 printf("Result: false (size: %lu)\n", sizeof($1));  
             exit(0);}
       | ID '\n'            {printf("ID: %s\n", $1); exit(0);}
+      | INT '\n' {printf("Int type recognized\n"); exit(0);}
+      | declaration
       ;
+
+declaration: INT ID ':' intExpr'\n' {printf("Variable %s, of type int, value: %d\n", $2, $4); exit(0);}
+             | BOOLEAN ID ':' boolExpr'\n' {printf("Variable %s, of type bool, value: %d\n", $2, $4); exit(0);}
+      ;
+
+
 
 intExpr  : intExpr '+' intExpr  {$$ = $1 + $3;}
       | intExpr '-' intExpr  {$$ = $1 - $3;}
       | intExpr '*' intExpr  {$$ = $1 * $3;}
       | intExpr '/' intExpr  {$$ = $1 / $3;}
-      | INT            {$$ = $1;}
+      | NUM            {$$ = $1;}
       | '-' intExpr %prec UMINUS {$$ = -$2;}
       | '(' intExpr ')' { $$ = $2; }
       ;
@@ -78,7 +87,7 @@ boolExpr : boolExpr AND boolExpr {$$ = $1 && $3;}
       | BOOL {$$ = $1;}
       | '(' boolExpr ')' { $$ = $2; }
       ;
-
+      
 
 %%
 

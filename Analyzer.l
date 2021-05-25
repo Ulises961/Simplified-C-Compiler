@@ -16,7 +16,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 [ \t] {/* skip blanks */}
 
 {INT}    {yylval.integer = atoi(yytext);
-          return INT;}
+          return NUM;}
 
 {BOOLEAN} {if (strcmp("true",strdup(yytext)) == 0)
                 yylval.integer = 1;
@@ -53,6 +53,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 \n      {return '\n';}
 
 "int"  {return INT;}
+"bool"  {return BOOLEAN;}
 
 {ID}     {yylval.lexeme = strdup(yytext);
           return ID;}

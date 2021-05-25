@@ -49,7 +49,7 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    INT = 258,
+    NUM = 258,
     BOOL = 259,
     ID = 260,
     CHAR = 261,
@@ -69,11 +69,13 @@ extern int yydebug;
     SMEQ = 275,
     TRUE = 276,
     FALSE = 277,
-    UMINUS = 278
+    INT = 278,
+    BOOLEAN = 279,
+    UMINUS = 280
   };
 #endif
 /* Tokens.  */
-#define INT 258
+#define NUM 258
 #define BOOL 259
 #define ID 260
 #define CHAR 261
@@ -93,7 +95,9 @@ extern int yydebug;
 #define SMEQ 275
 #define TRUE 276
 #define FALSE 277
-#define UMINUS 278
+#define INT 278
+#define BOOLEAN 279
+#define UMINUS 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -106,7 +110,7 @@ union YYSTYPE
        bool boolean;
        
 
-#line 110 "y.tab.h"
+#line 114 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
