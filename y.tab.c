@@ -570,8 +570,8 @@ static const yytype_int8 yyrline[] =
 {
        0,    64,    64,    65,    68,    69,    70,    73,    74,    75,
       78,    79,    80,    81,    82,    83,    84,    87,    88,    89,
-      90,    91,    94,   110,   111,   113,   114,   115,   116,   117,
-     118,   119
+      90,    91,    94,    95,    96,    97,    98,    99,   100,   103,
+     119,   120
 };
 #endif
 
@@ -585,7 +585,7 @@ static const char *const yytname[] =
   "GREQ", "EQ", "NEQ", "TRUE", "FALSE", "RETURN", "INT", "BOOLEAN", "'-'",
   "'+'", "'*'", "'/'", "UMINUS", "'\\n'", "';'", "'('", "')'", "':'",
   "$accept", "program", "statement", "expr", "intExpr", "boolExpr",
-  "varDecl", "typeSpec", "relExpr", YY_NULLPTR
+  "relExpr", "varDecl", "typeSpec", YY_NULLPTR
 };
 #endif
 
@@ -616,7 +616,7 @@ static const yytype_int16 yytoknum[] =
 static const yytype_int8 yypact[] =
 {
      -26,     5,   -26,   -26,   -26,    37,   -25,   -26,   -26,    -1,
-       0,   -18,    39,    16,     8,    -8,    22,   -26,    37,   -26,
+       0,   -18,    39,    16,     8,   -26,    -8,    22,    37,   -26,
      -26,    -1,   -26,    57,    35,     3,    12,   -26,     0,     0,
        0,     0,     0,     0,   -26,    -1,    -1,    -1,    -1,    37,
       37,   -26,    17,     3,    35,   -26,   -26,   -26,   -26,   -26,
@@ -629,19 +629,19 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       3,     0,     1,    14,    20,     0,     0,    23,    24,     0,
-       0,     0,     0,     7,     8,     0,     0,     9,     0,    19,
+       3,     0,     1,    14,    20,     0,     0,    30,    31,     0,
+       0,     0,     0,     7,     8,     9,     0,     0,     0,    19,
        6,     0,    15,     0,     7,     8,     9,     2,     0,     0,
        0,     0,     0,     0,     4,     0,     0,     0,     0,     0,
-       0,     5,     0,     0,     0,    16,    21,    31,    25,    26,
-      27,    28,    29,    30,    11,    10,    12,    13,    17,    18,
-       0,    22
+       0,     5,     0,     0,     0,    16,    21,    28,    22,    23,
+      24,    25,    26,    27,    11,    10,    12,    13,    17,    18,
+       0,    29
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -26,   -26,   -26,   -10,    30,    -4,   -26,   -26,    24
+     -26,   -26,   -26,   -10,    30,    -4,    24,   -26,   -26
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -683,7 +683,7 @@ static const yytype_int8 yystos[] =
 {
        0,    37,     0,     3,     4,    10,    23,    24,    25,    26,
       33,    38,    39,    40,    41,    42,    43,    44,    33,    41,
-      32,    33,    40,    39,    40,    41,    44,    31,    15,    16,
+      32,    33,    40,    39,    40,    41,    42,    31,    15,    16,
       17,    18,    19,    20,    32,    26,    27,    28,    29,     8,
        9,    32,     5,    41,    40,    34,    34,    34,    39,    39,
       39,    39,    39,    39,    40,    40,    40,    40,    41,    41,
@@ -695,7 +695,7 @@ static const yytype_int8 yyr1[] =
 {
        0,    36,    37,    37,    38,    38,    38,    39,    39,    39,
       40,    40,    40,    40,    40,    40,    40,    41,    41,    41,
-      41,    41,    42,    43,    43,    44,    44,    44,    44,    44,
+      41,    41,    42,    42,    42,    42,    42,    42,    42,    43,
       44,    44
 };
 
@@ -704,8 +704,8 @@ static const yytype_int8 yyr2[] =
 {
        0,     2,     3,     0,     2,     2,     2,     1,     1,     1,
        3,     3,     3,     3,     1,     2,     3,     3,     3,     2,
-       1,     3,     4,     1,     1,     3,     3,     3,     3,     3,
-       3,     3
+       1,     3,     3,     3,     3,     3,     3,     3,     3,     4,
+       1,     1
 };
 
 
@@ -1498,8 +1498,50 @@ yyreduce:
 
   case 22:
 #line 94 "Parser.y"
+                              {if ((yyvsp[-2].integer) <= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+#line 1503 "y.tab.c"
+    break;
+
+  case 23:
+#line 95 "Parser.y"
+                              {if ((yyvsp[-2].integer) < (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+#line 1509 "y.tab.c"
+    break;
+
+  case 24:
+#line 96 "Parser.y"
+                              {if ((yyvsp[-2].integer) > (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+#line 1515 "y.tab.c"
+    break;
+
+  case 25:
+#line 97 "Parser.y"
+                              {if ((yyvsp[-2].integer) >= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+#line 1521 "y.tab.c"
+    break;
+
+  case 26:
+#line 98 "Parser.y"
+                              {if ((yyvsp[-2].integer) == (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+#line 1527 "y.tab.c"
+    break;
+
+  case 27:
+#line 99 "Parser.y"
+                              {if ((yyvsp[-2].integer) != (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+#line 1533 "y.tab.c"
+    break;
+
+  case 28:
+#line 100 "Parser.y"
+                                   { (yyval.integer) = (yyvsp[-1].integer); }
+#line 1539 "y.tab.c"
+    break;
+
+  case 29:
+#line 103 "Parser.y"
                               {                                   // assignment of true or false values to int variable makes automatic conversion
-            if (strcmp((yyvsp[-3].lexeme),"bool")==0 && ((yyvsp[0].integer) != 0 && (yyvsp[0].integer) != 1)){    // for bool variables only true, false, 0 a nd 1 are accepted
+            if (strcmp((yyvsp[-3].lexeme),"bool")==0 && ((yyvsp[0].integer) != 0 && (yyvsp[0].integer) != 1)){    // for bool variables only true, false, 0 and 1 are accepted
                   yyerror("TypeError, cannot assign int value to bool variable...\n");
                   exit(1);
             }
@@ -1512,48 +1554,6 @@ yyreduce:
                         printf("Variable %s, of type %s, value: false\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme));
             }
       }
-#line 1516 "y.tab.c"
-    break;
-
-  case 25:
-#line 113 "Parser.y"
-                              {if ((yyvsp[-2].integer) <= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1522 "y.tab.c"
-    break;
-
-  case 26:
-#line 114 "Parser.y"
-                              {if ((yyvsp[-2].integer) < (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1528 "y.tab.c"
-    break;
-
-  case 27:
-#line 115 "Parser.y"
-                              {if ((yyvsp[-2].integer) > (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1534 "y.tab.c"
-    break;
-
-  case 28:
-#line 116 "Parser.y"
-                              {if ((yyvsp[-2].integer) >= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1540 "y.tab.c"
-    break;
-
-  case 29:
-#line 117 "Parser.y"
-                              {if ((yyvsp[-2].integer) == (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1546 "y.tab.c"
-    break;
-
-  case 30:
-#line 118 "Parser.y"
-                              {if ((yyvsp[-2].integer) != (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1552 "y.tab.c"
-    break;
-
-  case 31:
-#line 119 "Parser.y"
-                                   { (yyval.integer) = (yyvsp[-1].integer); }
 #line 1558 "y.tab.c"
     break;
 

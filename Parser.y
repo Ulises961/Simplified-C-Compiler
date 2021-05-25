@@ -91,6 +91,15 @@ boolExpr : boolExpr AND boolExpr    { $$ = $1 && $3; }
       | '(' boolExpr ')'            { $$ = $2; }
       ;
 
+relExpr : expr SMEQ expr      {if ($1 <= $3) $$ = 1;else $$ = 0;}
+      | expr SM expr          {if ($1 < $3) $$ = 1;else $$ = 0;}
+      | expr GR expr          {if ($1 > $3) $$ = 1;else $$ = 0;}
+      | expr GREQ expr        {if ($1 >= $3) $$ = 1;else $$ = 0;}
+      | expr EQ expr          {if ($1 == $3) $$ = 1;else $$ = 0;}
+      | expr NEQ expr         {if ($1 != $3) $$ = 1;else $$ = 0;}
+      | '(' relExpr ')'            { $$ = $2; }
+      ;
+
 varDecl: typeSpec ID ':' expr {                                   // assignment of true or false values to int variable makes automatic conversion
             if (strcmp($1,"bool")==0 && ($4 != 0 && $4 != 1)){    // for bool variables only true, false, 0 and 1 are accepted
                   yyerror("TypeError, cannot assign int value to bool variable...\n");
@@ -109,15 +118,6 @@ varDecl: typeSpec ID ':' expr {                                   // assignment 
 
 typeSpec: INT 
       | BOOLEAN ;
-
-relExpr : expr SMEQ expr      {if ($1 <= $3) $$ = 1;else $$ = 0;}
-      | expr SM expr          {if ($1 < $3) $$ = 1;else $$ = 0;}
-      | expr GR expr          {if ($1 > $3) $$ = 1;else $$ = 0;}
-      | expr GREQ expr        {if ($1 >= $3) $$ = 1;else $$ = 0;}
-      | expr EQ expr          {if ($1 == $3) $$ = 1;else $$ = 0;}
-      | expr NEQ expr         {if ($1 != $3) $$ = 1;else $$ = 0;}
-      | '(' relExpr ')'            { $$ = $2; }
-      ;
 
 
 %%
