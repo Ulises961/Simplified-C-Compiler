@@ -18,7 +18,7 @@ int symbols[26];
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
        bool boolean;
-       }
+}
 
 
 %token <integer>  NUM //
@@ -43,8 +43,10 @@ int symbols[26];
 %token TRUE
 %token FALSE
 %token RETURN
+
 %token <lexeme> INT
 %token <lexeme> BOOLEAN
+
 %type <integer> intExpr
 %type <boolean> boolExpr
 %type <lexeme> typeSpec
@@ -58,17 +60,17 @@ int symbols[26];
 
 
 %%
-program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
-      | boolExpr '\n' {
+program  : intExpr ';'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
+      | boolExpr ';' {
             if ($1 == 1)
                   printf("Result: true (size: %lu)\n", sizeof($1));
             else
                 printf("Result: false (size: %lu)\n", sizeof($1));  
             exit(0);}
-      | ID '\n'            {printf("ID: %s\n", $1); exit(0);}
-      | INT '\n' {printf("Int type recognized\n"); exit(0);}
-      | declaration
-      | relOp '\n' {
+      | ID ';'            {printf("ID: %s\n", $1); exit(0);}
+      | INT ';' {printf("Int type recognized\n"); exit(0);}
+      | declaration ';'
+      | relOp ';' {
            if ($1 == 1)
                   printf("Result: true (size: %lu)\n", sizeof($1));
             else
@@ -77,7 +79,7 @@ program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1))
       }
       ;
 
-declaration: typeSpec ID ':' intExpr'\n' {
+declaration: typeSpec ID ':' intExpr {
       if (sizeof($4) == 4 && strcmp($1,"int") != 0){
             yyerror("Type is not an int\n");
             exit(1);
@@ -85,7 +87,7 @@ declaration: typeSpec ID ':' intExpr'\n' {
       
       printf("Type: %s Variable %s, of type int, value: %d\n", $1, $2, $4); exit(0);
       }
-      | typeSpec ID ':' boolExpr'\n' {
+      | typeSpec ID ':' boolExpr {
             if (sizeof($4) == 1 && strcmp($1,"bool") != 0){
                   yyerror("Type is not a bool\n");
                   exit(1);
