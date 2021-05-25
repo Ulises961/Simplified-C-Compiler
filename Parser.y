@@ -65,7 +65,7 @@ program: program statement '\n'
       |
       ;
 
-statement: expr
+statement: expr ';'
       | varDecl
       ;
 
