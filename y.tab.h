@@ -109,9 +109,8 @@ union YYSTYPE
 
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
-       bool boolean;
 
-#line 115 "y.tab.h"
+#line 114 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -17,12 +17,11 @@ int symbols[26];
 %union {
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
-       bool boolean;
 }
 
 
 %token <integer>  NUM //
-%token <boolean>  BOOL
+%token <integer>  BOOL
 %token <lexeme> ID
 
 %token CHAR
@@ -48,7 +47,8 @@ int symbols[26];
 %token <lexeme> BOOLEAN
 
 %type <integer> intExpr
-%type <boolean> boolExpr
+%type <integer> boolExpr
+%type <integer> expr
 %type <lexeme> typeSpec
 %type <boolean> relOp
 
@@ -64,7 +64,8 @@ program: program statement '\n'
       |
       ;
 
-statement: expr 
+statement: expr
+      | varDecl
       ;
 
 expr : intExpr { printf("Result: %d\n", $1); }
@@ -86,6 +87,18 @@ boolExpr : boolExpr AND boolExpr { $$ = $1 && $3; }
       | BOOL { $$  = $1; }
       | '(' boolExpr ')' { $$ = $2; }
       ;
+
+varDecl: typeSpec ID ':' expr {                             // assignment of true or false values to int variable makes automatic conversion
+      if (strcmp($1,"bool")==0 && ($4 != 0 && $4 != 1)){    // for bool variables only true, false, 0 a nd 1 are accepted
+            yyerror("TypeError, cannot assign int value to bool variable...\n");
+            exit(1);
+      }
+      printf("Variable %s, of type %s, value: %d\n", $2, $1, $4); }
+      ;
+
+typeSpec: INT 
+      | BOOLEAN ;
+
 
 /*
 .. : intExpr ';'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
