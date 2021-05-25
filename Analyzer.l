@@ -25,6 +25,10 @@ ID          {LETTER}({LETTER}|{DIGIT})*
           return BOOL;}
 
 ":"     {return ':';}
+";"     {return ';';}
+\n      {return '\n';}
+
+
 "+"     {return '+';}
 "-"     {return '-';}
 "*"     {return '*';}
@@ -50,7 +54,8 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "}"     {return '}';}
 "("     {return '(';}
 ")"     {return ')';}
-\n      {return '\n';}
+"return" {return RETURN;}
+
 
 "int"  {yylval.lexeme = strdup(yytext);
         return INT;}
@@ -61,7 +66,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
           return ID;}
 
 
-. yyerror("invalid character"); // error for all not recognized characters
+. yyerror("Parsing error, invalid character"); // error for all not recognized characters
 
 %%
 
