@@ -919,30 +919,32 @@ YY_RULE_SETUP
 case 30:
 YY_RULE_SETUP
 #line 55 "Analyzer.l"
-{return INT;}
+{yylval.lexeme = strdup(yytext);
+        return INT;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 56 "Analyzer.l"
-{return BOOLEAN;}
+#line 57 "Analyzer.l"
+{yylval.lexeme = strdup(yytext);
+            return BOOLEAN;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 58 "Analyzer.l"
+#line 60 "Analyzer.l"
 {yylval.lexeme = strdup(yytext);
           return ID;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 62 "Analyzer.l"
+#line 64 "Analyzer.l"
 yyerror("invalid character"); // error for all not recognized characters
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 64 "Analyzer.l"
+#line 66 "Analyzer.l"
 ECHO;
 	YY_BREAK
-#line 946 "lex.yy.c"
+#line 948 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1947,7 +1949,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 64 "Analyzer.l"
+#line 66 "Analyzer.l"
 
 
 int yywrap(void) {

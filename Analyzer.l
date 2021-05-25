@@ -52,8 +52,10 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 ")"     {return ')';}
 \n      {return '\n';}
 
-"int"  {return INT;}
-"bool"  {return BOOLEAN;}
+"int"  {yylval.lexeme = strdup(yytext);
+        return INT;}
+"bool"  {yylval.lexeme = strdup(yytext);
+            return BOOLEAN;}
 
 {ID}     {yylval.lexeme = strdup(yytext);
           return ID;}
