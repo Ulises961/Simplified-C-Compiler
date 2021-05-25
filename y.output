@@ -1,19 +1,19 @@
 Terminals unused in grammar
 
-    CHAR
-    BREAK
-    IF
-    ELSE
-    WHILE
-    DO
-    EQ
-    NEQ
-    GREQ
-    GR
-    SM
-    SMEQ
-    TRUE
-    FALSE
+   CHAR
+   BREAK
+   IF
+   ELSE
+   WHILE
+   DO
+   EQ
+   NEQ
+   GREQ
+   GR
+   SM
+   SMEQ
+   TRUE
+   FALSE
 
 
 Grammar
@@ -49,60 +49,55 @@ Grammar
 
 Terminals, with rules where they appear
 
-    $end (0) 0
-    '\n' (10) 1 2 3 4 6 7
-    '(' (40) 16 21
-    ')' (41) 16 21
-    '*' (42) 12
-    '+' (43) 10
-    '-' (45) 11 15
-    '/' (47) 13
-    ':' (58) 6 7
-    error (256)
-    NUM <integer> (258) 14
-    BOOL <boolean> (259) 20
-    ID <lexeme> (260) 3 6 7
-    CHAR (261)
-    BREAK (262)
-    AND (263) 17
-    OR (264) 18
-    NOT (265) 19
-    IF (266)
-    ELSE (267)
-    WHILE (268)
-    DO (269)
-    EQ (270)
-    NEQ (271)
-    GREQ (272)
-    GR (273)
-    SM (274)
-    SMEQ (275)
-    TRUE (276)
-    FALSE (277)
-    INT <lexeme> (278) 4 8
-    BOOLEAN <lexeme> (279) 9
-    UMINUS (280)
+$end (0) 0
+'\n' (10) 1 2 3 4 6 7
+'(' (40) 16 21
+')' (41) 16 21
+'*' (42) 12
+'+' (43) 10
+'-' (45) 11 15
+'/' (47) 13
+':' (58) 6 7
+error (256)
+NUM <integer> (258) 14
+BOOL <boolean> (259) 20
+ID <lexeme> (260) 3 6 7
+CHAR (261)
+BREAK (262)
+AND (263) 17
+OR (264) 18
+NOT (265) 19
+IF (266)
+ELSE (267)
+WHILE (268)
+DO (269)
+EQ (270)
+NEQ (271)
+GREQ (272)
+GR (273)
+SM (274)
+SMEQ (275)
+TRUE (276)
+FALSE (277)
+INT <lexeme> (278) 4 8
+BOOLEAN <lexeme> (279) 9
+UMINUS (280)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (34)
-        on left: 0
-    program (35)
-        on left: 1 2 3 4 5
-        on right: 0
-    declaration (36)
-        on left: 6 7
-        on right: 5
-    typedec <lexeme> (37)
-        on left: 8 9
-        on right: 6 7
-    intExpr <integer> (38)
-        on left: 10 11 12 13 14 15 16
-        on right: 1 6 10 11 12 13 15 16
-    boolExpr <boolean> (39)
-        on left: 17 18 19 20 21
-        on right: 2 7 17 18 19 21
+$accept (34)
+    on left: 0
+program (35)
+    on left: 1 2 3 4 5, on right: 0
+declaration (36)
+    on left: 6 7, on right: 5
+typedec <lexeme> (37)
+    on left: 8 9, on right: 6 7
+intExpr <integer> (38)
+    on left: 10 11 12 13 14 15 16, on right: 1 6 10 11 12 13 15 16
+boolExpr <boolean> (39)
+    on left: 17 18 19 20 21, on right: 2 7 17 18 19 21
 
 
 State 0
