@@ -16,13 +16,15 @@ int symbols[26];
 
 %union {
        char* lexeme;			//identifier
-       int value;			//value of an identifier of type int
+       int integer;			//value of an identifier of type int
+       bool boolean;
        }
 
 
-%token <value>  INT //
+%token <integer>  INT //
+%token <boolean>  BOOL
 %token <lexeme> ID
-%token BOOL
+
 %token CHAR
 %token BREAK
 %token AND
@@ -41,26 +43,42 @@ int symbols[26];
 %token TRUE
 %token FALSE
 
-%type <value> expr
+%type <integer> intExpr
+%type <boolean> boolExpr
 
 %left '-' '+'
 %left '*' '/'
-%left ':'
+%left AND OR
+%right NOT
 %right UMINUS
 
 %%
-program  : expr '\n'      {printf("Result: %d\n", $1); exit(0);}
-      | ID '\n'            {printf("Result: %s\n", $1); exit(0);}
+program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
+      | boolExpr '\n' {
+            if ($1 == 1)
+                  printf("Result: true (size: %lu)\n", sizeof($1));
+            else
+                printf("Result: false (size: %lu)\n", sizeof($1));  
+            exit(0);}
+      | ID '\n'            {printf("ID: %s\n", $1); exit(0);}
       ;
 
-expr  : expr '+' expr  {$$ = $1 + $3;}
-      | expr '-' expr  {$$ = $1 - $3;}
-      | expr '*' expr  {$$ = $1 * $3;}
-      | expr '/' expr  {$$ = $1 / $3;}
+intExpr  : intExpr '+' intExpr  {$$ = $1 + $3;}
+      | intExpr '-' intExpr  {$$ = $1 - $3;}
+      | intExpr '*' intExpr  {$$ = $1 * $3;}
+      | intExpr '/' intExpr  {$$ = $1 / $3;}
       | INT            {$$ = $1;}
-      | '-' expr %prec UMINUS {$$ = -$2;}
-      | '(' expr ')' { $$ = $2; }
+      | '-' intExpr %prec UMINUS {$$ = -$2;}
+      | '(' intExpr ')' { $$ = $2; }
       ;
+
+boolExpr : boolExpr AND boolExpr {$$ = $1 && $3;}
+      | boolExpr OR boolExpr {$$ = $1 || $3;}
+      | NOT boolExpr { if($2==1){ $$=0; }else{ $$=1;} } 
+      | BOOL {$$ = $1;}
+      | '(' boolExpr ')' { $$ = $2; }
+      ;
+
 
 %%
 

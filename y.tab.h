@@ -50,8 +50,8 @@ extern int yydebug;
   enum yytokentype
   {
     INT = 258,
-    ID = 259,
-    BOOL = 260,
+    BOOL = 259,
+    ID = 260,
     CHAR = 261,
     BREAK = 262,
     AND = 263,
@@ -74,8 +74,8 @@ extern int yydebug;
 #endif
 /* Tokens.  */
 #define INT 258
-#define ID 259
-#define BOOL 260
+#define BOOL 259
+#define ID 260
 #define CHAR 261
 #define BREAK 262
 #define AND 263
@@ -102,10 +102,11 @@ union YYSTYPE
 #line 17 "Parser.y"
 
        char* lexeme;			//identifier
-       int value;			//value of an identifier of type int
+       int integer;			//value of an identifier of type int
+       bool boolean;
        
 
-#line 109 "y.tab.h"
+#line 110 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

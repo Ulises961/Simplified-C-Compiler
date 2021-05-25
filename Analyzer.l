@@ -7,14 +7,22 @@ void yyerror(char *);
 
 DIGIT       [0-9]
 INT         {DIGIT}+
+BOOLEAN  (true|false)
 LETTER      [a-zA-Z]
 ID          {LETTER}({LETTER}|{DIGIT})*
 
 %%
 
 [ \t] {/* skip blanks */}
-{INT}    {yylval.value = atoi(yytext);
+
+{INT}    {yylval.integer = atoi(yytext);
           return INT;}
+
+{BOOLEAN} {if (strcmp("true",strdup(yytext)) == 0)
+                yylval.integer = 1;
+            else
+                yylval.integer = 0;
+          return BOOL;}
 
 ":"     {return ':';}
 "+"     {return '+';}
@@ -22,7 +30,6 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "*"     {return '*';}
 "/"     {return '/';}
 
-"bool"  {return BOOL;}
 "break" {return BREAK;}
 "and"    {return AND;}
 "or"    {return OR;}
@@ -37,8 +44,6 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 ">="    {return GREQ;}
 "=="    {return EQ;}
 "!="    {return NEQ;}
-"true"  {return TRUE;}
-"false" {return FALSE;}
 "["     {return '[';}
 "]"     {return ']';}
 "{"     {return '{';}
@@ -46,6 +51,8 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "("     {return '(';}
 ")"     {return ')';}
 \n      {return '\n';}
+
+"int"  {return INT;}
 
 {ID}     {yylval.lexeme = strdup(yytext);
           return ID;}
