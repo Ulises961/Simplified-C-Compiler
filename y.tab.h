@@ -69,9 +69,10 @@ extern int yydebug;
     SMEQ = 275,
     TRUE = 276,
     FALSE = 277,
-    INT = 278,
-    BOOLEAN = 279,
-    UMINUS = 280
+    RETURN = 278,
+    INT = 279,
+    BOOLEAN = 280,
+    UMINUS = 281
   };
 #endif
 /* Tokens.  */
@@ -95,9 +96,10 @@ extern int yydebug;
 #define SMEQ 275
 #define TRUE 276
 #define FALSE 277
-#define INT 278
-#define BOOLEAN 279
-#define UMINUS 280
+#define RETURN 278
+#define INT 279
+#define BOOLEAN 280
+#define UMINUS 281
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -110,7 +112,7 @@ union YYSTYPE
        bool boolean;
        
 
-#line 114 "y.tab.h"
+#line 116 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

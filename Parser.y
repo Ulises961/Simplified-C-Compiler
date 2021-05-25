@@ -42,17 +42,19 @@ int symbols[26];
 %token SMEQ
 %token TRUE
 %token FALSE
+%token RETURN
 %token <lexeme> INT
 %token <lexeme> BOOLEAN
 %type <integer> intExpr
 %type <boolean> boolExpr
-%type <lexeme> typedec
+%type <lexeme> typeSpec
 
 %left '-' '+'
 %left '*' '/'
 %left AND OR
 %right NOT
 %right UMINUS
+
 
 %%
 program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1)); exit(0);}
@@ -67,7 +69,7 @@ program  : intExpr '\n'      {printf("Result: %d (size: %lu)\n", $1, sizeof($1))
       | declaration
       ;
 
-declaration: typedec ID ':' intExpr'\n' {
+declaration: typeSpec ID ':' intExpr'\n' {
       if (sizeof($4) == 4 && strcmp($1,"int") != 0){
             yyerror("Type is not an int\n");
             exit(1);
@@ -75,7 +77,7 @@ declaration: typedec ID ':' intExpr'\n' {
       
       printf("Type: %s Variable %s, of type int, value: %d\n", $1, $2, $4); exit(0);
       }
-      | typedec ID ':' boolExpr'\n' {
+      | typeSpec ID ':' boolExpr'\n' {
             if (sizeof($4) == 1 && strcmp($1,"bool") != 0){
                   yyerror("Type is not a bool\n");
                   exit(1);
@@ -85,7 +87,7 @@ declaration: typedec ID ':' intExpr'\n' {
             }
       ;
 
-typedec: INT 
+typeSpec: INT 
       | BOOLEAN ;
 
 intExpr  : intExpr '+' intExpr  {$$ = $1 + $3;}
@@ -103,7 +105,7 @@ boolExpr : boolExpr AND boolExpr {$$ = $1 && $3;}
       | BOOL {$$ = $1;}
       | '(' boolExpr ')' { $$ = $2; }
       ;
-      
+   
 
 %%
 

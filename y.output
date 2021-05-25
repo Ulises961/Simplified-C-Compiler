@@ -14,6 +14,7 @@ Terminals unused in grammar
     SMEQ
     TRUE
     FALSE
+    RETURN
 
 
 Grammar
@@ -26,11 +27,11 @@ Grammar
     4        | INT '\n'
     5        | declaration
 
-    6 declaration: typedec ID ':' intExpr '\n'
-    7            | typedec ID ':' boolExpr '\n'
+    6 declaration: typeSpec ID ':' intExpr '\n'
+    7            | typeSpec ID ':' boolExpr '\n'
 
-    8 typedec: INT
-    9        | BOOLEAN
+    8 typeSpec: INT
+    9         | BOOLEAN
 
    10 intExpr: intExpr '+' intExpr
    11        | intExpr '-' intExpr
@@ -79,28 +80,29 @@ Terminals, with rules where they appear
     SMEQ (275)
     TRUE (276)
     FALSE (277)
-    INT <lexeme> (278) 4 8
-    BOOLEAN <lexeme> (279) 9
-    UMINUS (280)
+    RETURN (278)
+    INT <lexeme> (279) 4 8
+    BOOLEAN <lexeme> (280) 9
+    UMINUS (281)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (34)
+    $accept (35)
         on left: 0
-    program (35)
+    program (36)
         on left: 1 2 3 4 5
         on right: 0
-    declaration (36)
+    declaration (37)
         on left: 6 7
         on right: 5
-    typedec <lexeme> (37)
+    typeSpec <lexeme> (38)
         on left: 8 9
         on right: 6 7
-    intExpr <integer> (38)
+    intExpr <integer> (39)
         on left: 10 11 12 13 14 15 16
         on right: 1 6 10 11 12 13 15 16
-    boolExpr <boolean> (39)
+    boolExpr <boolean> (40)
         on left: 17 18 19 20 21
         on right: 2 7 17 18 19 21
 
@@ -120,7 +122,7 @@ State 0
 
     program      go to state 9
     declaration  go to state 10
-    typedec      go to state 11
+    typeSpec     go to state 11
     intExpr      go to state 12
     boolExpr     go to state 13
 
@@ -160,18 +162,18 @@ State 4
 State 5
 
     4 program: INT . '\n'
-    8 typedec: INT .
+    8 typeSpec: INT .
 
     '\n'  shift, and go to state 17
 
-    $default  reduce using rule 8 (typedec)
+    $default  reduce using rule 8 (typeSpec)
 
 
 State 6
 
-    9 typedec: BOOLEAN .
+    9 typeSpec: BOOLEAN .
 
-    $default  reduce using rule 9 (typedec)
+    $default  reduce using rule 9 (typeSpec)
 
 
 State 7
@@ -216,8 +218,8 @@ State 10
 
 State 11
 
-    6 declaration: typedec . ID ':' intExpr '\n'
-    7            | typedec . ID ':' boolExpr '\n'
+    6 declaration: typeSpec . ID ':' intExpr '\n'
+    7            | typeSpec . ID ':' boolExpr '\n'
 
     ID  shift, and go to state 23
 
@@ -339,8 +341,8 @@ State 22
 
 State 23
 
-    6 declaration: typedec ID . ':' intExpr '\n'
-    7            | typedec ID . ':' boolExpr '\n'
+    6 declaration: typeSpec ID . ':' intExpr '\n'
+    7            | typeSpec ID . ':' boolExpr '\n'
 
     ':'  shift, and go to state 34
 
@@ -441,8 +443,8 @@ State 33
 
 State 34
 
-    6 declaration: typedec ID ':' . intExpr '\n'
-    7            | typedec ID ':' . boolExpr '\n'
+    6 declaration: typeSpec ID ':' . intExpr '\n'
+    7            | typeSpec ID ':' . boolExpr '\n'
 
     NUM   shift, and go to state 1
     BOOL  shift, and go to state 2
@@ -524,7 +526,7 @@ State 40
 
 State 41
 
-    6 declaration: typedec ID ':' intExpr . '\n'
+    6 declaration: typeSpec ID ':' intExpr . '\n'
    10 intExpr: intExpr . '+' intExpr
    11        | intExpr . '-' intExpr
    12        | intExpr . '*' intExpr
@@ -539,7 +541,7 @@ State 41
 
 State 42
 
-    7 declaration: typedec ID ':' boolExpr . '\n'
+    7 declaration: typeSpec ID ':' boolExpr . '\n'
    17 boolExpr: boolExpr . AND boolExpr
    18         | boolExpr . OR boolExpr
 
@@ -550,13 +552,13 @@ State 42
 
 State 43
 
-    6 declaration: typedec ID ':' intExpr '\n' .
+    6 declaration: typeSpec ID ':' intExpr '\n' .
 
     $default  reduce using rule 6 (declaration)
 
 
 State 44
 
-    7 declaration: typedec ID ':' boolExpr '\n' .
+    7 declaration: typeSpec ID ':' boolExpr '\n' .
 
     $default  reduce using rule 7 (declaration)
