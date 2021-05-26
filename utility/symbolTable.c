@@ -56,24 +56,6 @@ symbol* createSymbol(char* name, char* type, int value){
     symbolPtr->type = type;
     symbolPtr->value = value;
 
-    // in case head and tail are still NULL
-    /*if (symbolTable->head == NULL){
-        if (symbolTable->tail != NULL)
-            exit(1); // error
-
-        printf("Null HEAD\n");
-        symbolPtr->next = symbolTable->head;
-
-        symbolTable->head = symbolPtr;
-        symbolTable->tail = symbolPtr;
-    }
-    
-    printf("Head Name: %s Type: %s Value: %d\n", symbolTable->head->name, symbolTable->head->type, symbolTable->head->value);
-    printf("Tail Name: %s Type: %s Value: %d\n", symbolTable->tail->name, symbolTable->tail->type, symbolTable->tail->value);*/
-
-    // assignType(symbolPtr, type);
-    //symbolPtr->next = NULL;
-
     return symbolPtr;
 }
 
@@ -82,15 +64,13 @@ symbol* lookup(char* name){
 
     //symbol* temp = symbolTable->head;
 
-    symbol* temp;
+    symbol* temp = symbolTable->head;
 
     if (symbolTable->head == NULL){
         printf("Symbol table empty...\n");
         return NULL;
     }
-    else{
-        printf("Name: %s Type: %s Value: %d\n", temp->name, temp->type, temp->value);
-        
+    else{      
         while(temp != NULL){
             if(strcmp(temp->name, name) == 0){
                 printf("Found variable %s in symbol table\n", name);
@@ -106,24 +86,27 @@ symbol* lookup(char* name){
     return temp;
 }
 
-void addToTail(symbol* newSymbol){
+void addToTail(char* name, char* type, int value){
 
-    if (lookup(newSymbol->name) == NULL){
-        if(symbolTable->head == NULL){
-            symbolTable->head = newSymbol;
+    symbol* symbolPtr = createSymbol(name, type, value);
+
+    if (lookup(name) != NULL){
+        printf("Error, variable %s already defined...\n", symbolPtr->name);
+        exit(1);
+    }
+
+    printf("Creating variable %s\n", name);
+
+    if(symbolTable->head == NULL){
+            symbolTable->head = symbolPtr;
             symbolTable->tail = symbolTable->head;
 
-        }else if(symbolTable->head == symbolTable->tail){
-            symbolTable->head->next = newSymbol;
-            symbolTable->tail = newSymbol;
+    }else if(symbolTable->head == symbolTable->tail){
+            symbolTable->head->next = symbolPtr;
+            symbolTable->tail = symbolPtr;
 
-        }else{
-            symbolTable->tail->next = newSymbol;
-            symbolTable->tail = newSymbol;
-        }
-    }
-    else{
-        printf("Error, variable %s already defined...\n", newSymbol->name);
-        exit(1);
+    }else{
+            symbolTable->tail->next = symbolPtr;
+            symbolTable->tail = symbolPtr;
     }
 }

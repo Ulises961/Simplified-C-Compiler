@@ -1808,16 +1808,15 @@ void yyerror(char *s) {
 int main(void) {
 
       initialize();
-
-      symbol* new = createSymbol("testVar","testType",10);
-      
-      addToTail(new);
-
+     
+      addToTail("testVar","testType",10);
       symbol* look = lookup("testVar");
-
       printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
 
       
+      addToTail("testVar4","testType2",20);
+      look = lookup("testVar4");
+      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
 
 
       yyparse();
