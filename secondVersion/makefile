@@ -1,4 +1,4 @@
 all:
 	flex Analyzer.l
-	yacc -vd calc-yacc.y
+	yacc -vd yaccTester.y
 	gcc y.tab.c -ly -ll -o tester

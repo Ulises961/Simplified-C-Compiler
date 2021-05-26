@@ -5,12 +5,16 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include "lex.yy.c"
+#include "../symbolTable.c"
+
 //#include <symbolTab>
 
 void yyerror(char *);
 int yylex(void);
 bool compare(int, int, int);
 int sum ( int, int, int);
+int multiply ( int, int, int);
 int symbols[26];
 
 %}
@@ -20,12 +24,11 @@ int symbols[26];
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
        bool boolean;
- 
        }
 
 
 %token <integer>  NUM //
-%token <boolean>  BOOL
+%token BOOL
 %token <lexeme> ID
 
 
@@ -46,8 +49,8 @@ int symbols[26];
 %token <boolean>TRUE
 %token <boolean>FALSE
 %token RETURN
-%token <lexeme> INT
-%token <lexeme> BOOLEAN
+%token INT
+//%token BOOLEAN
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
@@ -74,19 +77,29 @@ int symbols[26];
 
 
 %%
-program : typeSpec varDeclInit ';' { printf("%s",$1);exit(1);}
+program : 
+      typeSpec varDeclInit ';' { symbol* x = createSymbol($2,$1);
+                                          printf("%s",x->name);exit(1);}
       | stmt {}
       |program program {}
       |boolExp '\n'{ printf("%d",$1);exit(1);}
       ; 
-varDeclInit : varDeclId { $$ = $1; }
-      | varDeclId ':' simpleExp {$$ = loo  $3;}
+varDeclInit : 
+      varDeclId { $$ = $1; }
+      | varDeclId ':' simpleExp {
+            symbol* x = lookup($1);
+
+            if(x != NULL){
+                  assignValue(x, $3);
+            }
+            $$ = x;
+        }
       ;
 varDeclId : ID { $$ = $1;}
       |ID[NUM] {}
       ;
-typeSpec : INT {$$ = $1;}
-      | BOOL {$$ = $1;}
+typeSpec : INT {$$ = 11119;}
+      | BOOL {$$ = 11120;}
       ;
  stmt : exp;
       |;
@@ -128,16 +141,16 @@ relOp: GR { $$ = 11111 ;}
       |NEQ { $$ = 11116 ; }
       ;
 sumExp: sumExp sumOp mulExp { $$ = sum ($1,$2,$3); }
-      |mulExp { $$ = $$1; }
+      |mulExp { $$ = $1; }
       ;
-sumOp: '+'
-      |'-'
+sumOp: '+' { $$ = 11117;}
+      |'-'  { $$ = 11118;}
       ;
 mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3);}
       | unaryExp
       ;
-mulOp: '*' { $$ = 11117;}
-      | '/'  { $$ = 11118;}
+mulOp: '*' { $$ = 11121;}
+      | '/'  { $$ = 11122;}
       ;
 unaryExp: '-' NUM { $$ = -$2;}
       |NUM { $$ = $1;}
@@ -146,7 +159,6 @@ unaryExp: '-' NUM { $$ = -$2;}
 
 %%
 
-#include "lex.yy.c"
 
 void yyerror(char *s) {
       fprintf(stderr, "%s\n", s);
@@ -187,7 +199,7 @@ int sum ( int a, int b, int c){
 
 int multiply ( int a, int b, int c){
       switch (b){
-            case 11117 : return (a * b);
-            case 11118 : return (a / b); 
+            case 11121 : return (a * b);
+            case 11122 : return (a / b); 
       }
 }
