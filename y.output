@@ -1,0 +1,839 @@
+Terminals unused in grammar
+
+    CHAR
+    BREAK
+    IF
+    ELSE
+    WHILE
+    DO
+    TRUE
+    FALSE
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program statement '\n'
+    2        | %empty
+
+    3 statement: expr ';'
+    4          | varDecl ';'
+    5          | RETURN ';'
+
+    6 expr: intExpr
+    7     | boolExpr
+    8     | relExpr
+
+    9 intExpr: intExpr '+' intExpr
+   10        | intExpr '-' intExpr
+   11        | intExpr '*' intExpr
+   12        | intExpr '/' intExpr
+   13        | NUM
+   14        | '-' intExpr
+   15        | '(' intExpr ')'
+
+   16 boolExpr: boolExpr AND boolExpr
+   17         | boolExpr OR boolExpr
+   18         | NOT boolExpr
+   19         | BOOL
+   20         | '(' boolExpr ')'
+
+   21 relExpr: expr SMEQ expr
+   22        | expr SM expr
+   23        | expr GR expr
+   24        | expr GREQ expr
+   25        | expr EQ expr
+   26        | expr NEQ expr
+   27        | '(' relExpr ')'
+
+   28 varDecl: typeSpec ID ':' expr
+
+   29 typeSpec: INT
+   30         | BOOLEAN
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '\n' (10) 1
+    '(' (40) 15 20 27
+    ')' (41) 15 20 27
+    '*' (42) 11
+    '+' (43) 9
+    '-' (45) 10 14
+    '/' (47) 12
+    ':' (58) 28
+    ';' (59) 3 4 5
+    error (256)
+    NUM <integer> (258) 13
+    BOOL <integer> (259) 19
+    ID <lexeme> (260) 28
+    CHAR (261)
+    BREAK (262)
+    AND (263) 16
+    OR (264) 17
+    NOT (265) 18
+    IF (266)
+    ELSE (267)
+    WHILE (268)
+    DO (269)
+    SMEQ (270) 21
+    SM (271) 22
+    GR (272) 23
+    GREQ (273) 24
+    EQ (274) 25
+    NEQ (275) 26
+    TRUE (276)
+    FALSE (277)
+    RETURN (278) 5
+    INT <lexeme> (279) 29
+    BOOLEAN <lexeme> (280) 30
+    UMINUS (281)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (36)
+        on left: 0
+    program (37)
+        on left: 1 2
+        on right: 0 1
+    statement (38)
+        on left: 3 4 5
+        on right: 1
+    expr <integer> (39)
+        on left: 6 7 8
+        on right: 3 21 22 23 24 25 26 28
+    intExpr <integer> (40)
+        on left: 9 10 11 12 13 14 15
+        on right: 6 9 10 11 12 14 15
+    boolExpr <integer> (41)
+        on left: 16 17 18 19 20
+        on right: 7 16 17 18 20
+    relExpr <integer> (42)
+        on left: 21 22 23 24 25 26 27
+        on right: 8 27
+    varDecl (43)
+        on left: 28
+        on right: 4
+    typeSpec <lexeme> (44)
+        on left: 29 30
+        on right: 28
+
+
+State 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 2 (program)
+
+    program  go to state 1
+
+
+State 1
+
+    0 $accept: program . $end
+    1 program: program . statement '\n'
+
+    $end     shift, and go to state 2
+    NUM      shift, and go to state 3
+    BOOL     shift, and go to state 4
+    NOT      shift, and go to state 5
+    RETURN   shift, and go to state 6
+    INT      shift, and go to state 7
+    BOOLEAN  shift, and go to state 8
+    '-'      shift, and go to state 9
+    '('      shift, and go to state 10
+
+    statement  go to state 11
+    expr       go to state 12
+    intExpr    go to state 13
+    boolExpr   go to state 14
+    relExpr    go to state 15
+    varDecl    go to state 16
+    typeSpec   go to state 17
+
+
+State 2
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 3
+
+   13 intExpr: NUM .
+
+    $default  reduce using rule 13 (intExpr)
+
+
+State 4
+
+   19 boolExpr: BOOL .
+
+    $default  reduce using rule 19 (boolExpr)
+
+
+State 5
+
+   18 boolExpr: NOT . boolExpr
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 18
+
+    boolExpr  go to state 19
+
+
+State 6
+
+    5 statement: RETURN . ';'
+
+    ';'  shift, and go to state 20
+
+
+State 7
+
+   29 typeSpec: INT .
+
+    $default  reduce using rule 29 (typeSpec)
+
+
+State 8
+
+   30 typeSpec: BOOLEAN .
+
+    $default  reduce using rule 30 (typeSpec)
+
+
+State 9
+
+   14 intExpr: '-' . intExpr
+
+    NUM  shift, and go to state 3
+    '-'  shift, and go to state 9
+    '('  shift, and go to state 21
+
+    intExpr  go to state 22
+
+
+State 10
+
+   15 intExpr: '(' . intExpr ')'
+   20 boolExpr: '(' . boolExpr ')'
+   27 relExpr: '(' . relExpr ')'
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 23
+    intExpr   go to state 24
+    boolExpr  go to state 25
+    relExpr   go to state 26
+
+
+State 11
+
+    1 program: program statement . '\n'
+
+    '\n'  shift, and go to state 27
+
+
+State 12
+
+    3 statement: expr . ';'
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+
+    SMEQ  shift, and go to state 28
+    SM    shift, and go to state 29
+    GR    shift, and go to state 30
+    GREQ  shift, and go to state 31
+    EQ    shift, and go to state 32
+    NEQ   shift, and go to state 33
+    ';'   shift, and go to state 34
+
+
+State 13
+
+    6 expr: intExpr .
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 6 (expr)
+
+
+State 14
+
+    7 expr: boolExpr .
+   16 boolExpr: boolExpr . AND boolExpr
+   17         | boolExpr . OR boolExpr
+
+    AND  shift, and go to state 39
+    OR   shift, and go to state 40
+
+    $default  reduce using rule 7 (expr)
+
+
+State 15
+
+    8 expr: relExpr .
+
+    $default  reduce using rule 8 (expr)
+
+
+State 16
+
+    4 statement: varDecl . ';'
+
+    ';'  shift, and go to state 41
+
+
+State 17
+
+   28 varDecl: typeSpec . ID ':' expr
+
+    ID  shift, and go to state 42
+
+
+State 18
+
+   20 boolExpr: '(' . boolExpr ')'
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 18
+
+    boolExpr  go to state 43
+
+
+State 19
+
+   16 boolExpr: boolExpr . AND boolExpr
+   17         | boolExpr . OR boolExpr
+   18         | NOT boolExpr .
+
+    $default  reduce using rule 18 (boolExpr)
+
+
+State 20
+
+    5 statement: RETURN ';' .
+
+    $default  reduce using rule 5 (statement)
+
+
+State 21
+
+   15 intExpr: '(' . intExpr ')'
+
+    NUM  shift, and go to state 3
+    '-'  shift, and go to state 9
+    '('  shift, and go to state 21
+
+    intExpr  go to state 44
+
+
+State 22
+
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+   14        | '-' intExpr .
+
+    $default  reduce using rule 14 (intExpr)
+
+
+State 23
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+
+    SMEQ  shift, and go to state 28
+    SM    shift, and go to state 29
+    GR    shift, and go to state 30
+    GREQ  shift, and go to state 31
+    EQ    shift, and go to state 32
+    NEQ   shift, and go to state 33
+
+
+State 24
+
+    6 expr: intExpr .
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+   15        | '(' intExpr . ')'
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+    ')'  shift, and go to state 45
+
+    $default  reduce using rule 6 (expr)
+
+
+State 25
+
+    7 expr: boolExpr .
+   16 boolExpr: boolExpr . AND boolExpr
+   17         | boolExpr . OR boolExpr
+   20         | '(' boolExpr . ')'
+
+    AND  shift, and go to state 39
+    OR   shift, and go to state 40
+    ')'  shift, and go to state 46
+
+    $default  reduce using rule 7 (expr)
+
+
+State 26
+
+    8 expr: relExpr .
+   27 relExpr: '(' relExpr . ')'
+
+    ')'  shift, and go to state 47
+
+    $default  reduce using rule 8 (expr)
+
+
+State 27
+
+    1 program: program statement '\n' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 28
+
+   21 relExpr: expr SMEQ . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 48
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 29
+
+   22 relExpr: expr SM . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 49
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 30
+
+   23 relExpr: expr GR . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 50
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 31
+
+   24 relExpr: expr GREQ . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 51
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 32
+
+   25 relExpr: expr EQ . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 52
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 33
+
+   26 relExpr: expr NEQ . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 53
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 34
+
+    3 statement: expr ';' .
+
+    $default  reduce using rule 3 (statement)
+
+
+State 35
+
+   10 intExpr: intExpr '-' . intExpr
+
+    NUM  shift, and go to state 3
+    '-'  shift, and go to state 9
+    '('  shift, and go to state 21
+
+    intExpr  go to state 54
+
+
+State 36
+
+    9 intExpr: intExpr '+' . intExpr
+
+    NUM  shift, and go to state 3
+    '-'  shift, and go to state 9
+    '('  shift, and go to state 21
+
+    intExpr  go to state 55
+
+
+State 37
+
+   11 intExpr: intExpr '*' . intExpr
+
+    NUM  shift, and go to state 3
+    '-'  shift, and go to state 9
+    '('  shift, and go to state 21
+
+    intExpr  go to state 56
+
+
+State 38
+
+   12 intExpr: intExpr '/' . intExpr
+
+    NUM  shift, and go to state 3
+    '-'  shift, and go to state 9
+    '('  shift, and go to state 21
+
+    intExpr  go to state 57
+
+
+State 39
+
+   16 boolExpr: boolExpr AND . boolExpr
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 18
+
+    boolExpr  go to state 58
+
+
+State 40
+
+   17 boolExpr: boolExpr OR . boolExpr
+
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '('   shift, and go to state 18
+
+    boolExpr  go to state 59
+
+
+State 41
+
+    4 statement: varDecl ';' .
+
+    $default  reduce using rule 4 (statement)
+
+
+State 42
+
+   28 varDecl: typeSpec ID . ':' expr
+
+    ':'  shift, and go to state 60
+
+
+State 43
+
+   16 boolExpr: boolExpr . AND boolExpr
+   17         | boolExpr . OR boolExpr
+   20         | '(' boolExpr . ')'
+
+    AND  shift, and go to state 39
+    OR   shift, and go to state 40
+    ')'  shift, and go to state 46
+
+
+State 44
+
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+   15        | '(' intExpr . ')'
+
+    '-'  shift, and go to state 35
+    '+'  shift, and go to state 36
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+    ')'  shift, and go to state 45
+
+
+State 45
+
+   15 intExpr: '(' intExpr ')' .
+
+    $default  reduce using rule 15 (intExpr)
+
+
+State 46
+
+   20 boolExpr: '(' boolExpr ')' .
+
+    $default  reduce using rule 20 (boolExpr)
+
+
+State 47
+
+   27 relExpr: '(' relExpr ')' .
+
+    $default  reduce using rule 27 (relExpr)
+
+
+State 48
+
+   21 relExpr: expr . SMEQ expr
+   21        | expr SMEQ expr .
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+
+    $default  reduce using rule 21 (relExpr)
+
+
+State 49
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   22        | expr SM expr .
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+
+    $default  reduce using rule 22 (relExpr)
+
+
+State 50
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   23        | expr GR expr .
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+
+    $default  reduce using rule 23 (relExpr)
+
+
+State 51
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   24        | expr GREQ expr .
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+
+    $default  reduce using rule 24 (relExpr)
+
+
+State 52
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   25        | expr EQ expr .
+   26        | expr . NEQ expr
+
+    $default  reduce using rule 25 (relExpr)
+
+
+State 53
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+   26        | expr NEQ expr .
+
+    $default  reduce using rule 26 (relExpr)
+
+
+State 54
+
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   10        | intExpr '-' intExpr .
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 10 (intExpr)
+
+
+State 55
+
+    9 intExpr: intExpr . '+' intExpr
+    9        | intExpr '+' intExpr .
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+
+    '*'  shift, and go to state 37
+    '/'  shift, and go to state 38
+
+    $default  reduce using rule 9 (intExpr)
+
+
+State 56
+
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   11        | intExpr '*' intExpr .
+   12        | intExpr . '/' intExpr
+
+    $default  reduce using rule 11 (intExpr)
+
+
+State 57
+
+    9 intExpr: intExpr . '+' intExpr
+   10        | intExpr . '-' intExpr
+   11        | intExpr . '*' intExpr
+   12        | intExpr . '/' intExpr
+   12        | intExpr '/' intExpr .
+
+    $default  reduce using rule 12 (intExpr)
+
+
+State 58
+
+   16 boolExpr: boolExpr . AND boolExpr
+   16         | boolExpr AND boolExpr .
+   17         | boolExpr . OR boolExpr
+
+    $default  reduce using rule 16 (boolExpr)
+
+
+State 59
+
+   16 boolExpr: boolExpr . AND boolExpr
+   17         | boolExpr . OR boolExpr
+   17         | boolExpr OR boolExpr .
+
+    $default  reduce using rule 17 (boolExpr)
+
+
+State 60
+
+   28 varDecl: typeSpec ID ':' . expr
+
+    NUM   shift, and go to state 3
+    BOOL  shift, and go to state 4
+    NOT   shift, and go to state 5
+    '-'   shift, and go to state 9
+    '('   shift, and go to state 10
+
+    expr      go to state 61
+    intExpr   go to state 13
+    boolExpr  go to state 14
+    relExpr   go to state 15
+
+
+State 61
+
+   21 relExpr: expr . SMEQ expr
+   22        | expr . SM expr
+   23        | expr . GR expr
+   24        | expr . GREQ expr
+   25        | expr . EQ expr
+   26        | expr . NEQ expr
+   28 varDecl: typeSpec ID ':' expr .
+
+    SMEQ  shift, and go to state 28
+    SM    shift, and go to state 29
+    GR    shift, and go to state 30
+    GREQ  shift, and go to state 31
+    EQ    shift, and go to state 32
+    NEQ   shift, and go to state 33
+
+    $default  reduce using rule 28 (varDecl)

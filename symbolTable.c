@@ -22,6 +22,37 @@ void initialize(){
     symbolTable = (symbolHT*) malloc(sizeof(symbolHT));
 }
 
+void assignValue(symbol* variable, int value){
+    if(variable->type == 11120){
+        if(value == 0 || value == 1)
+            variable->value = value;
+        else{
+            printf("\nError: invalid assignment!\n");
+            return;
+        }
+            
+    }else
+        variable->value = value;
+}
+
+void assignType(symbol* variable, char* type){
+    // if(!(type == 11119 && type == 11120)){
+    //     printf("Null pointer exception!");
+    //     return;
+    // }
+
+    // variable->type = type;
+}
+
+symbol* createSymbol(char* name, char* type){
+    symbol* symbolPtr = malloc(sizeof(symbol));
+    
+    symbolPtr->name = name;
+    // assignType(symbolPtr, type);
+    symbolPtr->next = NULL;
+
+    return symbolPtr;
+}
 
 symbol* lookup(char* name){
     symbol* temp = symbolTable->head;
@@ -34,15 +65,6 @@ symbol* lookup(char* name){
     }
 
     return temp;
-}
-
-symbol* createSymbol(char* name, int type, int value){
-    symbol* symbolPtr = malloc(sizeof(symbol));
-    symbolPtr->name = name;
-    symbolPtr->type = type;
-    symbolPtr->value = value;
-    symbolPtr->next = NULL;
-    return symbolPtr;
 }
 
 void addToTail(symbol* newSymbol){
@@ -59,29 +81,4 @@ void addToTail(symbol* newSymbol){
         symbolTable->tail->next = newSymbol;
         symbolTable->tail = newSymbol;
     }
-}
-
-
-int main(){
-    initialize();
-
-    symbol* a = createSymbol("aa", 1, 1);
-    symbol* b = createSymbol("bb", 1, 1);
-    symbol* c = createSymbol("cc", 1, 1);
-
-    addToTail(a);
-    addToTail(b);
-    addToTail(c);
-
-    printf("Inside the symboltable we have: %s\n", symbolTable->head->name);
-    printf("Inside the symboltable we have: %s\n", symbolTable->head->next->name);
-    printf("Inside the symboltable we have: %s\n", symbolTable->head->next->next->name);
-    
-    symbol* temp = lookup("cc");
-
-    if(temp != NULL)
-        printf("\ntemp = %s\n", temp->name);
-
-    printf("\nend\n");
-    return 0;
 }
