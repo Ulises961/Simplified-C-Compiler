@@ -137,13 +137,15 @@ int main(void) {
 
       initialize();
 
-      symbol* test = createSymbol("testVar","testType",10);
-      //symbol* test = createSymbol("testVar","testType",10);
-      //printf("Name: %s Type: %s Value: %d\n", test->name, test->type, test->value);
+      symbol* new = createSymbol("testVar","testType",10);
+      
+      addToTail(new);
 
-      //printf("%d\n", symbolTable->test);
+      symbol* look = lookup("testVar");
 
+      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
 
+      
 
 
       yyparse();
