@@ -71,10 +71,27 @@ program: program statement '\n'
       |
       ;
 
-statement: expr ';'
-      | varDecl ';'
+statement: varDecl ';'
+      | expr ';'
       | RETURN ';' {printf ("Exiting program...\n"); exit(0);}
       ;
+
+
+varDecl: typeSpec ID ':' expr {                                   // assignment of true or false values to int variable makes automatic conversion
+            if (strcmp($1,"bool")==0 && ($4 != 0 && $4 != 1)){    // for bool variables only true, false, 0 and 1 are accepted
+                  yyerror("TypeError, cannot assign int value to bool variable...\n");
+                  exit(1);
+            }
+            if (strcmp($1,"int")==0)
+                  printf("Variable %s, of type %s, value: %d\n", $2, $1, $4);
+            else
+                  printf("Variable %s, of type %s, value: %s\n", $2, $1, (($4 == 1) ? "true" : "false"));
+
+      }
+      ;
+
+typeSpec: INT 
+      | BOOLEAN ;
 
 expr : intExpr    { printf("Integer expression result: %d\n", $1); }
       | boolExpr  { printf("Boolean expression result: %s\n", (($1 == 1) ? "true" : "false"));}
@@ -105,22 +122,6 @@ relExpr : expr SMEQ expr      {if ($1 <= $3) $$ = 1;else $$ = 0;}
       | expr NEQ expr         {if ($1 != $3) $$ = 1;else $$ = 0;}
       | '(' relExpr ')'            { $$ = $2; }
       ;
-
-varDecl: typeSpec ID ':' expr {                                   // assignment of true or false values to int variable makes automatic conversion
-            if (strcmp($1,"bool")==0 && ($4 != 0 && $4 != 1)){    // for bool variables only true, false, 0 and 1 are accepted
-                  yyerror("TypeError, cannot assign int value to bool variable...\n");
-                  exit(1);
-            }
-            if (strcmp($1,"int")==0)
-                  printf("Variable %s, of type %s, value: %d\n", $2, $1, $4);
-            else
-                  printf("Variable %s, of type %s, value: %s\n", $2, $1, (($4 == 1) ? "true" : "false"));
-
-      }
-      ;
-
-typeSpec: INT 
-      | BOOLEAN ;
 
 
 %%
