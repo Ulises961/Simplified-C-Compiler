@@ -571,12 +571,12 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    81,    81,    83,    84,    85,    86,    87,    90,    91,
-     100,   101,   103,   104,   106,   107,   108,   109,   110,   111,
-     112,   113,   115,   116,   117,   119,   120,   121,   123,   124,
-     125,   127,   128,   129,   132,   133,   134,   135,   138,   139,
-     140,   141,   142,   143,   145,   146,   148,   149,   151,   152,
-     154,   155,   157,   158
+       0,    82,    82,    84,    85,    86,    87,    88,    91,    92,
+     102,   103,   105,   106,   108,   109,   110,   111,   112,   113,
+     114,   115,   117,   118,   119,   121,   122,   123,   125,   126,
+     127,   129,   130,   131,   134,   135,   136,   137,   140,   141,
+     142,   143,   144,   145,   147,   148,   150,   151,   153,   154,
+     156,   157,   159,   160
 };
 #endif
 
@@ -1440,50 +1440,51 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 81 "yaccTester.y"
-                                     {printf( "\n Input line parsed");}
+#line 82 "yaccTester.y"
+                                     {printf( "\n Input line parsed\n"); exit(0);}
 #line 1446 "y.tab.c"
     break;
 
   case 3:
-#line 83 "yaccTester.y"
+#line 84 "yaccTester.y"
              {}
 #line 1452 "y.tab.c"
     break;
 
   case 4:
-#line 84 "yaccTester.y"
+#line 85 "yaccTester.y"
                        {}
 #line 1458 "y.tab.c"
     break;
 
   case 5:
-#line 85 "yaccTester.y"
+#line 86 "yaccTester.y"
                    { printf("%d\n",(yyvsp[-1].boolean));exit(1);}
 #line 1464 "y.tab.c"
     break;
 
   case 6:
-#line 86 "yaccTester.y"
+#line 87 "yaccTester.y"
                   { printf("%d\n",(yyvsp[-1].integer));exit(1);}
 #line 1470 "y.tab.c"
     break;
 
   case 7:
-#line 87 "yaccTester.y"
+#line 88 "yaccTester.y"
                   { printf("%d\n",(yyvsp[-1].integer));exit(1);}
 #line 1476 "y.tab.c"
     break;
 
   case 8:
-#line 90 "yaccTester.y"
+#line 91 "yaccTester.y"
                 { (yyval.lexeme) = (yyvsp[0].lexeme); }
 #line 1482 "y.tab.c"
     break;
 
   case 9:
-#line 91 "yaccTester.y"
-                                { printf("\n value Var decl id: %s simple exp: %d\n",(yyvsp[-2].lexeme),(yyvsp[0].integer));
+#line 92 "yaccTester.y"
+                                {
+            printf("\n value Var decl id: %s simple exp: %d\n",(yyvsp[-2].lexeme),(yyvsp[0].integer));
             // symbol* x = lookup($1);
 
             // if(x != NULL){
@@ -1491,179 +1492,179 @@ yyreduce:
             // }
              (yyval.lexeme) = (yyvsp[-2].lexeme);
         }
-#line 1495 "y.tab.c"
+#line 1496 "y.tab.c"
     break;
 
   case 10:
-#line 100 "yaccTester.y"
+#line 102 "yaccTester.y"
                { (yyval.lexeme) = (yyvsp[0].lexeme); printf("\n value ID: %s\n",(yyvsp[0].lexeme));}
-#line 1501 "y.tab.c"
+#line 1502 "y.tab.c"
     break;
 
   case 11:
-#line 101 "yaccTester.y"
+#line 103 "yaccTester.y"
                {}
-#line 1507 "y.tab.c"
+#line 1508 "y.tab.c"
     break;
 
   case 12:
-#line 103 "yaccTester.y"
+#line 105 "yaccTester.y"
                {(yyval.lexeme) = 11119; printf("\n value type Spec: %d\n",(yyval.lexeme));}
-#line 1513 "y.tab.c"
+#line 1514 "y.tab.c"
     break;
 
   case 13:
-#line 104 "yaccTester.y"
+#line 106 "yaccTester.y"
              {(yyval.lexeme) = 11120;}
-#line 1519 "y.tab.c"
+#line 1520 "y.tab.c"
     break;
 
   case 29:
-#line 124 "yaccTester.y"
+#line 126 "yaccTester.y"
                 {(yyval.integer) = (yyvsp[0].boolean);}
-#line 1525 "y.tab.c"
+#line 1526 "y.tab.c"
     break;
 
   case 30:
-#line 125 "yaccTester.y"
+#line 127 "yaccTester.y"
                 {(yyval.integer) = (yyvsp[0].integer);}
-#line 1531 "y.tab.c"
+#line 1532 "y.tab.c"
     break;
 
   case 31:
-#line 127 "yaccTester.y"
+#line 129 "yaccTester.y"
                              { (yyval.boolean) = (yyvsp[-2].boolean) || (yyvsp[0].boolean) ;}
-#line 1537 "y.tab.c"
+#line 1538 "y.tab.c"
     break;
 
   case 32:
-#line 128 "yaccTester.y"
+#line 130 "yaccTester.y"
                                 { (yyval.boolean) = (yyvsp[-2].boolean) &&  (yyvsp[0].boolean);}
-#line 1543 "y.tab.c"
+#line 1544 "y.tab.c"
     break;
 
   case 33:
-#line 129 "yaccTester.y"
+#line 131 "yaccTester.y"
                     {(yyval.boolean) = (yyvsp[0].boolean);}
-#line 1549 "y.tab.c"
+#line 1550 "y.tab.c"
     break;
 
   case 34:
-#line 132 "yaccTester.y"
+#line 134 "yaccTester.y"
                              { (yyval.boolean) = !((yyvsp[0].boolean)); }
-#line 1555 "y.tab.c"
+#line 1556 "y.tab.c"
     break;
 
   case 35:
-#line 133 "yaccTester.y"
+#line 135 "yaccTester.y"
                            { (yyval.boolean) = compare((yyvsp[-2].integer),(yyvsp[-1].integer),(yyvsp[0].integer)); }
-#line 1561 "y.tab.c"
+#line 1562 "y.tab.c"
     break;
 
   case 36:
-#line 134 "yaccTester.y"
+#line 136 "yaccTester.y"
             {(yyval.boolean) = true;}
-#line 1567 "y.tab.c"
+#line 1568 "y.tab.c"
     break;
 
   case 37:
-#line 135 "yaccTester.y"
+#line 137 "yaccTester.y"
              {(yyval.boolean) = false;}
-#line 1573 "y.tab.c"
+#line 1574 "y.tab.c"
     break;
 
   case 38:
-#line 138 "yaccTester.y"
+#line 140 "yaccTester.y"
           { (yyval.integer) = 11111 ;}
-#line 1579 "y.tab.c"
+#line 1580 "y.tab.c"
     break;
 
   case 39:
-#line 139 "yaccTester.y"
+#line 141 "yaccTester.y"
             { (yyval.integer) = 11112 ;}
-#line 1585 "y.tab.c"
+#line 1586 "y.tab.c"
     break;
 
   case 40:
-#line 140 "yaccTester.y"
+#line 142 "yaccTester.y"
           { (yyval.integer) = 11113 ;}
-#line 1591 "y.tab.c"
+#line 1592 "y.tab.c"
     break;
 
   case 41:
-#line 141 "yaccTester.y"
+#line 143 "yaccTester.y"
             {(yyval.integer) = 11114 ; }
-#line 1597 "y.tab.c"
+#line 1598 "y.tab.c"
     break;
 
   case 42:
-#line 142 "yaccTester.y"
+#line 144 "yaccTester.y"
           { (yyval.integer) = 11115 ;}
-#line 1603 "y.tab.c"
+#line 1604 "y.tab.c"
     break;
 
   case 43:
-#line 143 "yaccTester.y"
+#line 145 "yaccTester.y"
            { (yyval.integer) = 11116 ; }
-#line 1609 "y.tab.c"
+#line 1610 "y.tab.c"
     break;
 
   case 44:
-#line 145 "yaccTester.y"
+#line 147 "yaccTester.y"
                             { (yyval.integer) = sum ((yyvsp[-2].integer),(yyvsp[-1].integer),(yyvsp[0].integer)); }
-#line 1615 "y.tab.c"
+#line 1616 "y.tab.c"
     break;
 
   case 45:
-#line 146 "yaccTester.y"
+#line 148 "yaccTester.y"
               { (yyval.integer) = (yyvsp[0].integer); }
-#line 1621 "y.tab.c"
+#line 1622 "y.tab.c"
     break;
 
   case 46:
-#line 148 "yaccTester.y"
+#line 150 "yaccTester.y"
            { (yyval.integer) = 11117;}
-#line 1627 "y.tab.c"
+#line 1628 "y.tab.c"
     break;
 
   case 47:
-#line 149 "yaccTester.y"
+#line 151 "yaccTester.y"
             { (yyval.integer) = 11118;}
-#line 1633 "y.tab.c"
+#line 1634 "y.tab.c"
     break;
 
   case 48:
-#line 151 "yaccTester.y"
+#line 153 "yaccTester.y"
                                { (yyval.integer) = multiply((yyvsp[-2].integer),(yyvsp[-1].integer),(yyvsp[0].integer));}
-#line 1639 "y.tab.c"
+#line 1640 "y.tab.c"
     break;
 
   case 50:
-#line 154 "yaccTester.y"
+#line 156 "yaccTester.y"
            { (yyval.integer) = 11121;}
-#line 1645 "y.tab.c"
+#line 1646 "y.tab.c"
     break;
 
   case 51:
-#line 155 "yaccTester.y"
+#line 157 "yaccTester.y"
              { (yyval.integer) = 11122;}
-#line 1651 "y.tab.c"
+#line 1652 "y.tab.c"
     break;
 
   case 52:
-#line 157 "yaccTester.y"
+#line 159 "yaccTester.y"
                   { (yyval.integer) = -(yyvsp[0].integer);}
-#line 1657 "y.tab.c"
+#line 1658 "y.tab.c"
     break;
 
   case 53:
-#line 158 "yaccTester.y"
+#line 160 "yaccTester.y"
            { (yyval.integer) = (yyvsp[0].integer);}
-#line 1663 "y.tab.c"
+#line 1664 "y.tab.c"
     break;
 
 
-#line 1667 "y.tab.c"
+#line 1668 "y.tab.c"
 
       default: break;
     }
@@ -1895,7 +1896,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 162 "yaccTester.y"
+#line 164 "yaccTester.y"
 
 
 

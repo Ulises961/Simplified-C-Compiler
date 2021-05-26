@@ -5,7 +5,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "symbolTable.c"
+#include "functions/symbolTable.c"
 
 void yyerror(char *);
 int yylex(void);
