@@ -15,7 +15,6 @@ typedef struct symbol{
 typedef struct symbolHT{
     symbol* head;
     symbol* tail;
-    int test;
 }symbolHT;
 
 symbolHT* symbolTable;
@@ -23,8 +22,6 @@ symbolHT* symbolTable;
 
 void initialize(){
     symbolTable = (symbolHT*) malloc(sizeof(symbolHT));
-    symbolTable->test = 1;
-    //printf("Initialization successful\n");
 }
 
 void assignValue(symbol* variable, int value){
@@ -60,25 +57,18 @@ symbol* createSymbol(char* name, char* type, int value){
 }
 
 symbol* lookup(char* name){
-    //printf("looking up...\n");
 
     symbol* temp = symbolTable->head;
 
-    if (symbolTable->head == NULL){
-        //printf("Symbol table empty...\n");
+    if (symbolTable->head == NULL)
         return NULL;
-    }
     else{      
         while(temp != NULL){
-            if(strcmp(temp->name, name) == 0){
-                //printf("Found variable %s in symbol table\n", name);
+            if(strcmp(temp->name, name) == 0)
                 return temp;
-            }
-            
+
             temp = temp->next;
         }
-
-        //printf("Variable %s not found\n", name);
     }
 
     return temp;
@@ -93,7 +83,7 @@ void addToTail(char* name, char* type, int value){
         exit(1);
     }
 
-    //printf("Creating variable %s\n", name);
+    printf("Creating variable in symbol table: %s, of type: %s, value: %d\n", name, type, value);
 
     if(symbolTable->head == NULL){
             symbolTable->head = symbolPtr;

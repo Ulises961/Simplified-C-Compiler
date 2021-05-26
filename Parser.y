@@ -16,7 +16,6 @@ bool compare(int, int, int);
 int sum ( int, int, int);
 int multiply ( int, int, int);
 
-
 %}
 
 
@@ -87,7 +86,8 @@ varDecl: typeSpec ID ':' expr {                                   // assignment 
             else
                   printf("Variable %s, of type %s, value: %s\n", $2, $1, (($4 == 1) ? "true" : "false"));
 
-
+            // create variable in symbol table
+            addToTail($2,$1,$4);
       }
       ;
 
@@ -135,22 +135,7 @@ void yyerror(char *s) {
 
 int main(void) {
 
-      initialize();
-     
-      addToTail("testVar","testType",10);
-      symbol* look = lookup("testVar");
-      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
-
-      
-      addToTail("testVar4","testType2",20);
-      look = lookup("testVar4");
-      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
-
-      addToTail("testVar3","testType2",20);
-      look = lookup("testVar3");
-      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
-
-      look = lookup("ciccio");
+      initialize(); //initialize symbol table
 
       yyparse();
 

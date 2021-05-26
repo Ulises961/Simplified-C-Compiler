@@ -86,8 +86,7 @@ int sum ( int, int, int);
 int multiply ( int, int, int);
 
 
-
-#line 91 "y.tab.c"
+#line 90 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -191,12 +190,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 23 "Parser.y"
+#line 22 "Parser.y"
 
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
 
-#line 200 "y.tab.c"
+#line 199 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -574,7 +573,7 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    70,    70,    71,    74,    75,    76,    80,    94,    95,
+       0,    69,    69,    70,    73,    74,    75,    79,    94,    95,
       97,    98,    99,   102,   103,   104,   105,   106,   107,   108,
      111,   112,   113,   114,   115,   118,   119,   120,   121,   122,
      123,   124
@@ -1409,13 +1408,13 @@ yyreduce:
   switch (yyn)
     {
   case 6:
-#line 76 "Parser.y"
+#line 75 "Parser.y"
                    {printf ("Exiting program...\n"); exit(0);}
-#line 1415 "y.tab.c"
+#line 1414 "y.tab.c"
     break;
 
   case 7:
-#line 80 "Parser.y"
+#line 79 "Parser.y"
                               {                                   // assignment of true or false values to int variable makes automatic conversion
             if (strcmp((yyvsp[-3].lexeme),"bool")==0 && ((yyvsp[0].integer) != 0 && (yyvsp[0].integer) != 1)){    // for bool variables only true, false, 0 and 1 are accepted
                   yyerror("TypeError, cannot assign int value to bool variable...\n");
@@ -1426,7 +1425,8 @@ yyreduce:
             else
                   printf("Variable %s, of type %s, value: %s\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme), (((yyvsp[0].integer) == 1) ? "true" : "false"));
 
-
+            // create variable in symbol table
+            addToTail((yyvsp[-2].lexeme),(yyvsp[-3].lexeme),(yyvsp[0].integer));
       }
 #line 1432 "y.tab.c"
     break;
@@ -1807,22 +1807,7 @@ void yyerror(char *s) {
 
 int main(void) {
 
-      initialize();
-     
-      addToTail("testVar","testType",10);
-      symbol* look = lookup("testVar");
-      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
-
-      
-      addToTail("testVar4","testType2",20);
-      look = lookup("testVar4");
-      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
-
-      addToTail("testVar3","testType2",20);
-      look = lookup("testVar3");
-      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
-
-      look = lookup("ciccio");
+      initialize(); //initialize symbol table
 
       yyparse();
 
