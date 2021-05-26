@@ -47,6 +47,7 @@ void assignType(symbol* variable, int type){
 }
 
 symbol* createSymbol(int type, char* name, int value){
+    
     symbol* symbolPtr = malloc(sizeof(symbol));
     
     assignType(symbolPtr, type);

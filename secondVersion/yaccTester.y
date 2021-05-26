@@ -15,7 +15,7 @@ int yylex(void);
 bool compare(int, int, int);
 int sum ( int, int, int);
 int multiply ( int, int, int);
-int symbols[26];
+void addToTail(symbol*);
 
 
 %}
@@ -48,11 +48,12 @@ int symbols[26];
 %token GR
 %token SM
 %token SMEQ
+%token PRINT
+%token RETURN
 %token <boolean>TRUE
 %token <boolean>FALSE
-%token RETURN
 %token <integer>INT
-//%token BOOLEAN
+
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
@@ -60,16 +61,14 @@ int symbols[26];
 %type <integer> mulExp
 %type <integer> simpleExp
 %type <integer> sumExp
-
 %type <lexeme> varDeclId
 %type <symbol> varDeclInit
-%type <symbol> stmt
+%type <integer> stmt
+%type <integer> compoundStmt
 %type <boolean> boolExp
-
-
-%type <lexeme> typeSpec
-
+%type <integer> typeSpec
 %type <boolean> unaryRelExp
+
 %left '-' '+'
 %left '*' '/'
 %left AND OR
@@ -81,52 +80,58 @@ int symbols[26];
 
 %%
 program : 
-      varDeclInit;
-      |stmt {}
-      |program program {}
-      |boolExp '\n'{ printf("%d\n",$1);exit(1);}
-      |sumExp '\n'{ printf("%d\n",$1);exit(1);}
-      |mulExp '\n'{ printf("%d\n",$1);exit(1);}
-      ; 
+      program program { printf("Reached parsing");}
+      |stmt 
+      |varDeclInit ';'
+      |PRINT stmt ';' {printf("%d\n",$2);}
+      |RETURN { printf("Exiting"); exit(0);}
+      |RETURN simpleExp ';' {return $2;}
+      ;
+
 varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  { 
             symbol* x;
             if(x = lookup($2))
                   $$ = x ;
             else{
                   x = createSymbol($1,$2,$4);
-                  printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d", x-> name, x->value, x->type);
+                  printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
                   $$ = x ;
             }
-            exit(0);
+            addToTail(x);
+            
       }  
      
     
       ;
 varDeclId : ID { $$ = $1; }
-      |ID[NUM] {}
+      /* |ID[NUM] {} */
       ;
 typeSpec : INT {$$ = 11119; }
       | BOOL {$$ = 11120;}
       ;
- stmt : exp;
-      |;
-      |IF '(' simpleExp ')' compoundStmt
-      |IF '(' simpleExp ')' compoundStmt ELSE compoundStmt
-      |WHILE simpleExp DO compoundStmt
-      |BREAK ';'
-      |RETURN ';'
-      |RETURN exp ';'
+ stmt : 
+      varDeclInit {$$ = $1->value;}
+      |IF '(' simpleExp ')' compoundStmt { if($3)$5;}
+      |IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
+      |WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
+      |BREAK ';' {break;}
+      |simpleExp ';' { $$ = $1;}
       ;
-compoundStmt : '{'localDecls stmt'}'
-localDecls : localDecls scopedVarDecl 
-      |scopedVarDecl
-      ;
-scopedVarDecl : typeSpec varDeclInit;
-exp : simpleExp
-      ;
+compoundStmt : '{'stmt'}'{$$ = $2;}
+
 simpleExp : 
-      |boolExp  {$$ = $1;}
+      boolExp  {$$ = $1;}
       |unaryExp {$$ = $1;}
+      |sumExp { $$ = $1;}
+      | ID {  symbol* out = lookup($1);  
+            if (out == NULL){
+                        printf("Error... Variable %s undefined..\n",$1);
+                        exit(1);
+            }
+            else
+                  $$ = out->value;
+      }
+      ;
       ;
 boolExp : boolExp OR boolExp { $$ = $1 || $3 ;}
       | boolExp AND unaryRelExp { $$ = $1 &&  $3;}
@@ -146,8 +151,9 @@ relOp: GR { $$ = 11111 ;}
       |EQ { $$ = 11115 ;}
       |NEQ { $$ = 11116 ; }
       ;
-sumExp: sumExp sumOp mulExp { $$ = sum ($1,$2,$3); }
+sumExp: sumExp sumOp sumExp { $$ = sum ($1,$2,$3); }
       |mulExp { $$ = $1; }
+       | '('sumExp')'             { $$ = $2; }
       ;
 sumOp: '+' { $$ = 11117;}
       |'-'  { $$ = 11118;}
