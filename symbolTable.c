@@ -35,22 +35,21 @@ void assignValue(symbol* variable, int value){
         variable->value = value;
 }
 
-void assignType(symbol* variable, char* type){
-    // if(!(type == 11119 && type == 11120)){
-    //     printf("Null pointer exception!");
-    //     return;
-    // }
+void assignType(symbol* variable, int type){
+    if(!(type == 11119 && type == 11120)){
+        printf("Null pointer exception!");
+        return;
+    }
 
-    // variable->type = type;
+    variable->type = type;
 }
 
-symbol* createSymbol(char* name, char* type){
+symbol* createSymbol(char* name){
     symbol* symbolPtr = malloc(sizeof(symbol));
     
     symbolPtr->name = name;
-    // assignType(symbolPtr, type);
     symbolPtr->next = NULL;
-
+      
     return symbolPtr;
 }
 
