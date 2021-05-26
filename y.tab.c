@@ -577,7 +577,7 @@ static const yytype_int8 yyrline[] =
        0,    70,    70,    71,    74,    75,    76,    79,    80,    81,
       84,    85,    86,    87,    88,    89,    90,    93,    94,    95,
       96,    97,   100,   101,   102,   103,   104,   105,   106,   109,
-     125,   126
+     122,   123
 };
 #endif
 
@@ -1420,13 +1420,13 @@ yyreduce:
 
   case 8:
 #line 80 "Parser.y"
-                  { if ((yyvsp[0].integer) == 1) printf("Boolean expression result: true\n"); else printf("Boolean expression result: false\n");}
+                  { printf("Boolean expression result: %s\n", (((yyvsp[0].integer) == 1) ? "true" : "false"));}
 #line 1425 "y.tab.c"
     break;
 
   case 9:
 #line 81 "Parser.y"
-                  { if ((yyvsp[0].integer) == 1) printf("Relation expression result: true\n"); else printf("Relation expression result: false\n");}
+                  { printf("Relational expression result: %s\n", (((yyvsp[0].integer) == 1) ? "true" : "false"));}
 #line 1431 "y.tab.c"
     break;
 
@@ -1553,18 +1553,15 @@ yyreduce:
             }
             if (strcmp((yyvsp[-3].lexeme),"int")==0)
                   printf("Variable %s, of type %s, value: %d\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme), (yyvsp[0].integer));
-            else{
-                  if ((yyvsp[0].integer) == 1)
-                        printf("Variable %s, of type %s, value: true\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme));
-                  else
-                        printf("Variable %s, of type %s, value: false\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme));
-            }
+            else
+                  printf("Variable %s, of type %s, value: %s\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme), (((yyvsp[0].integer) == 1) ? "true" : "false"));
+
       }
-#line 1564 "y.tab.c"
+#line 1561 "y.tab.c"
     break;
 
 
-#line 1568 "y.tab.c"
+#line 1565 "y.tab.c"
 
       default: break;
     }
@@ -1796,7 +1793,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 129 "Parser.y"
+#line 126 "Parser.y"
 
 
 #include "lex.yy.c"

@@ -77,8 +77,8 @@ statement: expr ';'
       ;
 
 expr : intExpr    { printf("Integer expression result: %d\n", $1); }
-      | boolExpr  { if ($1 == 1) printf("Boolean expression result: true\n"); else printf("Boolean expression result: false\n");}
-      | relExpr   { if ($1 == 1) printf("Relation expression result: true\n"); else printf("Relation expression result: false\n");}
+      | boolExpr  { printf("Boolean expression result: %s\n", (($1 == 1) ? "true" : "false"));}
+      | relExpr   { printf("Relational expression result: %s\n", (($1 == 1) ? "true" : "false"));}
       ;
 
 intExpr  : intExpr '+' intExpr      {$$ = $1 + $3;}
@@ -113,12 +113,9 @@ varDecl: typeSpec ID ':' expr {                                   // assignment 
             }
             if (strcmp($1,"int")==0)
                   printf("Variable %s, of type %s, value: %d\n", $2, $1, $4);
-            else{
-                  if ($4 == 1)
-                        printf("Variable %s, of type %s, value: true\n", $2, $1);
-                  else
-                        printf("Variable %s, of type %s, value: false\n", $2, $1);
-            }
+            else
+                  printf("Variable %s, of type %s, value: %s\n", $2, $1, (($4 == 1) ? "true" : "false"));
+
       }
       ;
 
