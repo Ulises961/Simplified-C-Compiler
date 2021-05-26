@@ -70,9 +70,10 @@ extern int yydebug;
     TRUE = 276,
     FALSE = 277,
     RETURN = 278,
-    INT = 279,
-    BOOLEAN = 280,
-    UMINUS = 281
+    PRINT = 279,
+    INT = 280,
+    BOOLEAN = 281,
+    UMINUS = 282
   };
 #endif
 /* Tokens.  */
@@ -97,9 +98,10 @@ extern int yydebug;
 #define TRUE 276
 #define FALSE 277
 #define RETURN 278
-#define INT 279
-#define BOOLEAN 280
-#define UMINUS 281
+#define PRINT 279
+#define INT 280
+#define BOOLEAN 281
+#define UMINUS 282
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -110,7 +112,7 @@ union YYSTYPE
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
 
-#line 114 "y.tab.h"
+#line 116 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

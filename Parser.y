@@ -47,6 +47,7 @@ int multiply ( int, int, int);
 %token TRUE
 %token FALSE
 %token RETURN
+%token PRINT
 
 %token <lexeme> INT
 %token <lexeme> BOOLEAN
@@ -72,6 +73,7 @@ program: program statement '\n'
 
 statement: varDecl ';'
       | expr ';'
+      | PRINT expr ';' {printf("%d\n",$2);}
       | RETURN ';' {printf ("Exiting program...\n"); exit(0);}
       ;
 
@@ -97,6 +99,13 @@ typeSpec: INT
 expr : intExpr    { printf("Integer expression result: %d\n", $1); }
       | boolExpr  { printf("Boolean expression result: %s\n", (($1 == 1) ? "true" : "false"));}
       | relExpr   { printf("Relational expression result: %s\n", (($1 == 1) ? "true" : "false"));}
+      | ID {  if (lookup($1) == NULL)
+                        printf("Error... Variable %s undefined..\n",$1);
+                  else{
+                        symbol* out = lookup($1);
+                        $$ = out->value;
+                  }
+      }
       ;
 
 intExpr  : intExpr '+' intExpr      {$$ = $1 + $3;}

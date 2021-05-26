@@ -83,7 +83,7 @@ void addToTail(char* name, char* type, int value){
         exit(1);
     }
 
-    //printf("Creating variable in symbol table: %s, of type: %s, value: %d\n", name, type, value);
+    printf("Creating variable in symbol table: %s, of type: %s, value: %d\n", name, type, value);
 
     if(symbolTable->head == NULL){
             symbolTable->head = symbolPtr;
