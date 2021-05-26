@@ -7,7 +7,7 @@ void yyerror(char *);
 
 DIGIT       [0-9]
 INT         {DIGIT}+
-BOOLEAN  (true|false)
+
 LETTER      [a-zA-Z]
 ID          {LETTER}({LETTER}|{DIGIT})*
 
@@ -18,17 +18,9 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 {INT}    {yylval.integer = atoi(yytext);
           return NUM;}
 
-{BOOLEAN} {if (strcmp("true",strdup(yytext)) == 0)
-                yylval.integer = 1;
-            else
-                yylval.integer = 0;
-          return BOOL;}
-
+"true"  {return TRUE;}
+"false" {return FALSE;}
 ":"     {return ':';}
-";"     {return ';';}
-\n      {return '\n';}
-
-
 "+"     {return '+';}
 "-"     {return '-';}
 "*"     {return '*';}
@@ -36,8 +28,8 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 
 "break" {return BREAK;}
 "and"    {return AND;}
-"or"    {return OR;}
-"not"     {return NOT;}
+"or"    {yylval.lexeme = strdup(yytext); return OR;}
+"not"    {yylval.lexeme = strdup(yytext); return NOT;}
 "if"    {return IF;}
 "else"  {return ELSE;}
 "while" {return WHILE;}
@@ -54,8 +46,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "}"     {return '}';}
 "("     {return '(';}
 ")"     {return ')';}
-"return" {return RETURN;}
-
+\n      {return '\n';}
 
 "int"  {yylval.lexeme = strdup(yytext);
         return INT;}
@@ -66,7 +57,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
           return ID;}
 
 
-. yyerror("Parsing error, invalid character"); // error for all not recognized characters
+. yyerror("invalid character"); // error for all not recognized characters
 
 %%
 
