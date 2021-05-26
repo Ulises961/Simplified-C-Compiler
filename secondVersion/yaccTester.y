@@ -24,11 +24,12 @@ int symbols[26];
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
        bool boolean;
-       }
+       
+}
 
 
 %token <integer>  NUM //
-%token BOOL
+%token <integer>BOOL
 %token <lexeme> ID
 
 
@@ -49,7 +50,7 @@ int symbols[26];
 %token <boolean>TRUE
 %token <boolean>FALSE
 %token RETURN
-%token INT
+%token <integer>INT
 //%token BOOLEAN
 %type <integer> relOp
 %type <integer> mulOp
@@ -78,27 +79,30 @@ int symbols[26];
 
 %%
 program : 
-      typeSpec varDeclInit ';' { symbol* x = createSymbol($2,$1);
-                                          printf("%s",x->name);exit(1);}
+       typeSpec varDeclInit ';' '\n' {printf( "\n Input line parsed\n"); exit(0);} /* { symbol* x = createSymbol($2,$1);
+                                          printf("%s",x->name);exit(1);} */
       | stmt {}
       |program program {}
-      |boolExp '\n'{ printf("%d",$1);exit(1);}
+      |boolExp '\n'{ printf("%d\n",$1);exit(1);}
+      |sumExp '\n'{ printf("%d\n",$1);exit(1);}
+      |mulExp '\n'{ printf("%d\n",$1);exit(1);}
       ; 
 varDeclInit : 
       varDeclId { $$ = $1; }
       | varDeclId ':' simpleExp {
-            symbol* x = lookup($1);
+            printf("\n value Var decl id: %s simple exp: %d\n",$1,$3);
+            // symbol* x = lookup($1);
 
-            if(x != NULL){
-                  assignValue(x, $3);
-            }
-            $$ = x;
+            // if(x != NULL){
+            //       assignValue(x, $3);
+            // }
+             $$ = $1;
         }
       ;
-varDeclId : ID { $$ = $1;}
+varDeclId : ID { $$ = $1; printf("\n value ID: %s\n",$1);}
       |ID[NUM] {}
       ;
-typeSpec : INT {$$ = 11119;}
+typeSpec : INT {$$ = 11119; printf("\n value type Spec: %d\n",$$);}
       | BOOL {$$ = 11120;}
       ;
  stmt : exp;
@@ -190,16 +194,16 @@ bool compare(int a, int b, int c){
              }
       return res;
 }
-int sum ( int a, int b, int c){
-      switch (b){
-            case 11117 : return (a + b);
-            case 11118 : return (a - b); 
+int sum ( int a, int op, int c){
+      switch (op){
+            case 11117 : return (a + c);
+            case 11118 : return (a - c); 
       }
 }
 
-int multiply ( int a, int b, int c){
-      switch (b){
-            case 11121 : return (a * b);
-            case 11122 : return (a / b); 
+int multiply ( int a, int op, int c){
+      switch (op){
+            case 11121 : return (a * c);
+            case 11122 : return (a / c); 
       }
 }

@@ -25,7 +25,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "-"     {return '-';}
 "*"     {return '*';}
 "/"     {return '/';}
-
+";"     {return ';';}
 "break" {return BREAK;}
 "and"    {return AND;}
 "or"    {yylval.lexeme = strdup(yytext); return OR;}

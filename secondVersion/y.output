@@ -10,134 +10,137 @@ Terminals unused in grammar
 
 Rules useless in parser due to conflicts
 
-    8 varDeclId: ID
+   10 varDeclId: ID
 
-   23 exp: program
+   25 exp: program
 
 
 State 0 conflicts: 11 shift/reduce, 12 reduce/reduce
 State 9 conflicts: 12 shift/reduce, 12 reduce/reduce
 State 12 conflicts: 12 shift/reduce, 24 reduce/reduce
+State 20 conflicts: 1 shift/reduce
 State 21 conflicts: 1 reduce/reduce
-State 29 conflicts: 11 shift/reduce, 26 reduce/reduce
-State 30 conflicts: 1 shift/reduce
-State 33 conflicts: 11 shift/reduce, 42 reduce/reduce
-State 34 conflicts: 14 reduce/reduce
-State 57 conflicts: 5 shift/reduce
-State 60 conflicts: 1 shift/reduce
-State 69 conflicts: 11 shift/reduce, 12 reduce/reduce
-State 74 conflicts: 1 shift/reduce
+State 31 conflicts: 11 shift/reduce, 26 reduce/reduce
+State 32 conflicts: 1 shift/reduce
+State 35 conflicts: 11 shift/reduce, 42 reduce/reduce
+State 36 conflicts: 14 reduce/reduce
+State 61 conflicts: 5 shift/reduce
+State 64 conflicts: 1 shift/reduce
+State 74 conflicts: 11 shift/reduce, 12 reduce/reduce
+State 79 conflicts: 1 shift/reduce
 
 
 Grammar
 
     0 $accept: program $end
 
-    1 program: typeSpec varDeclInit ';'
+    1 program: typeSpec varDeclInit ';' '\n'
     2        | stmt
     3        | program program
     4        | boolExp '\n'
+    5        | sumExp '\n'
+    6        | mulExp '\n'
 
-    5 varDeclInit: varDeclId
-    6            | varDeclId ':' simpleExp
+    7 varDeclInit: varDeclId
+    8            | varDeclId ':' simpleExp
 
-    7 varDeclId: ID
-    8          | ID
+    9 varDeclId: ID
+   10          | ID
 
-    9 typeSpec: INT
-   10         | BOOL
+   11 typeSpec: INT
+   12         | BOOL
 
-   11 stmt: exp
-   12     | %empty
-   13     | IF '(' simpleExp ')' compoundStmt
-   14     | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt
-   15     | WHILE simpleExp DO compoundStmt
-   16     | BREAK ';'
-   17     | RETURN ';'
-   18     | RETURN exp ';'
+   13 stmt: exp
+   14     | %empty
+   15     | IF '(' simpleExp ')' compoundStmt
+   16     | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt
+   17     | WHILE simpleExp DO compoundStmt
+   18     | BREAK ';'
+   19     | RETURN ';'
+   20     | RETURN exp ';'
 
-   19 compoundStmt: '{' localDecls stmt '}'
+   21 compoundStmt: '{' localDecls stmt '}'
 
-   20 localDecls: localDecls scopedVarDecl
-   21           | scopedVarDecl
+   22 localDecls: localDecls scopedVarDecl
+   23           | scopedVarDecl
 
-   22 scopedVarDecl: typeSpec varDeclInit
+   24 scopedVarDecl: typeSpec varDeclInit
 
-   23 exp: program
-   24    | simpleExp
+   25 exp: program
+   26    | simpleExp
 
-   25 simpleExp: %empty
-   26          | boolExp
-   27          | unaryExp
+   27 simpleExp: %empty
+   28          | boolExp
+   29          | unaryExp
 
-   28 boolExp: boolExp OR boolExp
-   29        | boolExp AND unaryRelExp
-   30        | unaryRelExp
+   30 boolExp: boolExp OR boolExp
+   31        | boolExp AND unaryRelExp
+   32        | unaryRelExp
 
-   31 unaryRelExp: NOT unaryRelExp
-   32            | sumExp relOp sumExp
-   33            | TRUE
-   34            | FALSE
+   33 unaryRelExp: NOT unaryRelExp
+   34            | sumExp relOp sumExp
+   35            | TRUE
+   36            | FALSE
 
-   35 relOp: GR
-   36      | GREQ
-   37      | SM
-   38      | SMEQ
-   39      | EQ
-   40      | NEQ
+   37 relOp: GR
+   38      | GREQ
+   39      | SM
+   40      | SMEQ
+   41      | EQ
+   42      | NEQ
 
-   41 sumExp: sumExp sumOp mulExp
-   42       | mulExp
+   43 sumExp: sumExp sumOp mulExp
+   44       | mulExp
 
-   43 sumOp: '+'
-   44      | '-'
+   45 sumOp: '+'
+   46      | '-'
 
-   45 mulExp: mulExp mulOp unaryExp
-   46       | unaryExp
+   47 mulExp: mulExp mulOp unaryExp
+   48       | unaryExp
 
-   47 mulOp: '*'
-   48      | '/'
+   49 mulOp: '*'
+   50      | '/'
 
-   49 unaryExp: '-' NUM
-   50         | NUM
+   51 unaryExp: '-' NUM
+   52         | NUM
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    '\n' (10) 4
-    '(' (40) 13 14
-    ')' (41) 13 14
-    '*' (42) 47
-    '+' (43) 43
-    '-' (45) 44 49
-    '/' (47) 48
-    ':' (58) 6
-    ';' (59) 1 16 17 18
-    '{' (123) 19
-    '}' (125) 19
+    '\n' (10) 1 4 5 6
+    '(' (40) 15 16
+    ')' (41) 15 16
+    '*' (42) 49
+    '+' (43) 45
+    '-' (45) 46 51
+    '/' (47) 50
+    ':' (58) 8
+    ';' (59) 1 18 19 20
+    '{' (123) 21
+    '}' (125) 21
     error (256)
-    NUM <integer> (258) 49 50
-    BOOL (259) 10
-    ID <lexeme> (260) 7 8
-    BREAK (261) 16
-    AND (262) 29
-    OR (263) 28
-    NOT (264) 31
-    IF (265) 13 14
-    ELSE (266) 14
-    WHILE (267) 15
-    DO (268) 15
-    EQ (269) 39
-    NEQ (270) 40
-    GREQ (271) 36
-    GR (272) 35
-    SM (273) 37
-    SMEQ (274) 38
-    TRUE <boolean> (275) 33
-    FALSE <boolean> (276) 34
-    RETURN (277) 17 18
-    INT (278) 9
+    NUM <integer> (258) 51 52
+    BOOL <integer> (259) 12
+    ID <lexeme> (260) 9 10
+    BREAK (261) 18
+    AND (262) 31
+    OR (263) 30
+    NOT (264) 33
+    IF (265) 15 16
+    ELSE (266) 16
+    WHILE (267) 17
+    DO (268) 17
+    EQ (269) 41
+    NEQ (270) 42
+    GREQ (271) 38
+    GR (272) 37
+    SM (273) 39
+    SMEQ (274) 40
+    TRUE <boolean> (275) 35
+    FALSE <boolean> (276) 36
+    RETURN (277) 19 20
+    INT <integer> (278) 11
     UMINUS (279)
 
 
@@ -146,59 +149,59 @@ Nonterminals, with rules where they appear
     $accept (36)
         on left: 0
     program (37)
-        on left: 1 2 3 4
-        on right: 0 3 23
+        on left: 1 2 3 4 5 6
+        on right: 0 3 25
     varDeclInit <lexeme> (38)
-        on left: 5 6
-        on right: 1 22
-    varDeclId <lexeme> (39)
         on left: 7 8
-        on right: 5 6
-    typeSpec <lexeme> (40)
+        on right: 1 24
+    varDeclId <lexeme> (39)
         on left: 9 10
-        on right: 1 22
+        on right: 7 8
+    typeSpec <lexeme> (40)
+        on left: 11 12
+        on right: 1 24
     stmt (41)
-        on left: 11 12 13 14 15 16 17 18
-        on right: 2 19
+        on left: 13 14 15 16 17 18 19 20
+        on right: 2 21
     compoundStmt (42)
-        on left: 19
-        on right: 13 14 15
+        on left: 21
+        on right: 15 16 17
     localDecls (43)
-        on left: 20 21
-        on right: 19 20
+        on left: 22 23
+        on right: 21 22
     scopedVarDecl (44)
-        on left: 22
-        on right: 20 21
+        on left: 24
+        on right: 22 23
     exp (45)
-        on left: 23 24
-        on right: 11 18
+        on left: 25 26
+        on right: 13 20
     simpleExp <integer> (46)
-        on left: 25 26 27
-        on right: 6 13 14 15 24
+        on left: 27 28 29
+        on right: 8 15 16 17 26
     boolExp <boolean> (47)
-        on left: 28 29 30
-        on right: 4 26 28 29
+        on left: 30 31 32
+        on right: 4 28 30 31
     unaryRelExp <boolean> (48)
-        on left: 31 32 33 34
-        on right: 29 30 31
+        on left: 33 34 35 36
+        on right: 31 32 33
     relOp <integer> (49)
-        on left: 35 36 37 38 39 40
-        on right: 32
+        on left: 37 38 39 40 41 42
+        on right: 34
     sumExp <integer> (50)
-        on left: 41 42
-        on right: 32 41
-    sumOp <integer> (51)
         on left: 43 44
-        on right: 41
-    mulExp <integer> (52)
+        on right: 5 34 43
+    sumOp <integer> (51)
         on left: 45 46
-        on right: 41 42 45
-    mulOp <integer> (53)
+        on right: 43
+    mulExp <integer> (52)
         on left: 47 48
-        on right: 45
-    unaryExp <integer> (54)
+        on right: 6 43 44 47
+    mulOp <integer> (53)
         on left: 49 50
-        on right: 27 45 46
+        on right: 47
+    unaryExp <integer> (54)
+        on left: 51 52
+        on right: 29 47 48
 
 
 State 0
@@ -217,31 +220,31 @@ State 0
     INT     shift, and go to state 10
     '-'     shift, and go to state 11
 
-    $end      reduce using rule 12 (stmt)
-    $end      [reduce using rule 25 (simpleExp)]
-    NUM       [reduce using rule 12 (stmt)]
-    NUM       [reduce using rule 25 (simpleExp)]
-    BOOL      [reduce using rule 12 (stmt)]
-    BOOL      [reduce using rule 25 (simpleExp)]
-    BREAK     [reduce using rule 12 (stmt)]
-    BREAK     [reduce using rule 25 (simpleExp)]
-    NOT       [reduce using rule 12 (stmt)]
-    NOT       [reduce using rule 25 (simpleExp)]
-    IF        [reduce using rule 12 (stmt)]
-    IF        [reduce using rule 25 (simpleExp)]
-    WHILE     [reduce using rule 12 (stmt)]
-    WHILE     [reduce using rule 25 (simpleExp)]
-    TRUE      [reduce using rule 12 (stmt)]
-    TRUE      [reduce using rule 25 (simpleExp)]
-    FALSE     [reduce using rule 12 (stmt)]
-    FALSE     [reduce using rule 25 (simpleExp)]
-    RETURN    [reduce using rule 12 (stmt)]
-    RETURN    [reduce using rule 25 (simpleExp)]
-    INT       [reduce using rule 12 (stmt)]
-    INT       [reduce using rule 25 (simpleExp)]
-    '-'       [reduce using rule 12 (stmt)]
-    '-'       [reduce using rule 25 (simpleExp)]
-    $default  reduce using rule 12 (stmt)
+    $end      reduce using rule 14 (stmt)
+    $end      [reduce using rule 27 (simpleExp)]
+    NUM       [reduce using rule 14 (stmt)]
+    NUM       [reduce using rule 27 (simpleExp)]
+    BOOL      [reduce using rule 14 (stmt)]
+    BOOL      [reduce using rule 27 (simpleExp)]
+    BREAK     [reduce using rule 14 (stmt)]
+    BREAK     [reduce using rule 27 (simpleExp)]
+    NOT       [reduce using rule 14 (stmt)]
+    NOT       [reduce using rule 27 (simpleExp)]
+    IF        [reduce using rule 14 (stmt)]
+    IF        [reduce using rule 27 (simpleExp)]
+    WHILE     [reduce using rule 14 (stmt)]
+    WHILE     [reduce using rule 27 (simpleExp)]
+    TRUE      [reduce using rule 14 (stmt)]
+    TRUE      [reduce using rule 27 (simpleExp)]
+    FALSE     [reduce using rule 14 (stmt)]
+    FALSE     [reduce using rule 27 (simpleExp)]
+    RETURN    [reduce using rule 14 (stmt)]
+    RETURN    [reduce using rule 27 (simpleExp)]
+    INT       [reduce using rule 14 (stmt)]
+    INT       [reduce using rule 27 (simpleExp)]
+    '-'       [reduce using rule 14 (stmt)]
+    '-'       [reduce using rule 27 (simpleExp)]
+    $default  reduce using rule 14 (stmt)
 
     program      go to state 12
     typeSpec     go to state 13
@@ -257,28 +260,28 @@ State 0
 
 State 1
 
-   50 unaryExp: NUM .
+   52 unaryExp: NUM .
 
-    $default  reduce using rule 50 (unaryExp)
+    $default  reduce using rule 52 (unaryExp)
 
 
 State 2
 
-   10 typeSpec: BOOL .
+   12 typeSpec: BOOL .
 
-    $default  reduce using rule 10 (typeSpec)
+    $default  reduce using rule 12 (typeSpec)
 
 
 State 3
 
-   16 stmt: BREAK . ';'
+   18 stmt: BREAK . ';'
 
     ';'  shift, and go to state 22
 
 
 State 4
 
-   31 unaryRelExp: NOT . unaryRelExp
+   33 unaryRelExp: NOT . unaryRelExp
 
     NUM    shift, and go to state 1
     NOT    shift, and go to state 4
@@ -287,22 +290,22 @@ State 4
     '-'    shift, and go to state 11
 
     unaryRelExp  go to state 23
-    sumExp       go to state 19
-    mulExp       go to state 20
-    unaryExp     go to state 24
+    sumExp       go to state 24
+    mulExp       go to state 25
+    unaryExp     go to state 26
 
 
 State 5
 
-   13 stmt: IF . '(' simpleExp ')' compoundStmt
-   14     | IF . '(' simpleExp ')' compoundStmt ELSE compoundStmt
+   15 stmt: IF . '(' simpleExp ')' compoundStmt
+   16     | IF . '(' simpleExp ')' compoundStmt ELSE compoundStmt
 
-    '('  shift, and go to state 25
+    '('  shift, and go to state 27
 
 
 State 6
 
-   15 stmt: WHILE . simpleExp DO compoundStmt
+   17 stmt: WHILE . simpleExp DO compoundStmt
 
     NUM    shift, and go to state 1
     NOT    shift, and go to state 4
@@ -310,34 +313,34 @@ State 6
     FALSE  shift, and go to state 8
     '-'    shift, and go to state 11
 
-    $default  reduce using rule 25 (simpleExp)
+    $default  reduce using rule 27 (simpleExp)
 
-    simpleExp    go to state 26
-    boolExp      go to state 27
+    simpleExp    go to state 28
+    boolExp      go to state 29
     unaryRelExp  go to state 18
-    sumExp       go to state 19
-    mulExp       go to state 20
+    sumExp       go to state 24
+    mulExp       go to state 25
     unaryExp     go to state 21
 
 
 State 7
 
-   33 unaryRelExp: TRUE .
+   35 unaryRelExp: TRUE .
 
-    $default  reduce using rule 33 (unaryRelExp)
+    $default  reduce using rule 35 (unaryRelExp)
 
 
 State 8
 
-   34 unaryRelExp: FALSE .
+   36 unaryRelExp: FALSE .
 
-    $default  reduce using rule 34 (unaryRelExp)
+    $default  reduce using rule 36 (unaryRelExp)
 
 
 State 9
 
-   17 stmt: RETURN . ';'
-   18     | RETURN . exp ';'
+   19 stmt: RETURN . ';'
+   20     | RETURN . exp ';'
 
     NUM     shift, and go to state 1
     BOOL    shift, and go to state 2
@@ -350,37 +353,37 @@ State 9
     RETURN  shift, and go to state 9
     INT     shift, and go to state 10
     '-'     shift, and go to state 11
-    ';'     shift, and go to state 28
+    ';'     shift, and go to state 30
 
-    NUM     [reduce using rule 12 (stmt)]
-    NUM     [reduce using rule 25 (simpleExp)]
-    BOOL    [reduce using rule 12 (stmt)]
-    BOOL    [reduce using rule 25 (simpleExp)]
-    BREAK   [reduce using rule 12 (stmt)]
-    BREAK   [reduce using rule 25 (simpleExp)]
-    NOT     [reduce using rule 12 (stmt)]
-    NOT     [reduce using rule 25 (simpleExp)]
-    IF      [reduce using rule 12 (stmt)]
-    IF      [reduce using rule 25 (simpleExp)]
-    WHILE   [reduce using rule 12 (stmt)]
-    WHILE   [reduce using rule 25 (simpleExp)]
-    TRUE    [reduce using rule 12 (stmt)]
-    TRUE    [reduce using rule 25 (simpleExp)]
-    FALSE   [reduce using rule 12 (stmt)]
-    FALSE   [reduce using rule 25 (simpleExp)]
-    RETURN  [reduce using rule 12 (stmt)]
-    RETURN  [reduce using rule 25 (simpleExp)]
-    INT     [reduce using rule 12 (stmt)]
-    INT     [reduce using rule 25 (simpleExp)]
-    '-'     [reduce using rule 12 (stmt)]
-    '-'     [reduce using rule 25 (simpleExp)]
-    ';'     [reduce using rule 12 (stmt)]
-    ';'     [reduce using rule 25 (simpleExp)]
+    NUM     [reduce using rule 14 (stmt)]
+    NUM     [reduce using rule 27 (simpleExp)]
+    BOOL    [reduce using rule 14 (stmt)]
+    BOOL    [reduce using rule 27 (simpleExp)]
+    BREAK   [reduce using rule 14 (stmt)]
+    BREAK   [reduce using rule 27 (simpleExp)]
+    NOT     [reduce using rule 14 (stmt)]
+    NOT     [reduce using rule 27 (simpleExp)]
+    IF      [reduce using rule 14 (stmt)]
+    IF      [reduce using rule 27 (simpleExp)]
+    WHILE   [reduce using rule 14 (stmt)]
+    WHILE   [reduce using rule 27 (simpleExp)]
+    TRUE    [reduce using rule 14 (stmt)]
+    TRUE    [reduce using rule 27 (simpleExp)]
+    FALSE   [reduce using rule 14 (stmt)]
+    FALSE   [reduce using rule 27 (simpleExp)]
+    RETURN  [reduce using rule 14 (stmt)]
+    RETURN  [reduce using rule 27 (simpleExp)]
+    INT     [reduce using rule 14 (stmt)]
+    INT     [reduce using rule 27 (simpleExp)]
+    '-'     [reduce using rule 14 (stmt)]
+    '-'     [reduce using rule 27 (simpleExp)]
+    ';'     [reduce using rule 14 (stmt)]
+    ';'     [reduce using rule 27 (simpleExp)]
 
-    program      go to state 29
+    program      go to state 31
     typeSpec     go to state 13
     stmt         go to state 14
-    exp          go to state 30
+    exp          go to state 32
     simpleExp    go to state 16
     boolExp      go to state 17
     unaryRelExp  go to state 18
@@ -391,25 +394,25 @@ State 9
 
 State 10
 
-    9 typeSpec: INT .
+   11 typeSpec: INT .
 
-    $default  reduce using rule 9 (typeSpec)
+    $default  reduce using rule 11 (typeSpec)
 
 
 State 11
 
-   49 unaryExp: '-' . NUM
+   51 unaryExp: '-' . NUM
 
-    NUM  shift, and go to state 31
+    NUM  shift, and go to state 33
 
 
 State 12
 
     0 $accept: program . $end
     3 program: program . program
-   23 exp: program .
+   25 exp: program .
 
-    $end    shift, and go to state 32
+    $end    shift, and go to state 34
     NUM     shift, and go to state 1
     BOOL    shift, and go to state 2
     BREAK   shift, and go to state 3
@@ -422,44 +425,44 @@ State 12
     INT     shift, and go to state 10
     '-'     shift, and go to state 11
 
-    $end    [reduce using rule 12 (stmt)]
-    $end    [reduce using rule 23 (exp)]
-    $end    [reduce using rule 25 (simpleExp)]
-    NUM     [reduce using rule 12 (stmt)]
-    NUM     [reduce using rule 23 (exp)]
-    NUM     [reduce using rule 25 (simpleExp)]
-    BOOL    [reduce using rule 12 (stmt)]
-    BOOL    [reduce using rule 23 (exp)]
-    BOOL    [reduce using rule 25 (simpleExp)]
-    BREAK   [reduce using rule 12 (stmt)]
-    BREAK   [reduce using rule 23 (exp)]
-    BREAK   [reduce using rule 25 (simpleExp)]
-    NOT     [reduce using rule 12 (stmt)]
-    NOT     [reduce using rule 23 (exp)]
-    NOT     [reduce using rule 25 (simpleExp)]
-    IF      [reduce using rule 12 (stmt)]
-    IF      [reduce using rule 23 (exp)]
-    IF      [reduce using rule 25 (simpleExp)]
-    WHILE   [reduce using rule 12 (stmt)]
-    WHILE   [reduce using rule 23 (exp)]
-    WHILE   [reduce using rule 25 (simpleExp)]
-    TRUE    [reduce using rule 12 (stmt)]
-    TRUE    [reduce using rule 23 (exp)]
-    TRUE    [reduce using rule 25 (simpleExp)]
-    FALSE   [reduce using rule 12 (stmt)]
-    FALSE   [reduce using rule 23 (exp)]
-    FALSE   [reduce using rule 25 (simpleExp)]
-    RETURN  [reduce using rule 12 (stmt)]
-    RETURN  [reduce using rule 23 (exp)]
-    RETURN  [reduce using rule 25 (simpleExp)]
-    INT     [reduce using rule 12 (stmt)]
-    INT     [reduce using rule 23 (exp)]
-    INT     [reduce using rule 25 (simpleExp)]
-    '-'     [reduce using rule 12 (stmt)]
-    '-'     [reduce using rule 23 (exp)]
-    '-'     [reduce using rule 25 (simpleExp)]
+    $end    [reduce using rule 14 (stmt)]
+    $end    [reduce using rule 25 (exp)]
+    $end    [reduce using rule 27 (simpleExp)]
+    NUM     [reduce using rule 14 (stmt)]
+    NUM     [reduce using rule 25 (exp)]
+    NUM     [reduce using rule 27 (simpleExp)]
+    BOOL    [reduce using rule 14 (stmt)]
+    BOOL    [reduce using rule 25 (exp)]
+    BOOL    [reduce using rule 27 (simpleExp)]
+    BREAK   [reduce using rule 14 (stmt)]
+    BREAK   [reduce using rule 25 (exp)]
+    BREAK   [reduce using rule 27 (simpleExp)]
+    NOT     [reduce using rule 14 (stmt)]
+    NOT     [reduce using rule 25 (exp)]
+    NOT     [reduce using rule 27 (simpleExp)]
+    IF      [reduce using rule 14 (stmt)]
+    IF      [reduce using rule 25 (exp)]
+    IF      [reduce using rule 27 (simpleExp)]
+    WHILE   [reduce using rule 14 (stmt)]
+    WHILE   [reduce using rule 25 (exp)]
+    WHILE   [reduce using rule 27 (simpleExp)]
+    TRUE    [reduce using rule 14 (stmt)]
+    TRUE    [reduce using rule 25 (exp)]
+    TRUE    [reduce using rule 27 (simpleExp)]
+    FALSE   [reduce using rule 14 (stmt)]
+    FALSE   [reduce using rule 25 (exp)]
+    FALSE   [reduce using rule 27 (simpleExp)]
+    RETURN  [reduce using rule 14 (stmt)]
+    RETURN  [reduce using rule 25 (exp)]
+    RETURN  [reduce using rule 27 (simpleExp)]
+    INT     [reduce using rule 14 (stmt)]
+    INT     [reduce using rule 25 (exp)]
+    INT     [reduce using rule 27 (simpleExp)]
+    '-'     [reduce using rule 14 (stmt)]
+    '-'     [reduce using rule 25 (exp)]
+    '-'     [reduce using rule 27 (simpleExp)]
 
-    program      go to state 33
+    program      go to state 35
     typeSpec     go to state 13
     stmt         go to state 14
     exp          go to state 15
@@ -473,12 +476,12 @@ State 12
 
 State 13
 
-    1 program: typeSpec . varDeclInit ';'
+    1 program: typeSpec . varDeclInit ';' '\n'
 
-    ID  shift, and go to state 34
+    ID  shift, and go to state 36
 
-    varDeclInit  go to state 35
-    varDeclId    go to state 36
+    varDeclInit  go to state 37
+    varDeclId    go to state 38
 
 
 State 14
@@ -490,114 +493,151 @@ State 14
 
 State 15
 
-   11 stmt: exp .
+   13 stmt: exp .
 
-    $default  reduce using rule 11 (stmt)
+    $default  reduce using rule 13 (stmt)
 
 
 State 16
 
-   24 exp: simpleExp .
+   26 exp: simpleExp .
 
-    $default  reduce using rule 24 (exp)
+    $default  reduce using rule 26 (exp)
 
 
 State 17
 
     4 program: boolExp . '\n'
-   26 simpleExp: boolExp .
-   28 boolExp: boolExp . OR boolExp
-   29        | boolExp . AND unaryRelExp
+   28 simpleExp: boolExp .
+   30 boolExp: boolExp . OR boolExp
+   31        | boolExp . AND unaryRelExp
 
-    AND   shift, and go to state 37
-    OR    shift, and go to state 38
-    '\n'  shift, and go to state 39
+    AND   shift, and go to state 39
+    OR    shift, and go to state 40
+    '\n'  shift, and go to state 41
 
-    $default  reduce using rule 26 (simpleExp)
+    $default  reduce using rule 28 (simpleExp)
 
 
 State 18
 
-   30 boolExp: unaryRelExp .
+   32 boolExp: unaryRelExp .
 
-    $default  reduce using rule 30 (boolExp)
+    $default  reduce using rule 32 (boolExp)
 
 
 State 19
 
-   32 unaryRelExp: sumExp . relOp sumExp
-   41 sumExp: sumExp . sumOp mulExp
+    5 program: sumExp . '\n'
+   34 unaryRelExp: sumExp . relOp sumExp
+   43 sumExp: sumExp . sumOp mulExp
 
-    EQ    shift, and go to state 40
-    NEQ   shift, and go to state 41
-    GREQ  shift, and go to state 42
-    GR    shift, and go to state 43
-    SM    shift, and go to state 44
-    SMEQ  shift, and go to state 45
-    '-'   shift, and go to state 46
-    '+'   shift, and go to state 47
+    EQ    shift, and go to state 42
+    NEQ   shift, and go to state 43
+    GREQ  shift, and go to state 44
+    GR    shift, and go to state 45
+    SM    shift, and go to state 46
+    SMEQ  shift, and go to state 47
+    '-'   shift, and go to state 48
+    '+'   shift, and go to state 49
+    '\n'  shift, and go to state 50
 
-    relOp  go to state 48
-    sumOp  go to state 49
+    relOp  go to state 51
+    sumOp  go to state 52
 
 
 State 20
 
-   42 sumExp: mulExp .
-   45 mulExp: mulExp . mulOp unaryExp
+    6 program: mulExp . '\n'
+   44 sumExp: mulExp .
+   47 mulExp: mulExp . mulOp unaryExp
 
-    '*'  shift, and go to state 50
-    '/'  shift, and go to state 51
+    '*'   shift, and go to state 53
+    '/'   shift, and go to state 54
+    '\n'  shift, and go to state 55
 
-    $default  reduce using rule 42 (sumExp)
+    '\n'      [reduce using rule 44 (sumExp)]
+    $default  reduce using rule 44 (sumExp)
 
-    mulOp  go to state 52
+    mulOp  go to state 56
 
 
 State 21
 
-   27 simpleExp: unaryExp .
-   46 mulExp: unaryExp .
+   29 simpleExp: unaryExp .
+   48 mulExp: unaryExp .
 
-    EQ        reduce using rule 46 (mulExp)
-    NEQ       reduce using rule 46 (mulExp)
-    GREQ      reduce using rule 46 (mulExp)
-    GR        reduce using rule 46 (mulExp)
-    SM        reduce using rule 46 (mulExp)
-    SMEQ      reduce using rule 46 (mulExp)
-    '-'       reduce using rule 27 (simpleExp)
-    '-'       [reduce using rule 46 (mulExp)]
-    '+'       reduce using rule 46 (mulExp)
-    '*'       reduce using rule 46 (mulExp)
-    '/'       reduce using rule 46 (mulExp)
-    $default  reduce using rule 27 (simpleExp)
+    EQ        reduce using rule 48 (mulExp)
+    NEQ       reduce using rule 48 (mulExp)
+    GREQ      reduce using rule 48 (mulExp)
+    GR        reduce using rule 48 (mulExp)
+    SM        reduce using rule 48 (mulExp)
+    SMEQ      reduce using rule 48 (mulExp)
+    '-'       reduce using rule 29 (simpleExp)
+    '-'       [reduce using rule 48 (mulExp)]
+    '+'       reduce using rule 48 (mulExp)
+    '*'       reduce using rule 48 (mulExp)
+    '/'       reduce using rule 48 (mulExp)
+    '\n'      reduce using rule 48 (mulExp)
+    $default  reduce using rule 29 (simpleExp)
 
 
 State 22
 
-   16 stmt: BREAK ';' .
+   18 stmt: BREAK ';' .
 
-    $default  reduce using rule 16 (stmt)
+    $default  reduce using rule 18 (stmt)
 
 
 State 23
 
-   31 unaryRelExp: NOT unaryRelExp .
+   33 unaryRelExp: NOT unaryRelExp .
 
-    $default  reduce using rule 31 (unaryRelExp)
+    $default  reduce using rule 33 (unaryRelExp)
 
 
 State 24
 
-   46 mulExp: unaryExp .
+   34 unaryRelExp: sumExp . relOp sumExp
+   43 sumExp: sumExp . sumOp mulExp
 
-    $default  reduce using rule 46 (mulExp)
+    EQ    shift, and go to state 42
+    NEQ   shift, and go to state 43
+    GREQ  shift, and go to state 44
+    GR    shift, and go to state 45
+    SM    shift, and go to state 46
+    SMEQ  shift, and go to state 47
+    '-'   shift, and go to state 48
+    '+'   shift, and go to state 49
+
+    relOp  go to state 51
+    sumOp  go to state 52
 
 
 State 25
 
-   13 stmt: IF '(' . simpleExp ')' compoundStmt
-   14     | IF '(' . simpleExp ')' compoundStmt ELSE compoundStmt
+   44 sumExp: mulExp .
+   47 mulExp: mulExp . mulOp unaryExp
+
+    '*'  shift, and go to state 53
+    '/'  shift, and go to state 54
+
+    $default  reduce using rule 44 (sumExp)
+
+    mulOp  go to state 56
+
+
+State 26
+
+   48 mulExp: unaryExp .
+
+    $default  reduce using rule 48 (mulExp)
+
+
+State 27
+
+   15 stmt: IF '(' . simpleExp ')' compoundStmt
+   16     | IF '(' . simpleExp ')' compoundStmt ELSE compoundStmt
 
     NUM    shift, and go to state 1
     NOT    shift, and go to state 4
@@ -605,46 +645,46 @@ State 25
     FALSE  shift, and go to state 8
     '-'    shift, and go to state 11
 
-    $default  reduce using rule 25 (simpleExp)
+    $default  reduce using rule 27 (simpleExp)
 
-    simpleExp    go to state 53
-    boolExp      go to state 27
+    simpleExp    go to state 57
+    boolExp      go to state 29
     unaryRelExp  go to state 18
-    sumExp       go to state 19
-    mulExp       go to state 20
+    sumExp       go to state 24
+    mulExp       go to state 25
     unaryExp     go to state 21
-
-
-State 26
-
-   15 stmt: WHILE simpleExp . DO compoundStmt
-
-    DO  shift, and go to state 54
-
-
-State 27
-
-   26 simpleExp: boolExp .
-   28 boolExp: boolExp . OR boolExp
-   29        | boolExp . AND unaryRelExp
-
-    AND  shift, and go to state 37
-    OR   shift, and go to state 38
-
-    $default  reduce using rule 26 (simpleExp)
 
 
 State 28
 
-   17 stmt: RETURN ';' .
+   17 stmt: WHILE simpleExp . DO compoundStmt
 
-    $default  reduce using rule 17 (stmt)
+    DO  shift, and go to state 58
 
 
 State 29
 
+   28 simpleExp: boolExp .
+   30 boolExp: boolExp . OR boolExp
+   31        | boolExp . AND unaryRelExp
+
+    AND  shift, and go to state 39
+    OR   shift, and go to state 40
+
+    $default  reduce using rule 28 (simpleExp)
+
+
+State 30
+
+   19 stmt: RETURN ';' .
+
+    $default  reduce using rule 19 (stmt)
+
+
+State 31
+
     3 program: program . program
-   23 exp: program .
+   25 exp: program .
 
     NUM     shift, and go to state 1
     BOOL    shift, and go to state 2
@@ -658,48 +698,48 @@ State 29
     INT     shift, and go to state 10
     '-'     shift, and go to state 11
 
-    NUM       [reduce using rule 12 (stmt)]
-    NUM       [reduce using rule 23 (exp)]
-    NUM       [reduce using rule 25 (simpleExp)]
-    BOOL      [reduce using rule 12 (stmt)]
-    BOOL      [reduce using rule 23 (exp)]
-    BOOL      [reduce using rule 25 (simpleExp)]
-    BREAK     [reduce using rule 12 (stmt)]
-    BREAK     [reduce using rule 23 (exp)]
-    BREAK     [reduce using rule 25 (simpleExp)]
-    NOT       [reduce using rule 12 (stmt)]
-    NOT       [reduce using rule 23 (exp)]
-    NOT       [reduce using rule 25 (simpleExp)]
-    IF        [reduce using rule 12 (stmt)]
-    IF        [reduce using rule 23 (exp)]
-    IF        [reduce using rule 25 (simpleExp)]
-    WHILE     [reduce using rule 12 (stmt)]
-    WHILE     [reduce using rule 23 (exp)]
-    WHILE     [reduce using rule 25 (simpleExp)]
-    TRUE      [reduce using rule 12 (stmt)]
-    TRUE      [reduce using rule 23 (exp)]
-    TRUE      [reduce using rule 25 (simpleExp)]
-    FALSE     [reduce using rule 12 (stmt)]
-    FALSE     [reduce using rule 23 (exp)]
-    FALSE     [reduce using rule 25 (simpleExp)]
-    RETURN    [reduce using rule 12 (stmt)]
-    RETURN    [reduce using rule 23 (exp)]
-    RETURN    [reduce using rule 25 (simpleExp)]
-    INT       [reduce using rule 12 (stmt)]
-    INT       [reduce using rule 23 (exp)]
-    INT       [reduce using rule 25 (simpleExp)]
-    '-'       [reduce using rule 12 (stmt)]
-    '-'       [reduce using rule 23 (exp)]
-    '-'       [reduce using rule 25 (simpleExp)]
-    ';'       reduce using rule 12 (stmt)
-    ';'       [reduce using rule 23 (exp)]
-    ';'       [reduce using rule 25 (simpleExp)]
-    '}'       reduce using rule 12 (stmt)
-    '}'       [reduce using rule 23 (exp)]
-    '}'       [reduce using rule 25 (simpleExp)]
-    $default  reduce using rule 12 (stmt)
+    NUM       [reduce using rule 14 (stmt)]
+    NUM       [reduce using rule 25 (exp)]
+    NUM       [reduce using rule 27 (simpleExp)]
+    BOOL      [reduce using rule 14 (stmt)]
+    BOOL      [reduce using rule 25 (exp)]
+    BOOL      [reduce using rule 27 (simpleExp)]
+    BREAK     [reduce using rule 14 (stmt)]
+    BREAK     [reduce using rule 25 (exp)]
+    BREAK     [reduce using rule 27 (simpleExp)]
+    NOT       [reduce using rule 14 (stmt)]
+    NOT       [reduce using rule 25 (exp)]
+    NOT       [reduce using rule 27 (simpleExp)]
+    IF        [reduce using rule 14 (stmt)]
+    IF        [reduce using rule 25 (exp)]
+    IF        [reduce using rule 27 (simpleExp)]
+    WHILE     [reduce using rule 14 (stmt)]
+    WHILE     [reduce using rule 25 (exp)]
+    WHILE     [reduce using rule 27 (simpleExp)]
+    TRUE      [reduce using rule 14 (stmt)]
+    TRUE      [reduce using rule 25 (exp)]
+    TRUE      [reduce using rule 27 (simpleExp)]
+    FALSE     [reduce using rule 14 (stmt)]
+    FALSE     [reduce using rule 25 (exp)]
+    FALSE     [reduce using rule 27 (simpleExp)]
+    RETURN    [reduce using rule 14 (stmt)]
+    RETURN    [reduce using rule 25 (exp)]
+    RETURN    [reduce using rule 27 (simpleExp)]
+    INT       [reduce using rule 14 (stmt)]
+    INT       [reduce using rule 25 (exp)]
+    INT       [reduce using rule 27 (simpleExp)]
+    '-'       [reduce using rule 14 (stmt)]
+    '-'       [reduce using rule 25 (exp)]
+    '-'       [reduce using rule 27 (simpleExp)]
+    ';'       reduce using rule 14 (stmt)
+    ';'       [reduce using rule 25 (exp)]
+    ';'       [reduce using rule 27 (simpleExp)]
+    '}'       reduce using rule 14 (stmt)
+    '}'       [reduce using rule 25 (exp)]
+    '}'       [reduce using rule 27 (simpleExp)]
+    $default  reduce using rule 14 (stmt)
 
-    program      go to state 33
+    program      go to state 35
     typeSpec     go to state 13
     stmt         go to state 14
     exp          go to state 15
@@ -711,36 +751,36 @@ State 29
     unaryExp     go to state 21
 
 
-State 30
-
-   11 stmt: exp .
-   18     | RETURN exp . ';'
-
-    ';'  shift, and go to state 55
-
-    ';'       [reduce using rule 11 (stmt)]
-    $default  reduce using rule 11 (stmt)
-
-
-State 31
-
-   49 unaryExp: '-' NUM .
-
-    $default  reduce using rule 49 (unaryExp)
-
-
 State 32
+
+   13 stmt: exp .
+   20     | RETURN exp . ';'
+
+    ';'  shift, and go to state 59
+
+    ';'       [reduce using rule 13 (stmt)]
+    $default  reduce using rule 13 (stmt)
+
+
+State 33
+
+   51 unaryExp: '-' NUM .
+
+    $default  reduce using rule 51 (unaryExp)
+
+
+State 34
 
     0 $accept: program $end .
 
     $default  accept
 
 
-State 33
+State 35
 
     3 program: program . program
     3        | program program .
-   23 exp: program .
+   25 exp: program .
 
     NUM     shift, and go to state 1
     BOOL    shift, and go to state 2
@@ -755,64 +795,64 @@ State 33
     '-'     shift, and go to state 11
 
     $end      reduce using rule 3 (program)
-    $end      [reduce using rule 12 (stmt)]
-    $end      [reduce using rule 23 (exp)]
-    $end      [reduce using rule 25 (simpleExp)]
+    $end      [reduce using rule 14 (stmt)]
+    $end      [reduce using rule 25 (exp)]
+    $end      [reduce using rule 27 (simpleExp)]
     NUM       [reduce using rule 3 (program)]
-    NUM       [reduce using rule 12 (stmt)]
-    NUM       [reduce using rule 23 (exp)]
-    NUM       [reduce using rule 25 (simpleExp)]
+    NUM       [reduce using rule 14 (stmt)]
+    NUM       [reduce using rule 25 (exp)]
+    NUM       [reduce using rule 27 (simpleExp)]
     BOOL      [reduce using rule 3 (program)]
-    BOOL      [reduce using rule 12 (stmt)]
-    BOOL      [reduce using rule 23 (exp)]
-    BOOL      [reduce using rule 25 (simpleExp)]
+    BOOL      [reduce using rule 14 (stmt)]
+    BOOL      [reduce using rule 25 (exp)]
+    BOOL      [reduce using rule 27 (simpleExp)]
     BREAK     [reduce using rule 3 (program)]
-    BREAK     [reduce using rule 12 (stmt)]
-    BREAK     [reduce using rule 23 (exp)]
-    BREAK     [reduce using rule 25 (simpleExp)]
+    BREAK     [reduce using rule 14 (stmt)]
+    BREAK     [reduce using rule 25 (exp)]
+    BREAK     [reduce using rule 27 (simpleExp)]
     NOT       [reduce using rule 3 (program)]
-    NOT       [reduce using rule 12 (stmt)]
-    NOT       [reduce using rule 23 (exp)]
-    NOT       [reduce using rule 25 (simpleExp)]
+    NOT       [reduce using rule 14 (stmt)]
+    NOT       [reduce using rule 25 (exp)]
+    NOT       [reduce using rule 27 (simpleExp)]
     IF        [reduce using rule 3 (program)]
-    IF        [reduce using rule 12 (stmt)]
-    IF        [reduce using rule 23 (exp)]
-    IF        [reduce using rule 25 (simpleExp)]
+    IF        [reduce using rule 14 (stmt)]
+    IF        [reduce using rule 25 (exp)]
+    IF        [reduce using rule 27 (simpleExp)]
     WHILE     [reduce using rule 3 (program)]
-    WHILE     [reduce using rule 12 (stmt)]
-    WHILE     [reduce using rule 23 (exp)]
-    WHILE     [reduce using rule 25 (simpleExp)]
+    WHILE     [reduce using rule 14 (stmt)]
+    WHILE     [reduce using rule 25 (exp)]
+    WHILE     [reduce using rule 27 (simpleExp)]
     TRUE      [reduce using rule 3 (program)]
-    TRUE      [reduce using rule 12 (stmt)]
-    TRUE      [reduce using rule 23 (exp)]
-    TRUE      [reduce using rule 25 (simpleExp)]
+    TRUE      [reduce using rule 14 (stmt)]
+    TRUE      [reduce using rule 25 (exp)]
+    TRUE      [reduce using rule 27 (simpleExp)]
     FALSE     [reduce using rule 3 (program)]
-    FALSE     [reduce using rule 12 (stmt)]
-    FALSE     [reduce using rule 23 (exp)]
-    FALSE     [reduce using rule 25 (simpleExp)]
+    FALSE     [reduce using rule 14 (stmt)]
+    FALSE     [reduce using rule 25 (exp)]
+    FALSE     [reduce using rule 27 (simpleExp)]
     RETURN    [reduce using rule 3 (program)]
-    RETURN    [reduce using rule 12 (stmt)]
-    RETURN    [reduce using rule 23 (exp)]
-    RETURN    [reduce using rule 25 (simpleExp)]
+    RETURN    [reduce using rule 14 (stmt)]
+    RETURN    [reduce using rule 25 (exp)]
+    RETURN    [reduce using rule 27 (simpleExp)]
     INT       [reduce using rule 3 (program)]
-    INT       [reduce using rule 12 (stmt)]
-    INT       [reduce using rule 23 (exp)]
-    INT       [reduce using rule 25 (simpleExp)]
+    INT       [reduce using rule 14 (stmt)]
+    INT       [reduce using rule 25 (exp)]
+    INT       [reduce using rule 27 (simpleExp)]
     '-'       [reduce using rule 3 (program)]
-    '-'       [reduce using rule 12 (stmt)]
-    '-'       [reduce using rule 23 (exp)]
-    '-'       [reduce using rule 25 (simpleExp)]
+    '-'       [reduce using rule 14 (stmt)]
+    '-'       [reduce using rule 25 (exp)]
+    '-'       [reduce using rule 27 (simpleExp)]
     ';'       reduce using rule 3 (program)
-    ';'       [reduce using rule 12 (stmt)]
-    ';'       [reduce using rule 23 (exp)]
-    ';'       [reduce using rule 25 (simpleExp)]
+    ';'       [reduce using rule 14 (stmt)]
+    ';'       [reduce using rule 25 (exp)]
+    ';'       [reduce using rule 27 (simpleExp)]
     '}'       reduce using rule 3 (program)
-    '}'       [reduce using rule 12 (stmt)]
-    '}'       [reduce using rule 23 (exp)]
-    '}'       [reduce using rule 25 (simpleExp)]
+    '}'       [reduce using rule 14 (stmt)]
+    '}'       [reduce using rule 25 (exp)]
+    '}'       [reduce using rule 27 (simpleExp)]
     $default  reduce using rule 3 (program)
 
-    program      go to state 33
+    program      go to state 35
     typeSpec     go to state 13
     stmt         go to state 14
     exp          go to state 15
@@ -824,78 +864,62 @@ State 33
     unaryExp     go to state 21
 
 
-State 34
-
-    7 varDeclId: ID .
-    8          | ID .
-
-    NUM       reduce using rule 7 (varDeclId)
-    NUM       [reduce using rule 8 (varDeclId)]
-    BOOL      reduce using rule 7 (varDeclId)
-    BOOL      [reduce using rule 8 (varDeclId)]
-    BREAK     reduce using rule 7 (varDeclId)
-    BREAK     [reduce using rule 8 (varDeclId)]
-    NOT       reduce using rule 7 (varDeclId)
-    NOT       [reduce using rule 8 (varDeclId)]
-    IF        reduce using rule 7 (varDeclId)
-    IF        [reduce using rule 8 (varDeclId)]
-    WHILE     reduce using rule 7 (varDeclId)
-    WHILE     [reduce using rule 8 (varDeclId)]
-    TRUE      reduce using rule 7 (varDeclId)
-    TRUE      [reduce using rule 8 (varDeclId)]
-    FALSE     reduce using rule 7 (varDeclId)
-    FALSE     [reduce using rule 8 (varDeclId)]
-    RETURN    reduce using rule 7 (varDeclId)
-    RETURN    [reduce using rule 8 (varDeclId)]
-    INT       reduce using rule 7 (varDeclId)
-    INT       [reduce using rule 8 (varDeclId)]
-    '-'       reduce using rule 7 (varDeclId)
-    '-'       [reduce using rule 8 (varDeclId)]
-    ';'       reduce using rule 7 (varDeclId)
-    ';'       [reduce using rule 8 (varDeclId)]
-    ':'       reduce using rule 7 (varDeclId)
-    ':'       [reduce using rule 8 (varDeclId)]
-    '}'       reduce using rule 7 (varDeclId)
-    '}'       [reduce using rule 8 (varDeclId)]
-    $default  reduce using rule 7 (varDeclId)
-
-
-State 35
-
-    1 program: typeSpec varDeclInit . ';'
-
-    ';'  shift, and go to state 56
-
-
 State 36
 
-    5 varDeclInit: varDeclId .
-    6            | varDeclId . ':' simpleExp
+    9 varDeclId: ID .
+   10          | ID .
 
-    ':'  shift, and go to state 57
-
-    $default  reduce using rule 5 (varDeclInit)
+    NUM       reduce using rule 9 (varDeclId)
+    NUM       [reduce using rule 10 (varDeclId)]
+    BOOL      reduce using rule 9 (varDeclId)
+    BOOL      [reduce using rule 10 (varDeclId)]
+    BREAK     reduce using rule 9 (varDeclId)
+    BREAK     [reduce using rule 10 (varDeclId)]
+    NOT       reduce using rule 9 (varDeclId)
+    NOT       [reduce using rule 10 (varDeclId)]
+    IF        reduce using rule 9 (varDeclId)
+    IF        [reduce using rule 10 (varDeclId)]
+    WHILE     reduce using rule 9 (varDeclId)
+    WHILE     [reduce using rule 10 (varDeclId)]
+    TRUE      reduce using rule 9 (varDeclId)
+    TRUE      [reduce using rule 10 (varDeclId)]
+    FALSE     reduce using rule 9 (varDeclId)
+    FALSE     [reduce using rule 10 (varDeclId)]
+    RETURN    reduce using rule 9 (varDeclId)
+    RETURN    [reduce using rule 10 (varDeclId)]
+    INT       reduce using rule 9 (varDeclId)
+    INT       [reduce using rule 10 (varDeclId)]
+    '-'       reduce using rule 9 (varDeclId)
+    '-'       [reduce using rule 10 (varDeclId)]
+    ';'       reduce using rule 9 (varDeclId)
+    ';'       [reduce using rule 10 (varDeclId)]
+    ':'       reduce using rule 9 (varDeclId)
+    ':'       [reduce using rule 10 (varDeclId)]
+    '}'       reduce using rule 9 (varDeclId)
+    '}'       [reduce using rule 10 (varDeclId)]
+    $default  reduce using rule 9 (varDeclId)
 
 
 State 37
 
-   29 boolExp: boolExp AND . unaryRelExp
+    1 program: typeSpec varDeclInit . ';' '\n'
 
-    NUM    shift, and go to state 1
-    NOT    shift, and go to state 4
-    TRUE   shift, and go to state 7
-    FALSE  shift, and go to state 8
-    '-'    shift, and go to state 11
-
-    unaryRelExp  go to state 58
-    sumExp       go to state 19
-    mulExp       go to state 20
-    unaryExp     go to state 24
+    ';'  shift, and go to state 60
 
 
 State 38
 
-   28 boolExp: boolExp OR . boolExp
+    7 varDeclInit: varDeclId .
+    8            | varDeclId . ':' simpleExp
+
+    ':'  shift, and go to state 61
+
+    $default  reduce using rule 7 (varDeclInit)
+
+
+State 39
+
+   31 boolExp: boolExp AND . unaryRelExp
 
     NUM    shift, and go to state 1
     NOT    shift, and go to state 4
@@ -903,157 +927,187 @@ State 38
     FALSE  shift, and go to state 8
     '-'    shift, and go to state 11
 
-    boolExp      go to state 59
+    unaryRelExp  go to state 62
+    sumExp       go to state 24
+    mulExp       go to state 25
+    unaryExp     go to state 26
+
+
+State 40
+
+   30 boolExp: boolExp OR . boolExp
+
+    NUM    shift, and go to state 1
+    NOT    shift, and go to state 4
+    TRUE   shift, and go to state 7
+    FALSE  shift, and go to state 8
+    '-'    shift, and go to state 11
+
+    boolExp      go to state 63
     unaryRelExp  go to state 18
-    sumExp       go to state 19
-    mulExp       go to state 20
-    unaryExp     go to state 24
+    sumExp       go to state 24
+    mulExp       go to state 25
+    unaryExp     go to state 26
 
 
-State 39
+State 41
 
     4 program: boolExp '\n' .
 
     $default  reduce using rule 4 (program)
 
 
-State 40
-
-   39 relOp: EQ .
-
-    $default  reduce using rule 39 (relOp)
-
-
-State 41
-
-   40 relOp: NEQ .
-
-    $default  reduce using rule 40 (relOp)
-
-
 State 42
 
-   36 relOp: GREQ .
+   41 relOp: EQ .
 
-    $default  reduce using rule 36 (relOp)
+    $default  reduce using rule 41 (relOp)
 
 
 State 43
 
-   35 relOp: GR .
+   42 relOp: NEQ .
 
-    $default  reduce using rule 35 (relOp)
+    $default  reduce using rule 42 (relOp)
 
 
 State 44
 
-   37 relOp: SM .
-
-    $default  reduce using rule 37 (relOp)
-
-
-State 45
-
-   38 relOp: SMEQ .
+   38 relOp: GREQ .
 
     $default  reduce using rule 38 (relOp)
 
 
+State 45
+
+   37 relOp: GR .
+
+    $default  reduce using rule 37 (relOp)
+
+
 State 46
 
-   44 sumOp: '-' .
+   39 relOp: SM .
 
-    $default  reduce using rule 44 (sumOp)
+    $default  reduce using rule 39 (relOp)
 
 
 State 47
 
-   43 sumOp: '+' .
+   40 relOp: SMEQ .
 
-    $default  reduce using rule 43 (sumOp)
+    $default  reduce using rule 40 (relOp)
 
 
 State 48
 
-   32 unaryRelExp: sumExp relOp . sumExp
+   46 sumOp: '-' .
 
-    NUM  shift, and go to state 1
-    '-'  shift, and go to state 11
-
-    sumExp    go to state 60
-    mulExp    go to state 20
-    unaryExp  go to state 24
+    $default  reduce using rule 46 (sumOp)
 
 
 State 49
 
-   41 sumExp: sumExp sumOp . mulExp
+   45 sumOp: '+' .
 
-    NUM  shift, and go to state 1
-    '-'  shift, and go to state 11
-
-    mulExp    go to state 61
-    unaryExp  go to state 24
+    $default  reduce using rule 45 (sumOp)
 
 
 State 50
 
-   47 mulOp: '*' .
+    5 program: sumExp '\n' .
 
-    $default  reduce using rule 47 (mulOp)
+    $default  reduce using rule 5 (program)
 
 
 State 51
 
-   48 mulOp: '/' .
-
-    $default  reduce using rule 48 (mulOp)
-
-
-State 52
-
-   45 mulExp: mulExp mulOp . unaryExp
+   34 unaryRelExp: sumExp relOp . sumExp
 
     NUM  shift, and go to state 1
     '-'  shift, and go to state 11
 
-    unaryExp  go to state 62
+    sumExp    go to state 64
+    mulExp    go to state 25
+    unaryExp  go to state 26
+
+
+State 52
+
+   43 sumExp: sumExp sumOp . mulExp
+
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 11
+
+    mulExp    go to state 65
+    unaryExp  go to state 26
 
 
 State 53
 
-   13 stmt: IF '(' simpleExp . ')' compoundStmt
-   14     | IF '(' simpleExp . ')' compoundStmt ELSE compoundStmt
+   49 mulOp: '*' .
 
-    ')'  shift, and go to state 63
+    $default  reduce using rule 49 (mulOp)
 
 
 State 54
 
-   15 stmt: WHILE simpleExp DO . compoundStmt
+   50 mulOp: '/' .
 
-    '{'  shift, and go to state 64
-
-    compoundStmt  go to state 65
+    $default  reduce using rule 50 (mulOp)
 
 
 State 55
 
-   18 stmt: RETURN exp ';' .
+    6 program: mulExp '\n' .
 
-    $default  reduce using rule 18 (stmt)
+    $default  reduce using rule 6 (program)
 
 
 State 56
 
-    1 program: typeSpec varDeclInit ';' .
+   47 mulExp: mulExp mulOp . unaryExp
 
-    $default  reduce using rule 1 (program)
+    NUM  shift, and go to state 1
+    '-'  shift, and go to state 11
+
+    unaryExp  go to state 66
 
 
 State 57
 
-    6 varDeclInit: varDeclId ':' . simpleExp
+   15 stmt: IF '(' simpleExp . ')' compoundStmt
+   16     | IF '(' simpleExp . ')' compoundStmt ELSE compoundStmt
+
+    ')'  shift, and go to state 67
+
+
+State 58
+
+   17 stmt: WHILE simpleExp DO . compoundStmt
+
+    '{'  shift, and go to state 68
+
+    compoundStmt  go to state 69
+
+
+State 59
+
+   20 stmt: RETURN exp ';' .
+
+    $default  reduce using rule 20 (stmt)
+
+
+State 60
+
+    1 program: typeSpec varDeclInit ';' . '\n'
+
+    '\n'  shift, and go to state 70
+
+
+State 61
+
+    8 varDeclInit: varDeclId ':' . simpleExp
 
     NUM    shift, and go to state 1
     NOT    shift, and go to state 4
@@ -1061,131 +1115,138 @@ State 57
     FALSE  shift, and go to state 8
     '-'    shift, and go to state 11
 
-    NUM       [reduce using rule 25 (simpleExp)]
-    NOT       [reduce using rule 25 (simpleExp)]
-    TRUE      [reduce using rule 25 (simpleExp)]
-    FALSE     [reduce using rule 25 (simpleExp)]
-    '-'       [reduce using rule 25 (simpleExp)]
-    $default  reduce using rule 25 (simpleExp)
+    NUM       [reduce using rule 27 (simpleExp)]
+    NOT       [reduce using rule 27 (simpleExp)]
+    TRUE      [reduce using rule 27 (simpleExp)]
+    FALSE     [reduce using rule 27 (simpleExp)]
+    '-'       [reduce using rule 27 (simpleExp)]
+    $default  reduce using rule 27 (simpleExp)
 
-    simpleExp    go to state 66
-    boolExp      go to state 27
+    simpleExp    go to state 71
+    boolExp      go to state 29
     unaryRelExp  go to state 18
-    sumExp       go to state 19
-    mulExp       go to state 20
+    sumExp       go to state 24
+    mulExp       go to state 25
     unaryExp     go to state 21
-
-
-State 58
-
-   29 boolExp: boolExp AND unaryRelExp .
-
-    $default  reduce using rule 29 (boolExp)
-
-
-State 59
-
-   28 boolExp: boolExp . OR boolExp
-   28        | boolExp OR boolExp .
-   29        | boolExp . AND unaryRelExp
-
-    $default  reduce using rule 28 (boolExp)
-
-
-State 60
-
-   32 unaryRelExp: sumExp relOp sumExp .
-   41 sumExp: sumExp . sumOp mulExp
-
-    '-'  shift, and go to state 46
-    '+'  shift, and go to state 47
-
-    '-'       [reduce using rule 32 (unaryRelExp)]
-    $default  reduce using rule 32 (unaryRelExp)
-
-    sumOp  go to state 49
-
-
-State 61
-
-   41 sumExp: sumExp sumOp mulExp .
-   45 mulExp: mulExp . mulOp unaryExp
-
-    '*'  shift, and go to state 50
-    '/'  shift, and go to state 51
-
-    $default  reduce using rule 41 (sumExp)
-
-    mulOp  go to state 52
 
 
 State 62
 
-   45 mulExp: mulExp mulOp unaryExp .
+   31 boolExp: boolExp AND unaryRelExp .
 
-    $default  reduce using rule 45 (mulExp)
+    $default  reduce using rule 31 (boolExp)
 
 
 State 63
 
-   13 stmt: IF '(' simpleExp ')' . compoundStmt
-   14     | IF '(' simpleExp ')' . compoundStmt ELSE compoundStmt
+   30 boolExp: boolExp . OR boolExp
+   30        | boolExp OR boolExp .
+   31        | boolExp . AND unaryRelExp
 
-    '{'  shift, and go to state 64
-
-    compoundStmt  go to state 67
+    $default  reduce using rule 30 (boolExp)
 
 
 State 64
 
-   19 compoundStmt: '{' . localDecls stmt '}'
+   34 unaryRelExp: sumExp relOp sumExp .
+   43 sumExp: sumExp . sumOp mulExp
 
-    BOOL  shift, and go to state 2
-    INT   shift, and go to state 10
+    '-'  shift, and go to state 48
+    '+'  shift, and go to state 49
 
-    typeSpec       go to state 68
-    localDecls     go to state 69
-    scopedVarDecl  go to state 70
+    '-'       [reduce using rule 34 (unaryRelExp)]
+    $default  reduce using rule 34 (unaryRelExp)
+
+    sumOp  go to state 52
 
 
 State 65
 
-   15 stmt: WHILE simpleExp DO compoundStmt .
+   43 sumExp: sumExp sumOp mulExp .
+   47 mulExp: mulExp . mulOp unaryExp
 
-    $default  reduce using rule 15 (stmt)
+    '*'  shift, and go to state 53
+    '/'  shift, and go to state 54
+
+    $default  reduce using rule 43 (sumExp)
+
+    mulOp  go to state 56
 
 
 State 66
 
-    6 varDeclInit: varDeclId ':' simpleExp .
+   47 mulExp: mulExp mulOp unaryExp .
 
-    $default  reduce using rule 6 (varDeclInit)
+    $default  reduce using rule 47 (mulExp)
 
 
 State 67
 
-   13 stmt: IF '(' simpleExp ')' compoundStmt .
-   14     | IF '(' simpleExp ')' compoundStmt . ELSE compoundStmt
+   15 stmt: IF '(' simpleExp ')' . compoundStmt
+   16     | IF '(' simpleExp ')' . compoundStmt ELSE compoundStmt
 
-    ELSE  shift, and go to state 71
+    '{'  shift, and go to state 68
 
-    $default  reduce using rule 13 (stmt)
+    compoundStmt  go to state 72
 
 
 State 68
 
-   22 scopedVarDecl: typeSpec . varDeclInit
+   21 compoundStmt: '{' . localDecls stmt '}'
 
-    ID  shift, and go to state 34
+    BOOL  shift, and go to state 2
+    INT   shift, and go to state 10
 
-    varDeclInit  go to state 72
-    varDeclId    go to state 36
+    typeSpec       go to state 73
+    localDecls     go to state 74
+    scopedVarDecl  go to state 75
 
 
 State 69
 
-   19 compoundStmt: '{' localDecls . stmt '}'
-   20 localDecls: localDecls . scopedVarDecl
+   17 stmt: WHILE simpleExp DO compoundStmt .
+
+    $default  reduce using rule 17 (stmt)
+
+
+State 70
+
+    1 program: typeSpec varDeclInit ';' '\n' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 71
+
+    8 varDeclInit: varDeclId ':' simpleExp .
+
+    $default  reduce using rule 8 (varDeclInit)
+
+
+State 72
+
+   15 stmt: IF '(' simpleExp ')' compoundStmt .
+   16     | IF '(' simpleExp ')' compoundStmt . ELSE compoundStmt
+
+    ELSE  shift, and go to state 76
+
+    $default  reduce using rule 15 (stmt)
+
+
+State 73
+
+   24 scopedVarDecl: typeSpec . varDeclInit
+
+    ID  shift, and go to state 36
+
+    varDeclInit  go to state 77
+    varDeclId    go to state 38
+
+
+State 74
+
+   21 compoundStmt: '{' localDecls . stmt '}'
+   22 localDecls: localDecls . scopedVarDecl
 
     NUM     shift, and go to state 1
     BOOL    shift, and go to state 2
@@ -1199,36 +1260,36 @@ State 69
     INT     shift, and go to state 10
     '-'     shift, and go to state 11
 
-    NUM       [reduce using rule 12 (stmt)]
-    NUM       [reduce using rule 25 (simpleExp)]
-    BOOL      [reduce using rule 12 (stmt)]
-    BOOL      [reduce using rule 25 (simpleExp)]
-    BREAK     [reduce using rule 12 (stmt)]
-    BREAK     [reduce using rule 25 (simpleExp)]
-    NOT       [reduce using rule 12 (stmt)]
-    NOT       [reduce using rule 25 (simpleExp)]
-    IF        [reduce using rule 12 (stmt)]
-    IF        [reduce using rule 25 (simpleExp)]
-    WHILE     [reduce using rule 12 (stmt)]
-    WHILE     [reduce using rule 25 (simpleExp)]
-    TRUE      [reduce using rule 12 (stmt)]
-    TRUE      [reduce using rule 25 (simpleExp)]
-    FALSE     [reduce using rule 12 (stmt)]
-    FALSE     [reduce using rule 25 (simpleExp)]
-    RETURN    [reduce using rule 12 (stmt)]
-    RETURN    [reduce using rule 25 (simpleExp)]
-    INT       [reduce using rule 12 (stmt)]
-    INT       [reduce using rule 25 (simpleExp)]
-    '-'       [reduce using rule 12 (stmt)]
-    '-'       [reduce using rule 25 (simpleExp)]
-    '}'       reduce using rule 12 (stmt)
-    '}'       [reduce using rule 25 (simpleExp)]
-    $default  reduce using rule 12 (stmt)
+    NUM       [reduce using rule 14 (stmt)]
+    NUM       [reduce using rule 27 (simpleExp)]
+    BOOL      [reduce using rule 14 (stmt)]
+    BOOL      [reduce using rule 27 (simpleExp)]
+    BREAK     [reduce using rule 14 (stmt)]
+    BREAK     [reduce using rule 27 (simpleExp)]
+    NOT       [reduce using rule 14 (stmt)]
+    NOT       [reduce using rule 27 (simpleExp)]
+    IF        [reduce using rule 14 (stmt)]
+    IF        [reduce using rule 27 (simpleExp)]
+    WHILE     [reduce using rule 14 (stmt)]
+    WHILE     [reduce using rule 27 (simpleExp)]
+    TRUE      [reduce using rule 14 (stmt)]
+    TRUE      [reduce using rule 27 (simpleExp)]
+    FALSE     [reduce using rule 14 (stmt)]
+    FALSE     [reduce using rule 27 (simpleExp)]
+    RETURN    [reduce using rule 14 (stmt)]
+    RETURN    [reduce using rule 27 (simpleExp)]
+    INT       [reduce using rule 14 (stmt)]
+    INT       [reduce using rule 27 (simpleExp)]
+    '-'       [reduce using rule 14 (stmt)]
+    '-'       [reduce using rule 27 (simpleExp)]
+    '}'       reduce using rule 14 (stmt)
+    '}'       [reduce using rule 27 (simpleExp)]
+    $default  reduce using rule 14 (stmt)
 
-    program        go to state 29
-    typeSpec       go to state 73
-    stmt           go to state 74
-    scopedVarDecl  go to state 75
+    program        go to state 31
+    typeSpec       go to state 78
+    stmt           go to state 79
+    scopedVarDecl  go to state 80
     exp            go to state 15
     simpleExp      go to state 16
     boolExp        go to state 17
@@ -1238,77 +1299,77 @@ State 69
     unaryExp       go to state 21
 
 
-State 70
+State 75
 
-   21 localDecls: scopedVarDecl .
+   23 localDecls: scopedVarDecl .
 
-    $default  reduce using rule 21 (localDecls)
-
-
-State 71
-
-   14 stmt: IF '(' simpleExp ')' compoundStmt ELSE . compoundStmt
-
-    '{'  shift, and go to state 64
-
-    compoundStmt  go to state 76
+    $default  reduce using rule 23 (localDecls)
 
 
-State 72
+State 76
 
-   22 scopedVarDecl: typeSpec varDeclInit .
+   16 stmt: IF '(' simpleExp ')' compoundStmt ELSE . compoundStmt
 
-    $default  reduce using rule 22 (scopedVarDecl)
+    '{'  shift, and go to state 68
 
-
-State 73
-
-    1 program: typeSpec . varDeclInit ';'
-   22 scopedVarDecl: typeSpec . varDeclInit
-
-    ID  shift, and go to state 34
-
-    varDeclInit  go to state 77
-    varDeclId    go to state 36
+    compoundStmt  go to state 81
 
 
-State 74
+State 77
+
+   24 scopedVarDecl: typeSpec varDeclInit .
+
+    $default  reduce using rule 24 (scopedVarDecl)
+
+
+State 78
+
+    1 program: typeSpec . varDeclInit ';' '\n'
+   24 scopedVarDecl: typeSpec . varDeclInit
+
+    ID  shift, and go to state 36
+
+    varDeclInit  go to state 82
+    varDeclId    go to state 38
+
+
+State 79
 
     2 program: stmt .
-   19 compoundStmt: '{' localDecls stmt . '}'
+   21 compoundStmt: '{' localDecls stmt . '}'
 
-    '}'  shift, and go to state 78
+    '}'  shift, and go to state 83
 
     '}'       [reduce using rule 2 (program)]
     $default  reduce using rule 2 (program)
 
 
-State 75
+State 80
 
-   20 localDecls: localDecls scopedVarDecl .
+   22 localDecls: localDecls scopedVarDecl .
 
-    $default  reduce using rule 20 (localDecls)
-
-
-State 76
-
-   14 stmt: IF '(' simpleExp ')' compoundStmt ELSE compoundStmt .
-
-    $default  reduce using rule 14 (stmt)
+    $default  reduce using rule 22 (localDecls)
 
 
-State 77
+State 81
 
-    1 program: typeSpec varDeclInit . ';'
-   22 scopedVarDecl: typeSpec varDeclInit .
+   16 stmt: IF '(' simpleExp ')' compoundStmt ELSE compoundStmt .
 
-    ';'  shift, and go to state 56
-
-    $default  reduce using rule 22 (scopedVarDecl)
+    $default  reduce using rule 16 (stmt)
 
 
-State 78
+State 82
 
-   19 compoundStmt: '{' localDecls stmt '}' .
+    1 program: typeSpec varDeclInit . ';' '\n'
+   24 scopedVarDecl: typeSpec varDeclInit .
 
-    $default  reduce using rule 19 (compoundStmt)
+    ';'  shift, and go to state 60
+
+    $default  reduce using rule 24 (scopedVarDecl)
+
+
+State 83
+
+   21 compoundStmt: '{' localDecls stmt '}' .
+
+    $default  reduce using rule 21 (compoundStmt)
