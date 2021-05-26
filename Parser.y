@@ -146,6 +146,11 @@ int main(void) {
       look = lookup("testVar4");
       printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
 
+      addToTail("testVar3","testType2",20);
+      look = lookup("testVar3");
+      printf("Name: %s Type: %s Value: %d\n", look->name, look->type, look->value);
+
+      look = lookup("ciccio");
 
       yyparse();
 

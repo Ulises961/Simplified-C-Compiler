@@ -24,7 +24,7 @@ symbolHT* symbolTable;
 void initialize(){
     symbolTable = (symbolHT*) malloc(sizeof(symbolHT));
     symbolTable->test = 1;
-    printf("Initialization successful\n");
+    //printf("Initialization successful\n");
 }
 
 void assignValue(symbol* variable, int value){
@@ -60,27 +60,25 @@ symbol* createSymbol(char* name, char* type, int value){
 }
 
 symbol* lookup(char* name){
-    printf("looking up...\n");
-
-    //symbol* temp = symbolTable->head;
+    //printf("looking up...\n");
 
     symbol* temp = symbolTable->head;
 
     if (symbolTable->head == NULL){
-        printf("Symbol table empty...\n");
+        //printf("Symbol table empty...\n");
         return NULL;
     }
     else{      
         while(temp != NULL){
             if(strcmp(temp->name, name) == 0){
-                printf("Found variable %s in symbol table\n", name);
+                //printf("Found variable %s in symbol table\n", name);
                 return temp;
             }
             
             temp = temp->next;
         }
 
-        printf("Variable not found\n");
+        //printf("Variable %s not found\n", name);
     }
 
     return temp;
@@ -95,7 +93,7 @@ void addToTail(char* name, char* type, int value){
         exit(1);
     }
 
-    printf("Creating variable %s\n", name);
+    //printf("Creating variable %s\n", name);
 
     if(symbolTable->head == NULL){
             symbolTable->head = symbolPtr;
