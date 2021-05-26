@@ -10,7 +10,7 @@
 void yyerror(char *);
 int yylex(void);
 bool compare(int, int, int);
-
+int sum ( int, int, int);
 int symbols[26];
 
 %}
@@ -49,12 +49,18 @@ int symbols[26];
 %token <lexeme> INT
 %token <lexeme> BOOLEAN
 %type <integer> relOp
+%type <integer> mulOp
+%type <integer> sumOp
 %type <integer> unaryExp
+%type <integer> mulExp
+%type <integer> simpleExp
+%type <integer> sumExp
 %type <integer> intExp
 %type <boolean> boolExp
-%type <boolean> andExp
+
+
 %type <lexeme> typeSpec
-%type <integer> sumExp
+
 %type <boolean> unaryRelExp
 %left '-' '+'
 %left '*' '/'
@@ -72,7 +78,7 @@ program : typeSpec varDeclInit ';' {}
       |boolExp '\n'{ printf("%d",$1);exit(1);}
       ; 
 varDeclInit : varDeclId
-      |varDeclId ':' simpleExp
+      | varDeclId ':' simpleExp 
       ;
 varDeclId : ID
       |ID[NUM]
@@ -98,15 +104,15 @@ exp : program
       | simpleExp
       ;
 simpleExp : 
-      |boolExp
-      |unaryExp
+      |boolExp  {$$ = $1;}
+      |unaryExp {$$ = $1;}
       ;
-boolExp : boolExp OR boolExp { $$ = $1 | $3 ;}
+boolExp : boolExp OR boolExp { $$ = $1 || $3 ;}
       | boolExp AND unaryRelExp { $$ = $1 &&  $3;}
       | unaryRelExp {$$ = $1;}
     
       ;
-unaryRelExp: NOT unaryRelExp
+unaryRelExp: NOT unaryRelExp { $$ = !($2); }
       |sumExp relOp sumExp { $$ = compare($1,$2,$3); }
       |TRUE {$$ = true;}
       |FALSE {$$ = false;}
@@ -119,20 +125,20 @@ relOp: GR { $$ = 11111 ;}
       |EQ { $$ = 11115 ;}
       |NEQ { $$ = 11116 ; }
       ;
-sumExp: sumExp sumOp mulExp 
-      |mulExp
+sumExp: sumExp sumOp mulExp { $$ = sum ($1,$2,$3); }
+      |mulExp { $$ = $$1; }
       ;
 sumOp: '+'
       |'-'
       ;
-mulExp : mulExp mulOp unaryExp
+mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3);}
       | unaryExp
       ;
-mulOp: '*'
-      | '/'
+mulOp: '*' { $$ = 11117;}
+      | '/'  { $$ = 11118;}
       ;
-unaryExp: '-' NUM
-      |NUM
+unaryExp: '-' NUM { $$ = -$2;}
+      |NUM { $$ = $1;}
       ;
 
 
@@ -155,7 +161,7 @@ int main(void) {
 bool compare(int a, int b, int c){
       bool res;
       switch (b){
-            case 11111: res = (a >c);
+            case 11111: res = (a > c);
             break;
             case 11112: res = (a >= c);
             break;
@@ -169,4 +175,17 @@ bool compare(int a, int b, int c){
             break;
              }
       return res;
+}
+int sum ( int a, int b, int c){
+      switch (b){
+            case 11117 : return (a + b);
+            case 11118 : return (a - b); 
+      }
+}
+
+int multiply ( int a, int b, int c){
+      switch (b){
+            case 11117 : return (a * b);
+            case 11118 : return (a / b); 
+      }
 }
