@@ -101,12 +101,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 23 "yaccTester.y"
+#line 24 "yaccTester.y"
 
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
        bool boolean;
-       
+      struct symbol* symbol;       
 
 #line 112 "y.tab.h"
 

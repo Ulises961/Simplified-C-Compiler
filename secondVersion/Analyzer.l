@@ -3,6 +3,7 @@
 #include <string.h>
 void yyerror(char *);
 #include "y.tab.h"
+
 %}
 
 DIGIT       [0-9]

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "lex.yy.c"
-#include "../symbolTable.c"
+#include "symbolTable.c"
 
 //#include <symbolTab>
 
@@ -17,6 +17,7 @@ int sum ( int, int, int);
 int multiply ( int, int, int);
 int symbols[26];
 
+
 %}
 
 
@@ -24,7 +25,7 @@ int symbols[26];
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
        bool boolean;
-       
+      struct symbol* symbol;       
 }
 
 
@@ -59,9 +60,10 @@ int symbols[26];
 %type <integer> mulExp
 %type <integer> simpleExp
 %type <integer> sumExp
-%type <integer> intExp
+
 %type <lexeme> varDeclId
-%type <lexeme> varDeclInit
+%type <symbol> varDeclInit
+%type <symbol> stmt
 %type <boolean> boolExp
 
 
@@ -79,30 +81,31 @@ int symbols[26];
 
 %%
 program : 
-       typeSpec varDeclInit ';' '\n' {printf( "\n Input line parsed\n"); exit(0);} /* { symbol* x = createSymbol($2,$1);
-                                          printf("%s",x->name);exit(1);} */
-      | stmt {}
+      varDeclInit;
+      |stmt {}
       |program program {}
       |boolExp '\n'{ printf("%d\n",$1);exit(1);}
       |sumExp '\n'{ printf("%d\n",$1);exit(1);}
       |mulExp '\n'{ printf("%d\n",$1);exit(1);}
       ; 
-varDeclInit : 
-      varDeclId { $$ = $1; }
-      | varDeclId ':' simpleExp {
-            printf("\n value Var decl id: %s simple exp: %d\n",$1,$3);
-            // symbol* x = lookup($1);
-
-            // if(x != NULL){
-            //       assignValue(x, $3);
-            // }
-             $$ = $1;
-        }
+varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  { 
+            symbol* x;
+            if(x = lookup($2))
+                  $$ = x ;
+            else{
+                  x = createSymbol($1,$2,$4);
+                  printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d", x-> name, x->value, x->type);
+                  $$ = x ;
+            }
+            exit(0);
+      }  
+     
+    
       ;
-varDeclId : ID { $$ = $1; printf("\n value ID: %s\n",$1);}
+varDeclId : ID { $$ = $1; }
       |ID[NUM] {}
       ;
-typeSpec : INT {$$ = 11119; printf("\n value type Spec: %d\n",$$);}
+typeSpec : INT {$$ = 11119; }
       | BOOL {$$ = 11120;}
       ;
  stmt : exp;
@@ -119,8 +122,7 @@ localDecls : localDecls scopedVarDecl
       |scopedVarDecl
       ;
 scopedVarDecl : typeSpec varDeclInit;
-exp : program
-      | simpleExp
+exp : simpleExp
       ;
 simpleExp : 
       |boolExp  {$$ = $1;}
@@ -169,7 +171,9 @@ void yyerror(char *s) {
 }
 
 int main(void) {
+      initialize();
       yyparse();
+      
       return 0;
 }
 
