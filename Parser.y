@@ -91,6 +91,7 @@ varDecl: typeSpec ID ':' expr {                                   // assignment 
             // create variable in symbol table
             addToTail($2,$1,$4);
       }
+      }
       ;
 
 typeSpec: INT 
@@ -99,12 +100,13 @@ typeSpec: INT
 expr : intExpr    { printf("Integer expression result: %d\n", $1); }
       | boolExpr  { printf("Boolean expression result: %s\n", (($1 == 1) ? "true" : "false"));}
       | relExpr   { printf("Relational expression result: %s\n", (($1 == 1) ? "true" : "false"));}
-      | ID {  if (lookup($1) == NULL)
+      | ID {  symbol* out = lookup($1);  
+            if (out == NULL){
                         printf("Error... Variable %s undefined..\n",$1);
-                  else{
-                        symbol* out = lookup($1);
-                        $$ = out->value;
-                  }
+                        exit(1);
+            }
+            else
+                  $$ = out->value;
       }
       ;
 
