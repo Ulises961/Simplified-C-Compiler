@@ -87,6 +87,7 @@ varDecl: typeSpec ID ':' expr {                                   // assignment 
             else
                   printf("Variable %s, of type %s, value: %s\n", $2, $1, (($4 == 1) ? "true" : "false"));
 
+
       }
       ;
 
@@ -133,6 +134,17 @@ void yyerror(char *s) {
 }
 
 int main(void) {
+
+      initialize();
+
+      symbol* test = createSymbol("testVar","testType",10);
+      //symbol* test = createSymbol("testVar","testType",10);
+      //printf("Name: %s Type: %s Value: %d\n", test->name, test->type, test->value);
+
+      //printf("%d\n", symbolTable->test);
+
+
+
 
       yyparse();
 

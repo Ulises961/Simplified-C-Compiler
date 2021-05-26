@@ -574,10 +574,10 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    70,    70,    71,    74,    75,    76,    80,    93,    94,
-      96,    97,    98,   101,   102,   103,   104,   105,   106,   107,
-     110,   111,   112,   113,   114,   117,   118,   119,   120,   121,
-     122,   123
+       0,    70,    70,    71,    74,    75,    76,    80,    94,    95,
+      97,    98,    99,   102,   103,   104,   105,   106,   107,   108,
+     111,   112,   113,   114,   115,   118,   119,   120,   121,   122,
+     123,   124
 };
 #endif
 
@@ -1426,144 +1426,145 @@ yyreduce:
             else
                   printf("Variable %s, of type %s, value: %s\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme), (((yyvsp[0].integer) == 1) ? "true" : "false"));
 
+
       }
-#line 1431 "y.tab.c"
+#line 1432 "y.tab.c"
     break;
 
   case 10:
-#line 96 "Parser.y"
+#line 97 "Parser.y"
                   { printf("Integer expression result: %d\n", (yyvsp[0].integer)); }
-#line 1437 "y.tab.c"
+#line 1438 "y.tab.c"
     break;
 
   case 11:
-#line 97 "Parser.y"
+#line 98 "Parser.y"
                   { printf("Boolean expression result: %s\n", (((yyvsp[0].integer) == 1) ? "true" : "false"));}
-#line 1443 "y.tab.c"
+#line 1444 "y.tab.c"
     break;
 
   case 12:
-#line 98 "Parser.y"
+#line 99 "Parser.y"
                   { printf("Relational expression result: %s\n", (((yyvsp[0].integer) == 1) ? "true" : "false"));}
-#line 1449 "y.tab.c"
+#line 1450 "y.tab.c"
     break;
 
   case 13:
-#line 101 "Parser.y"
+#line 102 "Parser.y"
                                     {(yyval.integer) = (yyvsp[-2].integer) + (yyvsp[0].integer);}
-#line 1455 "y.tab.c"
+#line 1456 "y.tab.c"
     break;
 
   case 14:
-#line 102 "Parser.y"
+#line 103 "Parser.y"
                                     {(yyval.integer) = (yyvsp[-2].integer) - (yyvsp[0].integer);}
-#line 1461 "y.tab.c"
+#line 1462 "y.tab.c"
     break;
 
   case 15:
-#line 103 "Parser.y"
+#line 104 "Parser.y"
                                     {(yyval.integer) = (yyvsp[-2].integer) * (yyvsp[0].integer);}
-#line 1467 "y.tab.c"
+#line 1468 "y.tab.c"
     break;
 
   case 16:
-#line 104 "Parser.y"
+#line 105 "Parser.y"
                                     {(yyval.integer) = (yyvsp[-2].integer) / (yyvsp[0].integer);}
-#line 1473 "y.tab.c"
+#line 1474 "y.tab.c"
     break;
 
   case 17:
-#line 105 "Parser.y"
+#line 106 "Parser.y"
                                     {(yyval.integer) = (yyvsp[0].integer);}
-#line 1479 "y.tab.c"
+#line 1480 "y.tab.c"
     break;
 
   case 18:
-#line 106 "Parser.y"
+#line 107 "Parser.y"
                                     {(yyval.integer) = -(yyvsp[0].integer);}
-#line 1485 "y.tab.c"
+#line 1486 "y.tab.c"
     break;
 
   case 19:
-#line 107 "Parser.y"
+#line 108 "Parser.y"
                                     { (yyval.integer) = (yyvsp[-1].integer); }
-#line 1491 "y.tab.c"
+#line 1492 "y.tab.c"
     break;
 
   case 20:
-#line 110 "Parser.y"
+#line 111 "Parser.y"
                                     { (yyval.integer) = (yyvsp[-2].integer) && (yyvsp[0].integer); }
-#line 1497 "y.tab.c"
+#line 1498 "y.tab.c"
     break;
 
   case 21:
-#line 111 "Parser.y"
+#line 112 "Parser.y"
                                     { (yyval.integer) = (yyvsp[-2].integer) || (yyvsp[0].integer); }
-#line 1503 "y.tab.c"
+#line 1504 "y.tab.c"
     break;
 
   case 22:
-#line 112 "Parser.y"
+#line 113 "Parser.y"
                                     { if ((yyvsp[0].integer)==1) { (yyval.integer) = 0; } else { (yyval.integer) = 1; } }
-#line 1509 "y.tab.c"
+#line 1510 "y.tab.c"
     break;
 
   case 23:
-#line 113 "Parser.y"
+#line 114 "Parser.y"
                                     { (yyval.integer)  = (yyvsp[0].integer); }
-#line 1515 "y.tab.c"
+#line 1516 "y.tab.c"
     break;
 
   case 24:
-#line 114 "Parser.y"
+#line 115 "Parser.y"
                                     { (yyval.integer) = (yyvsp[-1].integer); }
-#line 1521 "y.tab.c"
+#line 1522 "y.tab.c"
     break;
 
   case 25:
-#line 117 "Parser.y"
+#line 118 "Parser.y"
                               {if ((yyvsp[-2].integer) <= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1527 "y.tab.c"
+#line 1528 "y.tab.c"
     break;
 
   case 26:
-#line 118 "Parser.y"
+#line 119 "Parser.y"
                               {if ((yyvsp[-2].integer) < (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1533 "y.tab.c"
+#line 1534 "y.tab.c"
     break;
 
   case 27:
-#line 119 "Parser.y"
+#line 120 "Parser.y"
                               {if ((yyvsp[-2].integer) > (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1539 "y.tab.c"
+#line 1540 "y.tab.c"
     break;
 
   case 28:
-#line 120 "Parser.y"
+#line 121 "Parser.y"
                               {if ((yyvsp[-2].integer) >= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1545 "y.tab.c"
+#line 1546 "y.tab.c"
     break;
 
   case 29:
-#line 121 "Parser.y"
+#line 122 "Parser.y"
                               {if ((yyvsp[-2].integer) == (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1551 "y.tab.c"
+#line 1552 "y.tab.c"
     break;
 
   case 30:
-#line 122 "Parser.y"
+#line 123 "Parser.y"
                               {if ((yyvsp[-2].integer) != (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
-#line 1557 "y.tab.c"
+#line 1558 "y.tab.c"
     break;
 
   case 31:
-#line 123 "Parser.y"
+#line 124 "Parser.y"
                                    { (yyval.integer) = (yyvsp[-1].integer); }
-#line 1563 "y.tab.c"
+#line 1564 "y.tab.c"
     break;
 
 
-#line 1567 "y.tab.c"
+#line 1568 "y.tab.c"
 
       default: break;
     }
@@ -1795,7 +1796,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 127 "Parser.y"
+#line 128 "Parser.y"
 
 
 #include "lex.yy.c"
@@ -1805,6 +1806,17 @@ void yyerror(char *s) {
 }
 
 int main(void) {
+
+      initialize();
+
+      symbol* test = createSymbol("testVar","testType",10);
+      //symbol* test = createSymbol("testVar","testType",10);
+      //printf("Name: %s Type: %s Value: %d\n", test->name, test->type, test->value);
+
+      //printf("%d\n", symbolTable->test);
+
+
+
 
       yyparse();
 
