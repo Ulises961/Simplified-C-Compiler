@@ -74,14 +74,20 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "functions/symbolTable.c"
+#include "utility/symbolTable.c"
+#include "utility/functions.c"
 
 void yyerror(char *);
 int yylex(void);
 
+// custom function
+bool compare(int, int, int);
+int sum ( int, int, int);
+int multiply ( int, int, int);
 
 
-#line 85 "y.tab.c"
+
+#line 91 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -185,12 +191,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 17 "Parser.y"
+#line 23 "Parser.y"
 
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
 
-#line 194 "y.tab.c"
+#line 200 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -568,10 +574,10 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    64,    64,    65,    68,    69,    70,    73,    74,    75,
-      78,    79,    80,    81,    82,    83,    84,    87,    88,    89,
-      90,    91,    94,    95,    96,    97,    98,    99,   100,   103,
-     119,   120
+       0,    70,    70,    71,    74,    75,    76,    79,    80,    81,
+      84,    85,    86,    87,    88,    89,    90,    93,    94,    95,
+      96,    97,   100,   101,   102,   103,   104,   105,   106,   109,
+     125,   126
 };
 #endif
 
@@ -1401,145 +1407,145 @@ yyreduce:
   switch (yyn)
     {
   case 6:
-#line 70 "Parser.y"
+#line 76 "Parser.y"
                    {printf ("Exiting program...\n"); exit(0);}
-#line 1407 "y.tab.c"
-    break;
-
-  case 7:
-#line 73 "Parser.y"
-                  { printf("Integer expression result: %d\n", (yyvsp[0].integer)); }
 #line 1413 "y.tab.c"
     break;
 
-  case 8:
-#line 74 "Parser.y"
-                  { if ((yyvsp[0].integer) == 1) printf("Boolean expression result: true\n"); else printf("Boolean expression result: false\n");}
+  case 7:
+#line 79 "Parser.y"
+                  { printf("Integer expression result: %d\n", (yyvsp[0].integer)); }
 #line 1419 "y.tab.c"
     break;
 
-  case 9:
-#line 75 "Parser.y"
-                  { if ((yyvsp[0].integer) == 1) printf("Relation expression result: true\n"); else printf("Relation expression result: false\n");}
+  case 8:
+#line 80 "Parser.y"
+                  { if ((yyvsp[0].integer) == 1) printf("Boolean expression result: true\n"); else printf("Boolean expression result: false\n");}
 #line 1425 "y.tab.c"
     break;
 
-  case 10:
-#line 78 "Parser.y"
-                                    {(yyval.integer) = (yyvsp[-2].integer) + (yyvsp[0].integer);}
+  case 9:
+#line 81 "Parser.y"
+                  { if ((yyvsp[0].integer) == 1) printf("Relation expression result: true\n"); else printf("Relation expression result: false\n");}
 #line 1431 "y.tab.c"
     break;
 
-  case 11:
-#line 79 "Parser.y"
-                                    {(yyval.integer) = (yyvsp[-2].integer) - (yyvsp[0].integer);}
+  case 10:
+#line 84 "Parser.y"
+                                    {(yyval.integer) = (yyvsp[-2].integer) + (yyvsp[0].integer);}
 #line 1437 "y.tab.c"
     break;
 
-  case 12:
-#line 80 "Parser.y"
-                                    {(yyval.integer) = (yyvsp[-2].integer) * (yyvsp[0].integer);}
+  case 11:
+#line 85 "Parser.y"
+                                    {(yyval.integer) = (yyvsp[-2].integer) - (yyvsp[0].integer);}
 #line 1443 "y.tab.c"
     break;
 
-  case 13:
-#line 81 "Parser.y"
-                                    {(yyval.integer) = (yyvsp[-2].integer) / (yyvsp[0].integer);}
+  case 12:
+#line 86 "Parser.y"
+                                    {(yyval.integer) = (yyvsp[-2].integer) * (yyvsp[0].integer);}
 #line 1449 "y.tab.c"
     break;
 
-  case 14:
-#line 82 "Parser.y"
-                                    {(yyval.integer) = (yyvsp[0].integer);}
+  case 13:
+#line 87 "Parser.y"
+                                    {(yyval.integer) = (yyvsp[-2].integer) / (yyvsp[0].integer);}
 #line 1455 "y.tab.c"
     break;
 
-  case 15:
-#line 83 "Parser.y"
-                                    {(yyval.integer) = -(yyvsp[0].integer);}
+  case 14:
+#line 88 "Parser.y"
+                                    {(yyval.integer) = (yyvsp[0].integer);}
 #line 1461 "y.tab.c"
     break;
 
-  case 16:
-#line 84 "Parser.y"
-                                    { (yyval.integer) = (yyvsp[-1].integer); }
+  case 15:
+#line 89 "Parser.y"
+                                    {(yyval.integer) = -(yyvsp[0].integer);}
 #line 1467 "y.tab.c"
     break;
 
-  case 17:
-#line 87 "Parser.y"
-                                    { (yyval.integer) = (yyvsp[-2].integer) && (yyvsp[0].integer); }
+  case 16:
+#line 90 "Parser.y"
+                                    { (yyval.integer) = (yyvsp[-1].integer); }
 #line 1473 "y.tab.c"
     break;
 
-  case 18:
-#line 88 "Parser.y"
-                                    { (yyval.integer) = (yyvsp[-2].integer) || (yyvsp[0].integer); }
+  case 17:
+#line 93 "Parser.y"
+                                    { (yyval.integer) = (yyvsp[-2].integer) && (yyvsp[0].integer); }
 #line 1479 "y.tab.c"
     break;
 
-  case 19:
-#line 89 "Parser.y"
-                                    { if ((yyvsp[0].integer)==1) { (yyval.integer) = 0; } else { (yyval.integer) = 1; } }
+  case 18:
+#line 94 "Parser.y"
+                                    { (yyval.integer) = (yyvsp[-2].integer) || (yyvsp[0].integer); }
 #line 1485 "y.tab.c"
     break;
 
-  case 20:
-#line 90 "Parser.y"
-                                    { (yyval.integer)  = (yyvsp[0].integer); }
+  case 19:
+#line 95 "Parser.y"
+                                    { if ((yyvsp[0].integer)==1) { (yyval.integer) = 0; } else { (yyval.integer) = 1; } }
 #line 1491 "y.tab.c"
     break;
 
-  case 21:
-#line 91 "Parser.y"
-                                    { (yyval.integer) = (yyvsp[-1].integer); }
+  case 20:
+#line 96 "Parser.y"
+                                    { (yyval.integer)  = (yyvsp[0].integer); }
 #line 1497 "y.tab.c"
     break;
 
-  case 22:
-#line 94 "Parser.y"
-                              {if ((yyvsp[-2].integer) <= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+  case 21:
+#line 97 "Parser.y"
+                                    { (yyval.integer) = (yyvsp[-1].integer); }
 #line 1503 "y.tab.c"
     break;
 
-  case 23:
-#line 95 "Parser.y"
-                              {if ((yyvsp[-2].integer) < (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+  case 22:
+#line 100 "Parser.y"
+                              {if ((yyvsp[-2].integer) <= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
 #line 1509 "y.tab.c"
     break;
 
-  case 24:
-#line 96 "Parser.y"
-                              {if ((yyvsp[-2].integer) > (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+  case 23:
+#line 101 "Parser.y"
+                              {if ((yyvsp[-2].integer) < (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
 #line 1515 "y.tab.c"
     break;
 
-  case 25:
-#line 97 "Parser.y"
-                              {if ((yyvsp[-2].integer) >= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+  case 24:
+#line 102 "Parser.y"
+                              {if ((yyvsp[-2].integer) > (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
 #line 1521 "y.tab.c"
     break;
 
-  case 26:
-#line 98 "Parser.y"
-                              {if ((yyvsp[-2].integer) == (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+  case 25:
+#line 103 "Parser.y"
+                              {if ((yyvsp[-2].integer) >= (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
 #line 1527 "y.tab.c"
     break;
 
-  case 27:
-#line 99 "Parser.y"
-                              {if ((yyvsp[-2].integer) != (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
+  case 26:
+#line 104 "Parser.y"
+                              {if ((yyvsp[-2].integer) == (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
 #line 1533 "y.tab.c"
     break;
 
-  case 28:
-#line 100 "Parser.y"
-                                   { (yyval.integer) = (yyvsp[-1].integer); }
+  case 27:
+#line 105 "Parser.y"
+                              {if ((yyvsp[-2].integer) != (yyvsp[0].integer)) (yyval.integer) = 1;else (yyval.integer) = 0;}
 #line 1539 "y.tab.c"
     break;
 
+  case 28:
+#line 106 "Parser.y"
+                                   { (yyval.integer) = (yyvsp[-1].integer); }
+#line 1545 "y.tab.c"
+    break;
+
   case 29:
-#line 103 "Parser.y"
+#line 109 "Parser.y"
                               {                                   // assignment of true or false values to int variable makes automatic conversion
             if (strcmp((yyvsp[-3].lexeme),"bool")==0 && ((yyvsp[0].integer) != 0 && (yyvsp[0].integer) != 1)){    // for bool variables only true, false, 0 and 1 are accepted
                   yyerror("TypeError, cannot assign int value to bool variable...\n");
@@ -1554,11 +1560,11 @@ yyreduce:
                         printf("Variable %s, of type %s, value: false\n", (yyvsp[-2].lexeme), (yyvsp[-3].lexeme));
             }
       }
-#line 1558 "y.tab.c"
+#line 1564 "y.tab.c"
     break;
 
 
-#line 1562 "y.tab.c"
+#line 1568 "y.tab.c"
 
       default: break;
     }
@@ -1790,7 +1796,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 123 "Parser.y"
+#line 129 "Parser.y"
 
 
 #include "lex.yy.c"

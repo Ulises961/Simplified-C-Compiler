@@ -5,10 +5,16 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include "functions/symbolTable.c"
+#include "utility/symbolTable.c"
+#include "utility/functions.c"
 
 void yyerror(char *);
 int yylex(void);
+
+// custom function
+bool compare(int, int, int);
+int sum ( int, int, int);
+int multiply ( int, int, int);
 
 
 %}
