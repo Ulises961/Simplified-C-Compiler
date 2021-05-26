@@ -56,6 +56,8 @@ int symbols[26];
 %type <integer> simpleExp
 %type <integer> sumExp
 %type <integer> intExp
+%type <lexeme> varDeclId
+%type <lexeme> varDeclInit
 %type <boolean> boolExp
 
 
@@ -72,19 +74,19 @@ int symbols[26];
 
 
 %%
-program : typeSpec varDeclInit ';' {}
+program : typeSpec varDeclInit ';' { printf("%s",$1);exit(1);}
       | stmt {}
       |program program {}
       |boolExp '\n'{ printf("%d",$1);exit(1);}
       ; 
-varDeclInit : varDeclId
-      | varDeclId ':' simpleExp 
+varDeclInit : varDeclId { $$ = $1; }
+      | varDeclId ':' simpleExp {$$ = loo  $3;}
       ;
-varDeclId : ID
-      |ID[NUM]
+varDeclId : ID { $$ = $1;}
+      |ID[NUM] {}
       ;
-typeSpec : INT
-      | BOOL
+typeSpec : INT {$$ = $1;}
+      | BOOL {$$ = $1;}
       ;
  stmt : exp;
       |;
