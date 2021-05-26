@@ -37,13 +37,13 @@ void assignValue(symbol* variable, int value){
         variable->value = value;
 }
 
-void assignType(symbol* variable, int type){
-    if(!(type == 11119 && type == 11120)){
-        printf("Null pointer exception!");
-        return;
-    }
+void assignType(symbol* variable, char* type){
+    // if(!(type == 11119 && type == 11120)){
+    //     printf("Null pointer exception!");
+    //     return;
+    // }
 
-    variable->type = type;
+    // variable->type = type;
 }
 
 symbol* createSymbol(char* name, char* type, int value){
@@ -83,7 +83,7 @@ void addToTail(char* name, char* type, int value){
         exit(1);
     }
 
-    printf("Creating variable in symbol table: %s, of type: %s, value: %d\n", name, type, value);
+    //printf("Creating variable in symbol table: %s, of type: %s, value: %d\n", name, type, value);
 
     if(symbolTable->head == NULL){
             symbolTable->head = symbolPtr;
