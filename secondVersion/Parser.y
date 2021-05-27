@@ -77,9 +77,8 @@ int yylex(void);
 %right UMINUS
 
 
-
-
 %%
+
 program : program program '\n' { printf("Reached parsing\n");}
       | stmt ';'
       | varDeclInit ';'
@@ -89,7 +88,7 @@ program : program program '\n' { printf("Reached parsing\n");}
       |
       ;
 
-varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  { 
+varDeclInit :   typeSpec varDeclId ':' simpleExp  { 
             symbol* x;
             
             if(x = lookup($2))
@@ -125,7 +124,7 @@ compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1;}
       | unaryExp {$$ = $1;}
-      | sumExp { $$ = $1; printf("Result: %d\n", $1);};
+      | sumExp { $$ = $1; printf("Result: %d\n", $1);}
       | ID {  symbol* out = lookup($1);  
             if (out == NULL){
                         printf("Error... Variable %s undefined..\n",$1);
