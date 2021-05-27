@@ -22,7 +22,7 @@ andExp -> andExp and unaryRelExp | unaryRelExp
 unaryRelExp -> not unaryRelExp | sumExp relOp sumExp | unaryExp
 relOp -> <= | < | >| >= | == | != 
 
-sumExp ->  sumExp sumOp mulExp | mulExp | (sumExp)
+sumExp ->  sumExp sumOp mulExp | mulExp
 sumOp -> + | -
 
 mulExp -> mulExp mulOp unaryExp | unaryExp

@@ -158,7 +158,6 @@ relOp: GR { $$ = 11111 ; }
 
 sumExp: sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
       | mulExp { $$ = $1; }
-      | '('sumExp')' { $$ = $2; }
       ;
 
 sumOp: '+' { $$ = 11117;}
@@ -167,7 +166,6 @@ sumOp: '+' { $$ = 11117;}
 
 mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
       | unaryExp
-      | '('mulExp')'             { $$ = $2; }
       ;
 
 mulOp: '*' { $$ = 11121; }
