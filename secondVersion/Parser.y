@@ -27,7 +27,7 @@ int yylex(void);
 
 
 %token <integer>  NUM //
-%token <integer>BOOL
+%token <integer> BOOL
 %token <lexeme> ID
 
 
@@ -47,9 +47,11 @@ int yylex(void);
 %token SMEQ
 %token PRINT
 %token RETURN
-%token <boolean>TRUE
-%token <boolean>FALSE
-%token <integer>INT
+%token <boolean> TRUE
+%token <boolean> FALSE
+
+%token <lexeme> INT
+%token <lexeme> BOOLEAN
 
 %type <integer> relOp
 %type <integer> mulOp
@@ -95,6 +97,7 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  {
                   $$ = x ;
             }
             addSymbol(x);
+            printSymbols();
       }  
      
     
@@ -104,7 +107,7 @@ varDeclId : ID { $$ = $1; }
       ;
 
 typeSpec : INT {$$ = 11119; }
-      | BOOL {$$ = 11120;}
+      | BOOLEAN {$$ = 11120;}
       ;
 
  stmt : varDeclInit {$$ = $1->value;}
