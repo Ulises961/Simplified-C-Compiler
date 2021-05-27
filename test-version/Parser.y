@@ -91,7 +91,6 @@ varDecl: typeSpec ID ':' expr {                                   // assignment 
             // create variable in symbol table
             addToTail($2,$1,$4);
       }
-      }
       ;
 
 typeSpec: INT 

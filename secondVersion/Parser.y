@@ -27,9 +27,8 @@ int yylex(void);
 
 
 %token <integer>  NUM //
-%token <integer> BOOL
+%token <boolean> BOOL
 %token <lexeme> ID
-
 
 %token BREAK
 %token AND
@@ -75,8 +74,9 @@ int yylex(void);
 %left '-' '+'
 %left '*' '/'
 %left AND OR
+%left SMEQ SM GR GREQ EQ NEQ
 %right NOT
-%right UMINUS
+//%right UMINUS
 
 
 %%
@@ -104,7 +104,6 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
             printSymbols();
       }  
      
-    
       ;
 varDeclId : ID { $$ = $1; }
       /* |ID[NUM] {} */
@@ -136,7 +135,7 @@ boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
 
 unaryRelExp : NOT unaryRelExp { $$ = !($2); }
       | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
-      | TRUE {$$ = 1;}
+      | TRUE {$$ = 1; }
       | FALSE {$$ = 0;}
       | '(' unaryRelExp ')'  { $$ = $2; }
       ;
