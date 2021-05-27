@@ -61,14 +61,15 @@ int yylex(void);
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
+%type <integer> andExp
 %type <integer> unaryExp
 %type <integer> mulExp
 %type <integer> simpleExp
 %type <integer> sumExp
 %type <integer> variable
+%type <integer> relExp
 
-%type <boolean> boolExp
-%type <boolean> unaryRelExp
+%type <integer> unaryRelExp
 
 
 %left '-' '+'
@@ -76,7 +77,6 @@ int yylex(void);
 %left AND OR
 %left SMEQ SM GR GREQ EQ NEQ
 %right NOT
-//%right UMINUS
 
 
 %%
@@ -121,22 +121,21 @@ typeSpec : INT {$$ = 11119; }
 
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
-simpleExp : boolExp  {$$ = $1; }
-      | sumExp { $$ = $1; }
+simpleExp : simpleExp OR simpleExp  { $$ = $1 || $3 ; }
+      | andExp
       ;
 
-boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
-      | boolExp AND unaryRelExp { $$ = $1 &&  $3; }
+andExp : andExp AND unaryRelExp { $$ = $1 && $3 ; }
       | unaryRelExp {$$ = $1;}
       ;
 
 unaryRelExp : NOT unaryRelExp { $$ = !($2); }
-      | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
-      | TRUE {$$ = 1; }
-      | FALSE {$$ = 0;}
-      | '(' unaryRelExp ')'  { $$ = $2; }
+      | relExp
       ;
-      
+
+relExp : sumExp relOp sumExp { $$ = compare($1,$2,$3); }
+      | sumExp
+
 relOp : GR { $$ = 11111 ; }
       | GREQ { $$ = 11112 ;}
       | SM { $$ = 11113 ; }
@@ -162,9 +161,11 @@ mulOp : '*' { $$ = 11121; }
       ;
 
 unaryExp : '-' unaryExp { $$ = -$2; }
-      | '(' sumExp ')' { $$ = $2; }
-      | NUM { $$ = $1; }
+      | NUM { $$ = $1;}
+      | TRUE {$$ = 1; }
+      | FALSE {$$ = 0;}
       | variable
+      | '(' simpleExp ')' { $$ = $2; }
       ;
 
 variable :  ID {  symbol* out = lookup($1);  

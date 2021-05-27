@@ -19,20 +19,23 @@ scopedVarDecl -> typeSpec varDeclInit; ***TODO
 
 exp -> program | simpleExp ***SUBSTITUTED INTO stmt
 
-simpleExp -> simpleExp or simpleExp | andExp | true | false 
+simpleExp -> simpleExp or simpleExp | andExp ***OK
 
-andExp -> andExp and unaryRelExp | unaryRelExp 
+andExp -> andExp and unaryRelExp | unaryRelExp ***OK
 
-unaryRelExp -> not unaryRelExp | sumExp relOp sumExp | unaryExp
-relOp -> <= | < | >| >= | == | != 
+unaryRelExp -> not unaryRelExp | unaryExp ***OK
 
-sumExp ->  sumExp sumOp mulExp | mulExp
-sumOp -> + | -
+relExp -> sumExp relOp sumExp | sumExp ***OK
 
-mulExp -> mulExp mulOp unaryExp | unaryExp
+relOp -> <= | < | >| >= | == | != ***OK
+
+sumExp ->  sumExp sumOp mulExp | mulExp **OK
+sumOp -> + | - **OK
+
+mulExp -> mulExp mulOp unaryExp | unaryExp ***OK
 mulOp -> * | / 
 
-unaryExp -> - unaryExp | NUM | (sumExp) | variable
+unaryExp -> - unaryExp | NUM | FALSE | TRUE | variable | (simpleExp)
 
 variable -> ID
 
