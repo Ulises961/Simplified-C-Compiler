@@ -1,16 +1,17 @@
-program -> typeSpec varDeclInit; | stmt | program program ***OK
-varDeclInit -> varDeclId | varDeclId : simpleExp ***OK
-varDeclId -> ID | ID[INT] ***OK (SECOND RULE MISSING)
-typeSpec -> int | bool ***OK
+program -> program stmt | program | € ***OK (modified otherwise conflicts)
 
 stmt -> exp; ***SUBSTITUTED WITH simpleExp
         | ; ***??? MUST DECLARE TYPE??
-        | if (simpleExp) compoundStmt ***OK
-        | if (simpleExp) compundStmt else compundStmt  ***OK
-        | while simpleExp do compoundStmt ***OK
+        | if (simpleExp) compoundStmt ***OK (how to implmenent goto??)
+        | if (simpleExp) compundStmt else compundStmt  ***OK (how to implmenent goto??)
+        | while simpleExp do compoundStmt ***OK (how to implmenent goto??)
         | break; ***OK
         | return; ***OK
         | return exp ; ***OK
+
+varDeclInit -> varDeclId | varDeclId : simpleExp ***OK
+varDeclId -> ID | ID[INT] ***OK (SECOND RULE MISSING)
+typeSpec -> int | bool ***OK
 
 compoundStmt -> {localDecls stmt} ***OK
 
