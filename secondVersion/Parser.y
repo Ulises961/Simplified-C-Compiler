@@ -56,7 +56,7 @@ int yylex(void);
 
 %type <integer> typeSpec
 %type <integer> stmt
-%type <integer> compoundStmt
+//%type <integer> compoundStmt
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
@@ -83,11 +83,11 @@ int yylex(void);
 
 program : program program '\n' { printf("Reached parsing\n");}
       | stmt ';'
-      | varDeclInit ';'
-      | PRINT stmt ';' {printf("%d\n",$2);}
-      | RETURN ';' { printf("Exiting\n"); exit(0);}
-      | RETURN simpleExp ';' {return $2;}
-      |
+      //| varDeclInit ';'
+     // | PRINT stmt ';' {printf("%d\n",$2);}
+     // | RETURN ';' { printf("Exiting\n"); exit(0);}
+      //| RETURN simpleExp ';' {return $2;}
+      //|
       ;
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  { 
@@ -102,9 +102,9 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
             }
             addSymbol(x);
             printSymbols();
-      }  
-     
+      }    
       ;
+
 varDeclId : ID { $$ = $1; }
       /* |ID[NUM] {} */
       ;
@@ -114,17 +114,17 @@ typeSpec : INT {$$ = 11119; }
       ;
 
 stmt : varDeclInit {$$ = $1->value;}
-      | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
-      | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
-      | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
-      | BREAK ';' {break;}
+      //| IF '(' simpleExp ')' compoundStmt { if($3)$5;}
+      //| IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
+      //| WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
+      //| BREAK ';' {break;}
       | simpleExp { $$ = $1; }
       ;
 
-compoundStmt : '{' stmt '}' {$$ = $2;}
+//compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1; }
-      | unaryExp {$$ = $1; }
+      //| unaryExp {$$ = $1; }
       | sumExp { $$ = $1; }
       ;
 
