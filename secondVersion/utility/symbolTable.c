@@ -28,8 +28,8 @@ void assignValue(symbol* variable, int value){
         if(value == 0 || value == 1)
             variable->value = value;
         else{
-            printf("\nError: invalid assignment!\n");
-            return;
+            printf("\nError: invalid assignment of int value to bool variable!\n");
+            exit(1);
         }
             
     }else
@@ -90,4 +90,19 @@ void addSymbol(symbol* newSymbol){
         symbolTable->tail->next = newSymbol;
         symbolTable->tail = newSymbol;
     }
+}
+
+// for testing purposes
+void printSymbols(){
+    symbol* temp = symbolTable->head;
+
+    int index = 0;
+
+    while(temp != NULL){
+        printf("**Variable %d** Name: %s Type: %d Value: %d\n", index, temp->name, temp->type, temp->value);
+        index++;
+        temp = temp->next;
+    }
+
+
 }
