@@ -86,13 +86,14 @@ program: program stmt '\n' { printf("Reached parsing\n");}
       ;
 
 stmt : varDeclInit ';'
-      | simpleExp { $$ = $1; printf("Result: %d\n", $1); }
+      | simpleExp ';' { $$ = $1; printf("Result: %d\n", $1); }
       | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
       | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
       | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
       | BREAK ';' {break;}
       | RETURN ';' { printf("Exiting\n"); exit(0);}
       | RETURN simpleExp ';' {return $2;}
+      | PRINT simpleExp ';' { printf("%d\n", $2); }
       ;
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  { 
