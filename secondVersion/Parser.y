@@ -124,7 +124,7 @@ stmt : varDeclInit {$$ = $1->value;}
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1; printf("Boolean result: %s\n", (($1 == 1) ? "true" : "false"));}
-      | unaryExp {$$ = $1; printf("Result: %d\n", $1);}
+      | unaryExp {$$ = $1; printf("Unary result: %d\n", $1);}
       | sumExp { $$ = $1; printf("Result: %d\n", $1);}
       | ID {  symbol* out = lookup($1);  
             if (out == NULL){
@@ -145,6 +145,7 @@ unaryRelExp: NOT unaryRelExp { $$ = !($2); }
       | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
       | TRUE {$$ = 1;}
       | FALSE {$$ = 0;}
+      | '(' unaryRelExp ')'  { $$ = $2; }
       ;
       
 relOp: GR { $$ = 11111 ; }
@@ -155,9 +156,9 @@ relOp: GR { $$ = 11111 ; }
       | NEQ { $$ = 11116 ; }
       ;
 
-sumExp: sumExp sumOp sumExp { $$ = sum ($1,$2,$3); }
+sumExp: sumExp sumOp sumExp { $$ = sum($1,$2,$3); }
       | mulExp { $$ = $1; }
-      | '('sumExp')'             { $$ = $2; }
+      | '('sumExp')' { $$ = $2; }
       ;
 
 sumOp: '+' { $$ = 11117;}
@@ -166,15 +167,25 @@ sumOp: '+' { $$ = 11117;}
 
 mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
       | unaryExp
+      | '('mulExp')'             { $$ = $2; }
       ;
 
 mulOp: '*' { $$ = 11121; }
       | '/'  { $$ = 11122; }
       ;
 
-unaryExp: '-' NUM { $$ = -$2; }
+unaryExp: '-' unaryExp { $$ = -$2; }
       | NUM { $$ = $1;}
       ;
+
+/*intExpr  : intExpr '+' intExpr      {$$ = $1 + $3;}
+      | intExpr '-' intExpr         {$$ = $1 - $3;}
+      | intExpr '*' intExpr         {$$ = $1 * $3;}
+      | intExpr '/' intExpr         {$$ = $1 / $3;}
+      | NUM                         {$$ = $1;}
+      | '-' intExpr %prec UMINUS    {$$ = -$2;}
+      | '(' intExpr ')'             { $$ = $2; }
+      ;*/
 
 
 %%
