@@ -9,7 +9,7 @@ stmt -> exp; ***SUBSTITUTED WITH simpleExp
         | return; ***OK
         | return exp ; ***OK
 
-varDeclInit -> varDeclId | varDeclId : simpleExp ***OK
+varDeclInit -> typeSpec varDeclId : simpleExp | varDeclId : simpleExp ***OK (slightly modified)
 varDeclId -> ID | ID[INT] ***OK (SECOND RULE MISSING)
 typeSpec -> int | bool ***OK
 

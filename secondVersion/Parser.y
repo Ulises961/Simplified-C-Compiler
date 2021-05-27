@@ -105,7 +105,16 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
             }
             addSymbol(x);
             //printSymbols();
-      }    
+      }
+      | varDeclId ':' simpleExp {
+            symbol* out = lookup($1);  
+            if (out == NULL){
+                        printf("Error... Variable %s undefined..\n",$1);
+                        exit(1);
+            }
+            else
+                  assignValue(out,$3);
+      }
       ;
 
 varDeclId : ID { $$ = $1; }
@@ -165,7 +174,8 @@ unaryExp : '-' unaryExp { $$ = -$2; }
       | '(' simpleExp ')' { $$ = $2; }
       ;
 
-variable :  ID {  symbol* out = lookup($1);  
+variable :  ID {  
+            symbol* out = lookup($1);  
             if (out == NULL){
                         printf("Error... Variable %s undefined..\n",$1);
                         exit(1);
