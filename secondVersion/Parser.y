@@ -85,7 +85,7 @@ program : program program '\n' { printf("Reached parsing\n");}
       | stmt ';'
       | varDeclInit ';'
       | PRINT stmt ';' {printf("%d\n",$2);}
-      | RETURN { printf("Exiting\n"); exit(0);}
+      | RETURN ';' { printf("Exiting\n"); exit(0);}
       | RETURN simpleExp ';' {return $2;}
       |
       ;
@@ -124,9 +124,9 @@ stmt : varDeclInit {$$ = $1->value;}
 
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
-simpleExp : boolExp  {$$ = $1; printf("Boolean result: %s\n", (($1 == 1) ? "true" : "false"));}
-      | unaryExp {$$ = $1; printf("Unary result: %d\n", $1);}
-      | sumExp { $$ = $1; printf("Result: %d\n", $1);}
+simpleExp : boolExp  {$$ = $1; }
+      | unaryExp {$$ = $1; }
+      | sumExp { $$ = $1; }
       ;
 
 boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
