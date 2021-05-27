@@ -1,0 +1,11 @@
+int x : 10;
+
+int y : 20;
+
+print (x == y);
+
+print (x + y);
+
+print (1*2+3-4*(1+2));
+
+return;

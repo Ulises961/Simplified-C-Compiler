@@ -376,7 +376,7 @@ static const flex_int16_t yy_accept[83] =
 static const YY_CHAR yy_ec[256] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    4,    1,    1,    1,    1,    1,    1,    5,
         6,    7,    8,    1,    9,    1,   10,   11,   11,   11,
@@ -962,14 +962,16 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 63 "Analyzer.l"
-yyerror("invalid character"); // error for all not recognized characters
+{ yylval.lexeme = strdup(yytext);
+    printf("Symbol '%s' not recognized\n", yylval.lexeme);
+    yyerror("invalid character");} // error for all not recognized characters
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 65 "Analyzer.l"
+#line 67 "Analyzer.l"
 ECHO;
 	YY_BREAK
-#line 973 "lex.yy.c"
+#line 975 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1974,7 +1976,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 65 "Analyzer.l"
+#line 67 "Analyzer.l"
 
 
 int yywrap(void) {

@@ -1,36 +1,44 @@
-program -> typeSpec varDeclInit; | stmt | program program
-varDeclInit -> varDeclId | varDeclId : simpleExp
-varDeclId -> ID | ID[INT]
-typeSpec -> int | bool 
-stmt -> exp; 
-        | ; 
-        | if (simpleExp) compoundStmt 
-        | if (simpleExp) compundStmt else compundStmt 
-        | while simpleExp do compoundStmt 
-        | break;
-        | return;
-        | return exp ;
+program -> program stmt | program | € ***OK (modified otherwise conflicts)
 
-compoundStmt -> {localDecls stmt}
-localDecls -> localDecls scopedVarDecl | scopedVarDecl
-scopedVarDecl -> typeSpec varDeclInit;
-exp -> program | simpleExp
-simpleExp -> simpleExp or simpleExp | andExp | true | false 
+stmt -> exp; ***SUBSTITUTED WITH simpleExp
+        | ; ***??? MUST DECLARE TYPE??
+        | if (simpleExp) compoundStmt ***OK (how to implmenent goto??)
+        | if (simpleExp) compundStmt else compundStmt  ***OK (how to implmenent goto??)
+        | while simpleExp do compoundStmt ***OK (how to implmenent goto??)
+        | break; ***OK
+        | return; ***OK
+        | return exp ; ***OK
 
-andExp -> andExp and unaryRelExp | unaryRelExp 
+varDeclInit -> typeSpec varDeclId : simpleExp | varDeclId : simpleExp ***OK (slightly modified)
+varDeclId -> ID | ID[INT] ***OK (SECOND RULE MISSING)
+typeSpec -> int | bool ***OK
 
-unaryRelExp -> not unaryRelExp | sumExp relOp sumExp | unaryExp
-relOp -> <= | < | >| >= | == | != 
+compoundStmt -> {localDecls stmt} ***OK
 
-sumExp ->  sumExp sumOp mulExp | mulExp
-sumOp -> + | -
+localDecls -> localDecls scopedVarDecl | scopedVarDecl ***TODO
+scopedVarDecl -> typeSpec varDeclInit; ***TODO
 
-mulExp -> mulExp mulOp unaryExp | unaryExp
-mulOp -> * | / 
+exp -> program | simpleExp ***SUBSTITUTED INTO stmt
 
-unaryExp -> - unaryExp | NUM | (sumExp) | variable
+simpleExp -> simpleExp or simpleExp | andExp ***OK
 
-variable -> ID
+andExp -> andExp and unaryRelExp | unaryRelExp ***OK
+
+unaryRelExp -> not unaryRelExp | unaryExp ***OK
+
+relExp -> sumExp relOp sumExp | sumExp ***OK
+
+relOp -> <= | < | >| >= | == | != ***OK
+
+sumExp ->  sumExp sumOp mulExp | mulExp **OK
+sumOp -> + | - **OK
+
+mulExp -> mulExp mulOp unaryExp | unaryExp ***OK
+mulOp -> * | /  ***OK
+
+unaryExp -> - unaryExp | NUM | FALSE | TRUE | variable | (simpleExp) ***OK
+ 
+variable -> ID ***OK
 
 
 bool x : true;
