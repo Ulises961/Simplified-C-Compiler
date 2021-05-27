@@ -56,6 +56,7 @@ int yylex(void);
 
 %type <integer> typeSpec
 %type <integer> stmt
+%type <integer> varDeclInit
 %type <integer> compoundStmt
 %type <integer> relOp
 %type <integer> mulOp
@@ -69,7 +70,6 @@ int yylex(void);
 %type <boolean> boolExp
 %type <boolean> unaryRelExp
 
-%type <symbol> varDeclInit
 
 %left '-' '+'
 %left '*' '/'
@@ -81,24 +81,29 @@ int yylex(void);
 
 %%
 
-program : program program '\n' { printf("Reached parsing\n");}
-      | stmt '\n' {printf("statement...\n");}; 
-      | varDeclInit ';'
-     // | PRINT stmt ';' {printf("%d\n",$2);}
-     // | RETURN ';' { printf("Exiting\n"); exit(0);}
-      //| RETURN simpleExp ';' {return $2;}
-      //|
+program: program stmt '\n' { printf("Reached parsing\n");}
+      |
+      ;
+
+stmt : varDeclInit ';'
+      | simpleExp { $$ = $1; printf("Result: %d\n", $1); }
+      | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
+      | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
+      | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
+      | BREAK ';' {break;}
+      | RETURN ';' { printf("Exiting\n"); exit(0);}
+      | RETURN simpleExp ';' {return $2;}
       ;
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  { 
             symbol* x;
             
             if(x = lookup($2))
-                  $$ = x ;
+                  $$ = x->value ;
             else{
                   x = createSymbol($1,$2,$4);
                   printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
-                  $$ = x ;
+                  $$ = x->value ;
             }
             addSymbol(x);
             printSymbols();
@@ -113,18 +118,10 @@ typeSpec : INT {$$ = 11119; }
       | BOOLEAN {$$ = 11120;}
       ;
 
-stmt : simpleExp ';' { $$ = $1; printf("simple...\n"); }
-      | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
-      | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
-      | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
-      | BREAK ';' {break;}
-      ;
-
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1; }
-      //| unaryExp {$$ = $1; }
-      | sumExp { $$ = $1; printf("sumexp...\n"); }
+      | sumExp { $$ = $1; }
       ;
 
 boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
@@ -148,7 +145,7 @@ relOp : GR { $$ = 11111 ; }
       ;
 
 sumExp : sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
-      | mulExp { $$ = $1; printf("mulexp...\n"); }
+      | mulExp { $$ = $1; }
       ;
 
 sumOp : '+' { $$ = 11117;}
@@ -156,7 +153,7 @@ sumOp : '+' { $$ = 11117;}
       ;
 
 mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
-      | unaryExp { printf("unary...\n");}
+      | unaryExp
       ;
 
 mulOp : '*' { $$ = 11121; }
@@ -165,7 +162,7 @@ mulOp : '*' { $$ = 11121; }
 
 unaryExp : '-' unaryExp { $$ = -$2; }
       | '(' sumExp ')' { $$ = $2; }
-      | NUM { $$ = $1; printf("num...\n");}
+      | NUM { $$ = $1; }
       | variable
       ;
 

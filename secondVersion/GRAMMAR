@@ -1,22 +1,23 @@
-program -> typeSpec varDeclInit; | stmt | program program OK
-varDeclInit -> varDeclId | varDeclId : simpleExp OK
-varDeclId -> ID | ID[INT] OK (SECOND RULE MISSING)
-typeSpec -> int | bool OK
+program -> typeSpec varDeclInit; | stmt | program program ***OK
+varDeclInit -> varDeclId | varDeclId : simpleExp ***OK
+varDeclId -> ID | ID[INT] ***OK (SECOND RULE MISSING)
+typeSpec -> int | bool ***OK
 
-stmt -> exp; SUBSTITUTED WITH simpleExp
-        | ; ???
-        | if (simpleExp) compoundStmt OK
-        | if (simpleExp) compundStmt else compundStmt 
-        | while simpleExp do compoundStmt 
-        | break;
-        | return;
-        | return exp ;
+stmt -> exp; ***SUBSTITUTED WITH simpleExp
+        | ; ***???
+        | if (simpleExp) compoundStmt ***OK
+        | if (simpleExp) compundStmt else compundStmt  ***OK
+        | while simpleExp do compoundStmt ***OK
+        | break; ***OK
+        | return; ***OK
+        | return exp ; ***OK
 
-compoundStmt -> {localDecls stmt}
-localDecls -> localDecls scopedVarDecl | scopedVarDecl
-scopedVarDecl -> typeSpec varDeclInit;
+compoundStmt -> {localDecls stmt} ***OK
 
-exp -> program | simpleExp
+localDecls -> localDecls scopedVarDecl | scopedVarDecl ***TODO
+scopedVarDecl -> typeSpec varDeclInit; ***TODO
+
+exp -> program | simpleExp ***SUBSTITUTED INTO stmt
 
 simpleExp -> simpleExp or simpleExp | andExp | true | false 
 
