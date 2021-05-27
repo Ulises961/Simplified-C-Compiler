@@ -156,7 +156,7 @@ relOp: GR { $$ = 11111 ; }
       | NEQ { $$ = 11116 ; }
       ;
 
-sumExp: sumExp sumOp sumExp { $$ = sum($1,$2,$3); }
+sumExp: sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
       | mulExp { $$ = $1; }
       | '('sumExp')' { $$ = $2; }
       ;

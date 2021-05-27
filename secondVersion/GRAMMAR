@@ -24,8 +24,10 @@ relOp -> <= | < | >| >= | == | !=
 
 sumExp ->  sumExp sumOp mulExp | mulExp
 sumOp -> + | -
+
 mulExp -> mulExp mulOp unaryExp | unaryExp
 mulOp -> * | / 
+
 unaryExp -> - unaryExp | NUM
 
 
@@ -34,5 +36,3 @@ bool x : true;
 bool y : false;
 if (x or y) { x = false;}
 return;
-
-
