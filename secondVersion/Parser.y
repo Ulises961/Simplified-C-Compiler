@@ -71,7 +71,6 @@ int yylex(void);
 
 %type <integer> unaryRelExp
 
-
 %left '-' '+'
 %left '*' '/'
 %left AND OR
@@ -81,13 +80,14 @@ int yylex(void);
 
 %%
 
-program: program stmt '\n' { printf("Reached parsing\n");}
+program: program stmt '\n' //{ printf("Reached parsing\n");}
+      | program '\n'
       |
       ;
 
 stmt : varDeclInit ';'
       | simpleExp ';' { $$ = $1; printf("Result: %d\n", $1); }
-      | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
+      | IF '(' simpleExp ')' compoundStmt { if($3==1)$5;}
       | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
       | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
       | BREAK ';' {break;}
@@ -103,11 +103,11 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
                   $$ = x->value ;
             else{
                   x = createSymbol($1,$2,$4);
-                  printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
+                  //printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
                   $$ = x->value ;
             }
             addSymbol(x);
-            printSymbols();
+            //printSymbols();
       }    
       ;
 

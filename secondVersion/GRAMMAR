@@ -4,7 +4,7 @@ varDeclId -> ID | ID[INT] ***OK (SECOND RULE MISSING)
 typeSpec -> int | bool ***OK
 
 stmt -> exp; ***SUBSTITUTED WITH simpleExp
-        | ; ***???
+        | ; ***??? MUST DECLARE TYPE??
         | if (simpleExp) compoundStmt ***OK
         | if (simpleExp) compundStmt else compundStmt  ***OK
         | while simpleExp do compoundStmt ***OK
@@ -33,11 +33,11 @@ sumExp ->  sumExp sumOp mulExp | mulExp **OK
 sumOp -> + | - **OK
 
 mulExp -> mulExp mulOp unaryExp | unaryExp ***OK
-mulOp -> * | / 
+mulOp -> * | /  ***OK
 
-unaryExp -> - unaryExp | NUM | FALSE | TRUE | variable | (simpleExp)
-
-variable -> ID
+unaryExp -> - unaryExp | NUM | FALSE | TRUE | variable | (simpleExp) ***OK
+ 
+variable -> ID ***OK
 
 
 bool x : true;

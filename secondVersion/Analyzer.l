@@ -14,7 +14,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 
 %%
 
-[ \t] {/* skip blanks */}
+[ \t\r] {/* skip blanks */}
 
 {INT}    {yylval.integer = atoi(yytext);
           return NUM;}
@@ -60,7 +60,9 @@ ID          {LETTER}({LETTER}|{DIGIT})*
           return ID;}
 
 
-. yyerror("invalid character"); // error for all not recognized characters
+. { yylval.lexeme = strdup(yytext);
+    printf("Symbol '%s' not recognized\n", yylval.lexeme);
+    yyerror("invalid character");} // error for all not recognized characters
 
 %%
 
