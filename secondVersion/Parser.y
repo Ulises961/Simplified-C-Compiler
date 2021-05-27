@@ -6,16 +6,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "lex.yy.c"
-#include "symbolTable.c"
+#include "utility/symbolTable.c"
+#include "utility/functions.c"
 
 //#include <symbolTab>
 
 void yyerror(char *);
 int yylex(void);
-bool compare(int, int, int);
-int sum ( int, int, int);
-int multiply ( int, int, int);
-void addToTail(symbol*);
 
 
 %}
@@ -79,8 +76,7 @@ void addToTail(symbol*);
 
 
 %%
-program : 
-      program program { printf("Reached parsing");}
+program : program program { printf("Reached parsing");}
       | stmt 
       | varDeclInit ';'
       | PRINT stmt ';' {printf("%d\n",$2);}
@@ -90,6 +86,7 @@ program :
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  { 
             symbol* x;
+            
             if(x = lookup($2))
                   $$ = x ;
             else{
@@ -97,8 +94,7 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  {
                   printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
                   $$ = x ;
             }
-            addToTail(x);
-            
+            addSymbol(x);
       }  
      
     
@@ -106,9 +102,11 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  {
 varDeclId : ID { $$ = $1; }
       /* |ID[NUM] {} */
       ;
+
 typeSpec : INT {$$ = 11119; }
       | BOOL {$$ = 11120;}
       ;
+
  stmt : varDeclInit {$$ = $1->value;}
       | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
       | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
@@ -135,8 +133,8 @@ simpleExp : boolExp  {$$ = $1;}
 boolExp : boolExp OR boolExp { $$ = $1 || $3 ;}
       | boolExp AND unaryRelExp { $$ = $1 &&  $3;}
       | unaryRelExp {$$ = $1;}
-    
       ;
+
 unaryRelExp: NOT unaryRelExp { $$ = !($2); }
       | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
       | TRUE {$$ = true;}
@@ -155,6 +153,7 @@ sumExp: sumExp sumOp sumExp { $$ = sum ($1,$2,$3); }
       | mulExp { $$ = $1; }
       | '('sumExp')'             { $$ = $2; }
       ;
+
 sumOp: '+' { $$ = 11117;}
       | '-'  { $$ = 11118;}
       ;
@@ -180,43 +179,8 @@ void yyerror(char *s) {
 }
 
 int main(void) {
-      initialize();
+      initialize(); // initialize symbol table
       yyparse();
       
       return 0;
-}
-
-
-
-
-bool compare(int a, int b, int c){
-      bool res;
-      switch (b){
-            case 11111: res = (a > c);
-            break;
-            case 11112: res = (a >= c);
-            break;
-            case 11113: res = (a < c); 
-            break;
-            case 11114: res = (a <= c);
-            break;
-            case 11115: res = (a == c);
-            break;
-            case 11116: res = (a != c);
-            break;
-             }
-      return res;
-}
-int sum ( int a, int op, int c){
-      switch (op){
-            case 11117 : return (a + c);
-            case 11118 : return (a - c); 
-      }
-}
-
-int multiply ( int a, int op, int c){
-      switch (op){
-            case 11121 : return (a * c);
-            case 11122 : return (a / c); 
-      }
 }

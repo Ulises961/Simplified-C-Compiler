@@ -71,17 +71,22 @@ symbol* lookup(char* name){
     return temp;
 }
 
-void addToTail(symbol* newSymbol){
+void addSymbol(symbol* newSymbol){
+    
+    if (lookup(newSymbol->name) != NULL){
+        printf("Error, variable %s already defined...\n", newSymbol->name);
+        exit(1);
+    }
 
-    if(symbolTable->head == NULL){
+    if (symbolTable->head == NULL){
         symbolTable->head = newSymbol;
         symbolTable->tail = symbolTable->head;
 
-    }else if(symbolTable->head == symbolTable->tail){
+    } else if(symbolTable->head == symbolTable->tail){
         symbolTable->head->next = newSymbol;
         symbolTable->tail = newSymbol;
 
-    }else{
+    } else{
         symbolTable->tail->next = newSymbol;
         symbolTable->tail = newSymbol;
     }
