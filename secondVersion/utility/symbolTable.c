@@ -28,8 +28,8 @@ void assignValue(symbol* variable, int value){
         if(value == 0 || value == 1)
             variable->value = value;
         else{
-            printf("\nError: invalid assignment!\n");
-            return;
+            printf("\nError: invalid assignment of int value to bool variable!\n");
+            exit(1);
         }
             
     }else
@@ -71,18 +71,38 @@ symbol* lookup(char* name){
     return temp;
 }
 
-void addToTail(symbol* newSymbol){
+void addSymbol(symbol* newSymbol){
+    
+    if (lookup(newSymbol->name) != NULL){
+        printf("Error, variable %s already defined...\n", newSymbol->name);
+        exit(1);
+    }
 
-    if(symbolTable->head == NULL){
+    if (symbolTable->head == NULL){
         symbolTable->head = newSymbol;
         symbolTable->tail = symbolTable->head;
 
-    }else if(symbolTable->head == symbolTable->tail){
+    } else if(symbolTable->head == symbolTable->tail){
         symbolTable->head->next = newSymbol;
         symbolTable->tail = newSymbol;
 
-    }else{
+    } else{
         symbolTable->tail->next = newSymbol;
         symbolTable->tail = newSymbol;
     }
+}
+
+// for testing purposes
+void printSymbols(){
+    symbol* temp = symbolTable->head;
+
+    int index = 0;
+
+    while(temp != NULL){
+        printf("**Variable %d** Name: %s Type: %d Value: %d\n", index, temp->name, temp->type, temp->value);
+        index++;
+        temp = temp->next;
+    }
+
+
 }
