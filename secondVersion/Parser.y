@@ -47,6 +47,7 @@ int yylex(void);
 %token SMEQ
 %token PRINT
 %token RETURN
+
 %token <boolean> TRUE
 %token <boolean> FALSE
 
@@ -122,7 +123,7 @@ stmt : varDeclInit {$$ = $1->value;}
 
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
-simpleExp : boolExp  {$$ = $1; printf("Result: %d\n", $1);}
+simpleExp : boolExp  {$$ = $1; printf("Boolean result: %s\n", (($1 == 1) ? "true" : "false"));}
       | unaryExp {$$ = $1; printf("Result: %d\n", $1);}
       | sumExp { $$ = $1; printf("Result: %d\n", $1);}
       | ID {  symbol* out = lookup($1);  
