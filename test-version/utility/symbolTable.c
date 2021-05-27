@@ -98,3 +98,9 @@ void addToTail(char* name, char* type, int value){
             symbolTable->tail = symbolPtr;
     }
 }
+
+void printSymbols(){
+    
+
+
+}
