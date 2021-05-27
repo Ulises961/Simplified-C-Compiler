@@ -82,8 +82,8 @@ int yylex(void);
 %%
 
 program : program program '\n' { printf("Reached parsing\n");}
-      | stmt ';'
-      //| varDeclInit ';'
+      | stmt '\n' {printf("statement...\n");}; 
+      | varDeclInit ';'
      // | PRINT stmt ';' {printf("%d\n",$2);}
      // | RETURN ';' { printf("Exiting\n"); exit(0);}
       //| RETURN simpleExp ';' {return $2;}
@@ -113,19 +113,19 @@ typeSpec : INT {$$ = 11119; }
       | BOOLEAN {$$ = 11120;}
       ;
 
-stmt : varDeclInit {$$ = $1->value;}
+stmt : //varDeclInit ';' {$$ = $1->value;}
       //| IF '(' simpleExp ')' compoundStmt { if($3)$5;}
       //| IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
       //| WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
       //| BREAK ';' {break;}
-      | simpleExp { $$ = $1; }
+       simpleExp ';' { $$ = $1; printf("simple...\n"); }
       ;
 
 //compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1; }
       //| unaryExp {$$ = $1; }
-      | sumExp { $$ = $1; }
+      | sumExp { $$ = $1; printf("sumexp...\n"); }
       ;
 
 boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
@@ -149,7 +149,7 @@ relOp : GR { $$ = 11111 ; }
       ;
 
 sumExp : sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
-      | mulExp { $$ = $1; }
+      | mulExp { $$ = $1; printf("mulexp...\n"); }
       ;
 
 sumOp : '+' { $$ = 11117;}
@@ -157,7 +157,7 @@ sumOp : '+' { $$ = 11117;}
       ;
 
 mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
-      | unaryExp
+      | unaryExp { printf("unary...\n");}
       ;
 
 mulOp : '*' { $$ = 11121; }
@@ -166,7 +166,7 @@ mulOp : '*' { $$ = 11121; }
 
 unaryExp : '-' unaryExp { $$ = -$2; }
       | '(' sumExp ')' { $$ = $2; }
-      | NUM { $$ = $1;}
+      | NUM { $$ = $1; printf("num...\n");}
       | variable
       ;
 

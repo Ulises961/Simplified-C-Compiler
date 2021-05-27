@@ -1,7 +1,8 @@
-program -> typeSpec varDeclInit; | stmt | program program
-varDeclInit -> varDeclId | varDeclId : simpleExp
-varDeclId -> ID | ID[INT]
-typeSpec -> int | bool 
+program -> typeSpec varDeclInit; | stmt | program program OK
+varDeclInit -> varDeclId | varDeclId : simpleExp OK
+varDeclId -> ID | ID[INT] OK (SECOND RULE MISSING)
+typeSpec -> int | bool OK
+
 stmt -> exp; 
         | ; 
         | if (simpleExp) compoundStmt 
@@ -14,7 +15,9 @@ stmt -> exp;
 compoundStmt -> {localDecls stmt}
 localDecls -> localDecls scopedVarDecl | scopedVarDecl
 scopedVarDecl -> typeSpec varDeclInit;
+
 exp -> program | simpleExp
+
 simpleExp -> simpleExp or simpleExp | andExp | true | false 
 
 andExp -> andExp and unaryRelExp | unaryRelExp 
