@@ -81,11 +81,11 @@ void addToTail(symbol*);
 %%
 program : 
       program program { printf("Reached parsing");}
-      |stmt 
-      |varDeclInit ';'
-      |PRINT stmt ';' {printf("%d\n",$2);}
-      |RETURN { printf("Exiting"); exit(0);}
-      |RETURN simpleExp ';' {return $2;}
+      | stmt 
+      | varDeclInit ';'
+      | PRINT stmt ';' {printf("%d\n",$2);}
+      | RETURN { printf("Exiting\n"); exit(0);}
+      | RETURN simpleExp ';' {return $2;}
       ;
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  { 
@@ -109,20 +109,19 @@ varDeclId : ID { $$ = $1; }
 typeSpec : INT {$$ = 11119; }
       | BOOL {$$ = 11120;}
       ;
- stmt : 
-      varDeclInit {$$ = $1->value;}
-      |IF '(' simpleExp ')' compoundStmt { if($3)$5;}
-      |IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
-      |WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
-      |BREAK ';' {break;}
-      |simpleExp ';' { $$ = $1;}
+ stmt : varDeclInit {$$ = $1->value;}
+      | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
+      | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
+      | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
+      | BREAK ';' {break;}
+      | simpleExp ';' { $$ = $1;}
       ;
-compoundStmt : '{'stmt'}'{$$ = $2;}
 
-simpleExp : 
-      boolExp  {$$ = $1;}
-      |unaryExp {$$ = $1;}
-      |sumExp { $$ = $1;}
+compoundStmt : '{' stmt '}' {$$ = $2;}
+
+simpleExp : boolExp  {$$ = $1;}
+      | unaryExp {$$ = $1;}
+      | sumExp { $$ = $1;}
       | ID {  symbol* out = lookup($1);  
             if (out == NULL){
                         printf("Error... Variable %s undefined..\n",$1);
@@ -132,40 +131,44 @@ simpleExp :
                   $$ = out->value;
       }
       ;
-      ;
+
 boolExp : boolExp OR boolExp { $$ = $1 || $3 ;}
       | boolExp AND unaryRelExp { $$ = $1 &&  $3;}
       | unaryRelExp {$$ = $1;}
     
       ;
 unaryRelExp: NOT unaryRelExp { $$ = !($2); }
-      |sumExp relOp sumExp { $$ = compare($1,$2,$3); }
-      |TRUE {$$ = true;}
-      |FALSE {$$ = false;}
+      | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
+      | TRUE {$$ = true;}
+      | FALSE {$$ = false;}
       ;
       
 relOp: GR { $$ = 11111 ;}
-      |GREQ { $$ = 11112 ;}
-      |SM { $$ = 11113 ;}
-      |SMEQ {$$ = 11114 ; }
-      |EQ { $$ = 11115 ;}
-      |NEQ { $$ = 11116 ; }
+      | GREQ { $$ = 11112 ;}
+      | SM { $$ = 11113 ;}
+      | SMEQ {$$ = 11114 ; }
+      | EQ { $$ = 11115 ;}
+      | NEQ { $$ = 11116 ; }
       ;
+
 sumExp: sumExp sumOp sumExp { $$ = sum ($1,$2,$3); }
-      |mulExp { $$ = $1; }
-       | '('sumExp')'             { $$ = $2; }
+      | mulExp { $$ = $1; }
+      | '('sumExp')'             { $$ = $2; }
       ;
 sumOp: '+' { $$ = 11117;}
-      |'-'  { $$ = 11118;}
+      | '-'  { $$ = 11118;}
       ;
+
 mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3);}
       | unaryExp
       ;
+
 mulOp: '*' { $$ = 11121;}
       | '/'  { $$ = 11122;}
       ;
+
 unaryExp: '-' NUM { $$ = -$2;}
-      |NUM { $$ = $1;}
+      | NUM { $$ = $1;}
       ;
 
 

@@ -48,6 +48,8 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "("     {return '(';}
 ")"     {return ')';}
 \n      {return '\n';}
+"print" {return PRINT;}
+"return" {return RETURN;}
 
 "int"  {yylval.lexeme = strdup(yytext);
         return INT;}
