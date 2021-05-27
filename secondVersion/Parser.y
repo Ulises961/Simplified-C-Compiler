@@ -52,7 +52,11 @@ int yylex(void);
 
 %token <lexeme> INT
 %token <lexeme> BOOLEAN
+%type <lexeme> varDeclId
 
+%type <integer> typeSpec
+%type <integer> stmt
+%type <integer> compoundStmt
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
@@ -60,13 +64,11 @@ int yylex(void);
 %type <integer> mulExp
 %type <integer> simpleExp
 %type <integer> sumExp
-%type <lexeme> varDeclId
-%type <symbol> varDeclInit
-%type <integer> stmt
-%type <integer> compoundStmt
+
 %type <boolean> boolExp
-%type <integer> typeSpec
 %type <boolean> unaryRelExp
+
+%type <symbol> varDeclInit
 
 %left '-' '+'
 %left '*' '/'
@@ -78,12 +80,13 @@ int yylex(void);
 
 
 %%
-program : program program { printf("Reached parsing");}
-      | stmt 
+program : program program '\n' { printf("Reached parsing\n");}
+      | stmt ';'
       | varDeclInit ';'
       | PRINT stmt ';' {printf("%d\n",$2);}
       | RETURN { printf("Exiting\n"); exit(0);}
       | RETURN simpleExp ';' {return $2;}
+      |
       ;
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  ';' '\n'  { 
@@ -110,19 +113,19 @@ typeSpec : INT {$$ = 11119; }
       | BOOLEAN {$$ = 11120;}
       ;
 
- stmt : varDeclInit {$$ = $1->value;}
+stmt : varDeclInit {$$ = $1->value;}
       | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
       | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
       | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
       | BREAK ';' {break;}
-      | simpleExp ';' { $$ = $1;}
+      | simpleExp { $$ = $1; }
       ;
 
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1;}
       | unaryExp {$$ = $1;}
-      | sumExp { $$ = $1;}
+      | sumExp { $$ = $1; printf("Result: %d\n", $1);};
       | ID {  symbol* out = lookup($1);  
             if (out == NULL){
                         printf("Error... Variable %s undefined..\n",$1);
@@ -133,8 +136,8 @@ simpleExp : boolExp  {$$ = $1;}
       }
       ;
 
-boolExp : boolExp OR boolExp { $$ = $1 || $3 ;}
-      | boolExp AND unaryRelExp { $$ = $1 &&  $3;}
+boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
+      | boolExp AND unaryRelExp { $$ = $1 &&  $3; }
       | unaryRelExp {$$ = $1;}
       ;
 
@@ -144,11 +147,11 @@ unaryRelExp: NOT unaryRelExp { $$ = !($2); }
       | FALSE {$$ = false;}
       ;
       
-relOp: GR { $$ = 11111 ;}
+relOp: GR { $$ = 11111 ; }
       | GREQ { $$ = 11112 ;}
-      | SM { $$ = 11113 ;}
+      | SM { $$ = 11113 ; }
       | SMEQ {$$ = 11114 ; }
-      | EQ { $$ = 11115 ;}
+      | EQ { $$ = 11115 ; }
       | NEQ { $$ = 11116 ; }
       ;
 
@@ -161,15 +164,15 @@ sumOp: '+' { $$ = 11117;}
       | '-'  { $$ = 11118;}
       ;
 
-mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3);}
+mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
       | unaryExp
       ;
 
-mulOp: '*' { $$ = 11121;}
-      | '/'  { $$ = 11122;}
+mulOp: '*' { $$ = 11121; }
+      | '/'  { $$ = 11122; }
       ;
 
-unaryExp: '-' NUM { $$ = -$2;}
+unaryExp: '-' NUM { $$ = -$2; }
       | NUM { $$ = $1;}
       ;
 
