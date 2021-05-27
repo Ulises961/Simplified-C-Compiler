@@ -122,8 +122,8 @@ stmt : varDeclInit {$$ = $1->value;}
 
 compoundStmt : '{' stmt '}' {$$ = $2;}
 
-simpleExp : boolExp  {$$ = $1;}
-      | unaryExp {$$ = $1;}
+simpleExp : boolExp  {$$ = $1; printf("Result: %d\n", $1);}
+      | unaryExp {$$ = $1; printf("Result: %d\n", $1);}
       | sumExp { $$ = $1; printf("Result: %d\n", $1);}
       | ID {  symbol* out = lookup($1);  
             if (out == NULL){
@@ -142,8 +142,8 @@ boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
 
 unaryRelExp: NOT unaryRelExp { $$ = !($2); }
       | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
-      | TRUE {$$ = true;}
-      | FALSE {$$ = false;}
+      | TRUE {$$ = 1;}
+      | FALSE {$$ = 0;}
       ;
       
 relOp: GR { $$ = 11111 ; }

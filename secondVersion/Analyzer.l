@@ -29,8 +29,8 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 ";"     {return ';';}
 "break" {return BREAK;}
 "and"    {return AND;}
-"or"    {yylval.lexeme = strdup(yytext); return OR;}
-"not"    {yylval.lexeme = strdup(yytext); return NOT;}
+"or"    {return OR;}
+"not"     {return NOT;}
 "if"    {return IF;}
 "else"  {return ELSE;}
 "while" {return WHILE;}

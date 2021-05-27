@@ -838,12 +838,12 @@ YY_RULE_SETUP
 case 13:
 YY_RULE_SETUP
 #line 32 "Analyzer.l"
-{yylval.lexeme = strdup(yytext); return OR;}
+{return OR;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
 #line 33 "Analyzer.l"
-{yylval.lexeme = strdup(yytext); return NOT;}
+{return NOT;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
