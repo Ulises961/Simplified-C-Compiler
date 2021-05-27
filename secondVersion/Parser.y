@@ -56,7 +56,7 @@ int yylex(void);
 
 %type <integer> typeSpec
 %type <integer> stmt
-//%type <integer> compoundStmt
+%type <integer> compoundStmt
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
@@ -113,15 +113,14 @@ typeSpec : INT {$$ = 11119; }
       | BOOLEAN {$$ = 11120;}
       ;
 
-stmt : //varDeclInit ';' {$$ = $1->value;}
-      //| IF '(' simpleExp ')' compoundStmt { if($3)$5;}
-      //| IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
-      //| WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
-      //| BREAK ';' {break;}
-       simpleExp ';' { $$ = $1; printf("simple...\n"); }
+stmt : simpleExp ';' { $$ = $1; printf("simple...\n"); }
+      | IF '(' simpleExp ')' compoundStmt { if($3)$5;}
+      | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3){$5;} else {$7;};}
+      | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
+      | BREAK ';' {break;}
       ;
 
-//compoundStmt : '{' stmt '}' {$$ = $2;}
+compoundStmt : '{' stmt '}' {$$ = $2;}
 
 simpleExp : boolExp  {$$ = $1; }
       //| unaryExp {$$ = $1; }

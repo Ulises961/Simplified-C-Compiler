@@ -3,9 +3,9 @@ varDeclInit -> varDeclId | varDeclId : simpleExp OK
 varDeclId -> ID | ID[INT] OK (SECOND RULE MISSING)
 typeSpec -> int | bool OK
 
-stmt -> exp; 
-        | ; 
-        | if (simpleExp) compoundStmt 
+stmt -> exp; SUBSTITUTED WITH simpleExp
+        | ; ???
+        | if (simpleExp) compoundStmt OK
         | if (simpleExp) compundStmt else compundStmt 
         | while simpleExp do compoundStmt 
         | break;
