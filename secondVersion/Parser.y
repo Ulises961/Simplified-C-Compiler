@@ -65,6 +65,7 @@ int yylex(void);
 %type <integer> mulExp
 %type <integer> simpleExp
 %type <integer> sumExp
+%type <integer> variable
 
 %type <boolean> boolExp
 %type <boolean> unaryRelExp
@@ -126,7 +127,51 @@ compoundStmt : '{' stmt '}' {$$ = $2;}
 simpleExp : boolExp  {$$ = $1; printf("Boolean result: %s\n", (($1 == 1) ? "true" : "false"));}
       | unaryExp {$$ = $1; printf("Unary result: %d\n", $1);}
       | sumExp { $$ = $1; printf("Result: %d\n", $1);}
-      | ID {  symbol* out = lookup($1);  
+      ;
+
+boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
+      | boolExp AND unaryRelExp { $$ = $1 &&  $3; }
+      | unaryRelExp {$$ = $1;}
+      ;
+
+unaryRelExp : NOT unaryRelExp { $$ = !($2); }
+      | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
+      | TRUE {$$ = 1;}
+      | FALSE {$$ = 0;}
+      | '(' unaryRelExp ')'  { $$ = $2; }
+      ;
+      
+relOp : GR { $$ = 11111 ; }
+      | GREQ { $$ = 11112 ;}
+      | SM { $$ = 11113 ; }
+      | SMEQ {$$ = 11114 ; }
+      | EQ { $$ = 11115 ; }
+      | NEQ { $$ = 11116 ; }
+      ;
+
+sumExp : sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
+      | mulExp { $$ = $1; }
+      ;
+
+sumOp : '+' { $$ = 11117;}
+      | '-'  { $$ = 11118;}
+      ;
+
+mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
+      | unaryExp
+      ;
+
+mulOp : '*' { $$ = 11121; }
+      | '/'  { $$ = 11122; }
+      ;
+
+unaryExp : '-' unaryExp { $$ = -$2; }
+      | '(' sumExp ')' { $$ = $2; }
+      | NUM { $$ = $1;}
+      | variable
+      ;
+
+variable :  ID {  symbol* out = lookup($1);  
             if (out == NULL){
                         printf("Error... Variable %s undefined..\n",$1);
                         exit(1);
@@ -135,57 +180,6 @@ simpleExp : boolExp  {$$ = $1; printf("Boolean result: %s\n", (($1 == 1) ? "true
                   $$ = out->value;
       }
       ;
-
-boolExp : boolExp OR boolExp { $$ = $1 || $3 ; }
-      | boolExp AND unaryRelExp { $$ = $1 &&  $3; }
-      | unaryRelExp {$$ = $1;}
-      ;
-
-unaryRelExp: NOT unaryRelExp { $$ = !($2); }
-      | sumExp relOp sumExp { $$ = compare($1,$2,$3); }
-      | TRUE {$$ = 1;}
-      | FALSE {$$ = 0;}
-      | '(' unaryRelExp ')'  { $$ = $2; }
-      ;
-      
-relOp: GR { $$ = 11111 ; }
-      | GREQ { $$ = 11112 ;}
-      | SM { $$ = 11113 ; }
-      | SMEQ {$$ = 11114 ; }
-      | EQ { $$ = 11115 ; }
-      | NEQ { $$ = 11116 ; }
-      ;
-
-sumExp: sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
-      | mulExp { $$ = $1; }
-      ;
-
-sumOp: '+' { $$ = 11117;}
-      | '-'  { $$ = 11118;}
-      ;
-
-mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
-      | unaryExp
-      ;
-
-mulOp: '*' { $$ = 11121; }
-      | '/'  { $$ = 11122; }
-      ;
-
-unaryExp: '-' unaryExp { $$ = -$2; }
-      | '(' sumExp ')' { $$ = $2; }
-      | NUM { $$ = $1;}
-      ;
-
-/*intExpr  : intExpr '+' intExpr      {$$ = $1 + $3;}
-      | intExpr '-' intExpr         {$$ = $1 - $3;}
-      | intExpr '*' intExpr         {$$ = $1 * $3;}
-      | intExpr '/' intExpr         {$$ = $1 / $3;}
-      | NUM                         {$$ = $1;}
-      | '-' intExpr %prec UMINUS    {$$ = -$2;}
-      | '(' intExpr ')'             { $$ = $2; }
-      ;*/
-
 
 %%
 

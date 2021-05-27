@@ -15,7 +15,7 @@ compoundStmt -> {localDecls stmt}
 localDecls -> localDecls scopedVarDecl | scopedVarDecl
 scopedVarDecl -> typeSpec varDeclInit;
 exp -> program | simpleExp
-simpleExp -> simpleExp or simpleExp | andExp | ID |  true | false 
+simpleExp -> simpleExp or simpleExp | andExp | true | false 
 
 andExp -> andExp and unaryRelExp | unaryRelExp 
 
@@ -28,8 +28,9 @@ sumOp -> + | -
 mulExp -> mulExp mulOp unaryExp | unaryExp
 mulOp -> * | / 
 
-unaryExp -> - unaryExp | NUM | (sumExp)
+unaryExp -> - unaryExp | NUM | (sumExp) | variable
 
+variable -> ID
 
 
 bool x : true;
