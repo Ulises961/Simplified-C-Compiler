@@ -72,8 +72,7 @@ int yylex(void);
 
 %%
 
-program: program stmt '\n'
-      | program '\n'
+program: program stmt
       |
       ;
 
@@ -243,4 +242,3 @@ int main(void) {
       
       return 0;
 }
-

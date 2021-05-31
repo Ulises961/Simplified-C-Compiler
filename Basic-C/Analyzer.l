@@ -14,7 +14,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 
 %%
 
-[ \t\r] {/* skip blanks */}
+[ \t\r\n] {/* skip blanks */}
 
 {INT}    {yylval.integer = atoi(yytext);
           return NUM;}
@@ -47,7 +47,6 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "}"     {return '}';}
 "("     {return '(';}
 ")"     {return ')';}
-\n      {return '\n';}
 "print" {return PRINT;}
 "return" {return RETURN;}
 

@@ -4,24 +4,31 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+// This is the struct in which our variables are stored
 typedef struct symbol{
-    char* name;
+    char* name; 
     int type, value;
-    struct symbol* next;
+    struct symbol* next; // a pointer to the next symbol/variable
 } symbol;
 
+
+// This is a head tail list made in which the symbols will be stored
+// we decided to use a head tail list for better performance
 typedef struct symbolHT{
     symbol* head;
     symbol* tail;
 }symbolHT;
 
-symbolHT* symbolTable;
+// we declare our symbolTable as a global variable
+symbolHT* symbolTable; 
 
+
+// This function initializes our symbolTable
 void initialize(){
-  
     symbolTable = (symbolHT*) malloc(sizeof(symbolHT));
 }
 
+// This function assigns a value to a previously declared symbol
 void assignValue(symbol* variable, int value){
 
     if(variable->type == 11120){
@@ -41,6 +48,7 @@ void assignValue(symbol* variable, int value){
     }
 }
 
+// This function assigns a type to a previously declared symbol
 void assignType(symbol* variable, int type){
    
     if(type != 11119 && type != 11120){
@@ -51,6 +59,7 @@ void assignType(symbol* variable, int type){
     variable->type = type;
 }
 
+// This function creates and initializes a new symbol
 symbol* createSymbol(int type, char* name, int value){
     
     symbol* symbolPtr = malloc(sizeof(symbol));
@@ -63,6 +72,7 @@ symbol* createSymbol(int type, char* name, int value){
     return symbolPtr;
 }
 
+//this function performs the lookup in our symbolTable
 symbol* lookup(char* name){
     symbol* temp = symbolTable->head;
     
@@ -76,6 +86,7 @@ symbol* lookup(char* name){
     return temp;
 }
 
+// This function adds a new symbol to the symbolTable
 void addSymbol(symbol* newSymbol){
     
     if (lookup(newSymbol->name) != NULL){
@@ -97,17 +108,20 @@ void addSymbol(symbol* newSymbol){
     }
 }
 
-// for testing purposes
+// This function prints the content of our symbolTable
+// and we used it for debugging purposes
 void printSymbols(){
+    int index = 0;
     symbol* temp = symbolTable->head;
 
-    int index = 0;
-
     while(temp != NULL){
-        printf("\n**Variable %d\n** Name: %s \nType: %d \nValue: %d\n", index, temp->name, temp->type, temp->value);
+
+        printf("\nVariable %d", index);
+        printf("\nName: %s", temp->name);
+        printf("\nType: %d", temp->type);
+        printf("\nValue: %d\n", temp->value);
+
         index++;
         temp = temp->next;
     }
-
-
 }

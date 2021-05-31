@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 38
-#define YY_END_OF_BUFFER 39
+#define YY_NUM_RULES 37
+#define YY_END_OF_BUFFER 38
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,14 +362,14 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[80] =
     {   0,
-        0,    0,   39,   37,    1,   31,   37,   29,   30,    8,
-        6,    7,   10,    2,    5,   11,   20,   37,   21,   36,
-       25,   26,   36,   36,   36,   36,   36,   36,   36,   36,
-       36,   36,   36,   36,   27,   28,   24,    9,    2,   19,
-       23,   22,   36,   36,   36,   18,   36,   36,   15,   36,
-       36,   13,   36,   36,   36,   36,   12,   36,   36,   36,
-       34,   14,   36,   36,   36,   36,   35,   16,   36,   36,
-       36,    3,   36,    4,   32,   36,   17,   33,    0
+        0,    0,   38,   36,    1,    1,   36,   29,   30,    8,
+        6,    7,   10,    2,    5,   11,   20,   36,   21,   35,
+       25,   26,   35,   35,   35,   35,   35,   35,   35,   35,
+       35,   35,   35,   35,   27,   28,   24,    9,    2,   19,
+       23,   22,   35,   35,   35,   18,   35,   35,   15,   35,
+       35,   13,   35,   35,   35,   35,   12,   35,   35,   35,
+       33,   14,   35,   35,   35,   35,   34,   16,   35,   35,
+       35,    3,   35,    4,   31,   35,   17,   32,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -770,6 +770,7 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case 1:
+/* rule 1 can match eol */
 YY_RULE_SETUP
 #line 17 "Analyzer.l"
 {/* skip blanks */}
@@ -921,50 +922,44 @@ YY_RULE_SETUP
 {return ')';}
 	YY_BREAK
 case 31:
-/* rule 31 can match eol */
 YY_RULE_SETUP
 #line 50 "Analyzer.l"
-{return '\n';}
+{return PRINT;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
 #line 51 "Analyzer.l"
-{return PRINT;}
+{return RETURN;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 52 "Analyzer.l"
-{return RETURN;}
+#line 53 "Analyzer.l"
+{return INT;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
 #line 54 "Analyzer.l"
-{return INT;}
+{return BOOLEAN;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 55 "Analyzer.l"
-{return BOOLEAN;}
-	YY_BREAK
-case 36:
-YY_RULE_SETUP
-#line 57 "Analyzer.l"
+#line 56 "Analyzer.l"
 {yylval.lexeme = strdup(yytext);
           return ID;}
 	YY_BREAK
-case 37:
+case 36:
 YY_RULE_SETUP
-#line 61 "Analyzer.l"
+#line 60 "Analyzer.l"
 { yylval.lexeme = strdup(yytext);
     printf("Symbol \"%s\" not recognized\n", yylval.lexeme);
     yyerror("invalid character");} // error for all not recognized characters
 	YY_BREAK
-case 38:
+case 37:
 YY_RULE_SETUP
-#line 65 "Analyzer.l"
+#line 64 "Analyzer.l"
 ECHO;
 	YY_BREAK
-#line 968 "lex.yy.c"
+#line 963 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1969,10 +1964,9 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 65 "Analyzer.l"
+#line 64 "Analyzer.l"
 
 
 int yywrap(void) {
     return 1;
 }
-

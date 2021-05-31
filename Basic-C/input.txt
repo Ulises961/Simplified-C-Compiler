@@ -1,0 +1,35 @@
+int x : 10;
+int y : 20;
+y: y + 1;
+    
+int k : y+x;
+print k;
+    
+int
+ciccio
+:
+100
+;
+print
+ciccio
+;
+
+bool t : true;
+bool f : false;
+print f;
+
+if(t){
+    print f;
+}
+    
+if(x > y) {
+    return true;
+} else { 
+        return y;
+}
+
+while(t)
+do{
+    print f;
+}
+return;

@@ -1,0 +1,32 @@
+program -> program stmt | Ɛ
+
+stmt -> varDeclInit ;
+        | simpleExp ;
+        | if (simpleExp) {stmt}
+        | if (simpleExp) {stmt} else {stmt}
+        | while (simpleExp) do  {stmt}
+        | return ;
+        | return simpleExp ;
+        | print simpleExp ;
+
+varDeclInit -> typeSpec varDeclId : simpleExp | varDeclId : simpleExp
+varDeclId -> ID
+typeSpec -> int | bool
+
+simpleExp -> simpleExp or andExp | andExp
+
+andExp -> andExp and unaryRelExp | unaryRelExp
+
+unaryRelExp -> not unaryRelExp | relExp
+
+relExp -> sumExp relOp sumExp | sumExp
+
+relOp -> <= | < | >| >= | == | !=
+
+sumExp ->  sumExp sumOp mulExp | mulExp
+sumOp -> + | -
+
+mulExp -> mulExp mulOp unaryExp | unaryExp
+mulOp -> * | / | **
+
+unaryExp -> - unaryExp | NUM | FALSE | TRUE | ID | (simpleExp)
