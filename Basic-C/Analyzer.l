@@ -59,7 +59,9 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 
 . { yylval.lexeme = strdup(yytext);
     printf("Symbol \"%s\" not recognized\n", yylval.lexeme);
-    yyerror("invalid character");} // error for all not recognized characters
+    yyerror("invalid character");
+    exit(1);
+    } // error for all not recognized characters
 
 %%
 

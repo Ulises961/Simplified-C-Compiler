@@ -952,14 +952,16 @@ YY_RULE_SETUP
 #line 60 "Analyzer.l"
 { yylval.lexeme = strdup(yytext);
     printf("Symbol \"%s\" not recognized\n", yylval.lexeme);
-    yyerror("invalid character");} // error for all not recognized characters
+    yyerror("invalid character");
+    exit(1);
+    } // error for all not recognized characters
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 64 "Analyzer.l"
+#line 66 "Analyzer.l"
 ECHO;
 	YY_BREAK
-#line 963 "lex.yy.c"
+#line 965 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1964,7 +1966,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 64 "Analyzer.l"
+#line 66 "Analyzer.l"
 
 
 int yywrap(void) {

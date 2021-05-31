@@ -79,8 +79,8 @@ program: program stmt
 stmt : varDeclInit ';'
       | simpleExp ';' { $$ = $1->value; printf("Result: %d\n", $1->value); }
       | IF '(' simpleExp ')' '{'stmt'}' { if($3->value){printf("\nThe condition is true\n");} }
-      | IF '(' simpleExp ')' '{'stmt'}' ELSE '{'stmt'}' {if($3){printf("\nThe condition is true");} else{ printf("\nThis is the else branch executed;\n");}}
-      | WHILE '(' simpleExp ')' DO '{'stmt'}' {printf("\n The while loop should execute here");} 
+      | IF '(' simpleExp ')' '{'stmt'}' ELSE '{'stmt'}' {if($3){printf("\nThe condition is true\n");} else{ printf("\nThis is the else branch executed;\n");}}
+      | WHILE '(' simpleExp ')' DO '{'stmt'}' {printf("\n The while loop should execute here\n");} 
       | RETURN ';' { printf("\nExiting program\n"); exit(0);}
       | RETURN simpleExp ';' {printf("%d\n", $2->value); exit(0);}
       | PRINT simpleExp ';' { printf("%d\n", $2->value); }
