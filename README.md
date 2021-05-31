@@ -1,3 +1,6 @@
+# Formal Languages & Compilers 2020/21
+
+
 # Simplified Basic-C Compiler
 
 The project developed parses and calculates statements written in a C-like fashion. It can initialize variables of type bool and int, compute the 4 basic arithmetic operations plus the power operation, and perform comparison of variables. Lastly, the parser does type-checking on its primitive data-types.
