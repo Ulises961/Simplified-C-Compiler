@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "lex.yy.c"
-#include "utility/symbolTable.c"
 #include "utility/functions.c"
 
 void yyerror(char *);
@@ -26,8 +25,8 @@ int yylex(void);
 
 %token <integer>  NUM //
 %token <lexeme> ID
+%token POW
 
-%token BREAK
 %token AND
 %token OR
 %token NOT
@@ -44,32 +43,28 @@ int yylex(void);
 %token PRINT
 %token RETURN
 
-%token <boolean> TRUE
-%token <boolean> FALSE
+%token <symbol> TRUE
+%token <symbol> FALSE
 
-%token <lexeme> INT
-%token <lexeme> BOOLEAN
+%token INT
+%token BOOLEAN
 %type <lexeme> varDeclId
 
 %type <integer> typeSpec
 %type <integer> stmt
 %type <integer> varDeclInit
-%type <integer> compoundStmt
+
 %type <integer> relOp
 %type <integer> mulOp
 %type <integer> sumOp
-%type <integer> andExp
-%type <integer> unaryExp
-%type <integer> mulExp
-%type <integer> simpleExp
-%type <integer> sumExp
-%type <integer> variable
-%type <integer> relExp
+%type <symbol> andExp
+%type <symbol> unaryExp
+%type <symbol> mulExp
+%type <symbol> simpleExp
+%type <symbol> sumExp
+%type <symbol> relExp
+%type <symbol> unaryRelExp
 
-%type <integer> unaryRelExp
-
-%left '-' '+'
-%left '*' '/'
 %left AND OR
 %left SMEQ SM GR GREQ EQ NEQ
 %right NOT
@@ -83,23 +78,22 @@ program: program stmt '\n'
       ;
 
 stmt : varDeclInit ';'
-      | simpleExp ';' { $$ = $1; printf("Result: %d\n", $1); }
-      | IF '(' simpleExp ')' compoundStmt { if($3==true)$5;}
-      | IF '(' simpleExp ')' compoundStmt ELSE compoundStmt {if($3==true){$5;} else {$7;};}
-      | WHILE '(' simpleExp ')' DO compoundStmt {while($3){$6;}}
-      | BREAK ';' {break;}
-      | RETURN ';' { printf("Exiting program\n"); exit(0);}
-      | RETURN simpleExp ';' {return $2;}
-      | PRINT simpleExp ';' { printf("%d\n", $2); }
+      | simpleExp ';' { $$ = $1->value; printf("Result: %d\n", $1->value); }
+      | IF '(' simpleExp ')' '{'stmt'}' { if($3->value){printf("\nThe condition is true\n");} }
+      | IF '(' simpleExp ')' '{'stmt'}' ELSE '{'stmt'}' {if($3){printf("\nThe condition is true");} else{ printf("\nThis is the else branch executed;\n");}}
+      | WHILE '(' simpleExp ')' DO '{'stmt'}' {printf("\n The while loop should execute here");} 
+      | RETURN ';' { printf("\nExiting program\n"); exit(0);}
+      | RETURN simpleExp ';' {printf("%d\n", $2->value); exit(0);}
+      | PRINT simpleExp ';' { printf("%d\n", $2->value); }
       ;
 
 varDeclInit :   typeSpec varDeclId ':' simpleExp  { 
             symbol* x;
             
             if(x = lookup($2))
-                  $$ = x->value ;
+                  $$ = x -> value ;
             else{
-                  x = createSymbol($1,$2,$4);
+                  x = createSymbol($1,$2,$4->value);
                   //printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
                   $$ = x->value ;
             }
@@ -112,35 +106,62 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
                         printf("Error... Variable %s undefined..\n",$1);
                         exit(1);
             }
-            else
-                  assignValue(out,$3);
+            else{
+                  if(out->type == $3->type)
+                        assignValue(out,$3->value);
+                  else{
+                        printf("\nInvalid type assignment!\n");
+                        exit(1);
+                  }
+            }          
       }
       ;
 
-varDeclId : ID { $$ = $1; }
-      /* |ID[NUM] {} */
+varDeclId : ID { $$ = $1; } 
       ;
 
 typeSpec : INT {$$ = 11119; }
       | BOOLEAN {$$ = 11120;}
       ;
 
-compoundStmt : '{' stmt '}' {$$ = $2;}
+simpleExp : simpleExp OR andExp  {
+                  if ($1->type != 11120 || $3->type != 11120){
+                        printf("\nInvalid boolean operation with integers!\n");
+                        exit(1);     
+                  }
 
-simpleExp : simpleExp OR simpleExp  { $$ = $1 || $3 ; }
-      | andExp
+                  int res = ($1->value || $3->value); 
+                  symbol* x = createSymbol(11120, "temp", res);
+                  $$ = x; 
+            }
+      | andExp 
       ;
 
-andExp : andExp AND unaryRelExp { $$ = $1 && $3 ; }
+andExp : andExp AND unaryRelExp { 
+                  if ($1->type != 11120 || $3->type != 11120){
+                        printf("\nInvalid boolean operation with integers!\n");
+                        exit(1);     
+                  }
+
+                  int res = ($1->value && $3->value); 
+                  symbol* x = createSymbol(11120, "temp", res);
+                  $$ = x; 
+            }
       | unaryRelExp {$$ = $1;}
       ;
 
-unaryRelExp : NOT unaryRelExp { $$ = !($2); }
+unaryRelExp : NOT unaryRelExp { 
+                  int res = !($2->value); 
+                  symbol* x = createSymbol(11120, "temp", res);
+                  $$ = x; 
+                  // $$ = !($2); 
+            }
       | relExp
       ;
 
-relExp : sumExp relOp sumExp { $$ = compare($1,$2,$3); }
+relExp : sumExp relOp sumExp { symbol * x = compare($1, $2, $3); $$ = x; }
       | sumExp
+      ;
 
 relOp : GR { $$ = 11111 ; }
       | GREQ { $$ = 11112 ;}
@@ -150,7 +171,13 @@ relOp : GR { $$ = 11111 ; }
       | NEQ { $$ = 11116 ; }
       ;
 
-sumExp : sumExp sumOp mulExp { $$ = sum($1,$2,$3); }
+sumExp : sumExp sumOp mulExp { 
+            if($1->type == 11120 || $3->type == 11120 ){
+                  printf("\nError: you cannot sum two bool!\n");
+                  exit(1);
+            }else
+                  $$ = sum($1->value, $2, $3->value); 
+      } 
       | mulExp { $$ = $1; }
       ;
 
@@ -158,32 +185,50 @@ sumOp : '+' { $$ = 11117;}
       | '-'  { $$ = 11118;}
       ;
 
-mulExp : mulExp mulOp unaryExp { $$ = multiply($1,$2,$3); }
+mulExp : mulExp mulOp unaryExp { 
+            if ($1->type != 11119 || $3->type != 11119){
+                        printf("\nInvalid integer operation with boolean!\n");
+                        exit(1);     
+                  }
+
+            $$ = multiply($1->value, $2, $3->value); 
+      }
       | unaryExp
       ;
 
 mulOp : '*' { $$ = 11121; }
       | '/'  { $$ = 11122; }
+      | POW { $$ = 11123;}
       ;
 
-unaryExp : '-' unaryExp { $$ = -$2; }
-      | NUM { $$ = $1;}
-      | TRUE {$$ = 1; }
-      | FALSE {$$ = 0;}
-      | variable
+unaryExp : '-' unaryExp {
+                  symbol* x = createSymbol(11119, "temp", ($2->value));
+                  x->value = - x->value;
+                  $$ = x;
+                   
+            }
+      | NUM {     symbol* x = createSymbol(11119, "temp", $1);
+                  $$ = x;
+                   }
+      | TRUE {
+            symbol* x = createSymbol(11120, "temp", 1); 
+            $$ = x; 
+            }
+      | FALSE { symbol* x = createSymbol(11120, "temp", 0); 
+            $$ = x;}   
+      | ID {  
+                  symbol* out = lookup($1);  
+                  if (out == NULL){
+                              printf("Error... Variable %s undefined..\n",$1);
+                              exit(1);
+                  }
+                  else
+                        $$ = out;
+            }
       | '(' simpleExp ')' { $$ = $2; }
       ;
 
-variable :  ID {  
-            symbol* out = lookup($1);  
-            if (out == NULL){
-                        printf("Error... Variable %s undefined..\n",$1);
-                        exit(1);
-            }
-            else
-                  $$ = out->value;
-      }
-      ;
+
 
 %%
 
@@ -198,3 +243,4 @@ int main(void) {
       
       return 0;
 }
+

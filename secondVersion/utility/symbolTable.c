@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-
 typedef struct symbol{
     char* name;
     int type, value;
@@ -24,7 +23,9 @@ void initialize(){
 }
 
 void assignValue(symbol* variable, int value){
+
     if(variable->type == 11120){
+      
         if(value == 0 || value == 1)
             variable->value = value;
         else{
@@ -32,8 +33,12 @@ void assignValue(symbol* variable, int value){
             exit(1);
         }
             
-    }else
-        variable->value = value;
+    }else if(variable->type == 11119){
+        variable->value = value; 
+    }else{
+        printf("\nError: invalid assignment of bool value to int variable!\n");
+        exit(1);
+    }
 }
 
 void assignType(symbol* variable, int type){
@@ -99,7 +104,7 @@ void printSymbols(){
     int index = 0;
 
     while(temp != NULL){
-        printf("**Variable %d** Name: %s Type: %d Value: %d\n", index, temp->name, temp->type, temp->value);
+        printf("\n**Variable %d\n** Name: %s \nType: %d \nValue: %d\n", index, temp->name, temp->type, temp->value);
         index++;
         temp = temp->next;
     }

@@ -25,9 +25,9 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "+"     {return '+';}
 "-"     {return '-';}
 "*"     {return '*';}
+"**"     {return POW;}
 "/"     {return '/';}
 ";"     {return ';';}
-"break" {return BREAK;}
 "and"    {return AND;}
 "or"    {return OR;}
 "not"     {return NOT;}
@@ -51,17 +51,15 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 "print" {return PRINT;}
 "return" {return RETURN;}
 
-"int"  {yylval.lexeme = strdup(yytext);
-        return INT;}
-"bool"  {yylval.lexeme = strdup(yytext);
-            return BOOLEAN;}
+"int"   {return INT;}
+"bool"  {return BOOLEAN;}
             
 {ID}     {yylval.lexeme = strdup(yytext);
           return ID;}
 
 
 . { yylval.lexeme = strdup(yytext);
-    printf("Symbol '%s' not recognized\n", yylval.lexeme);
+    printf("Symbol \"%s\" not recognized\n", yylval.lexeme);
     yyerror("invalid character");} // error for all not recognized characters
 
 %%
