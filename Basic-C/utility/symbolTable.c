@@ -110,7 +110,7 @@ void addSymbol(symbol* newSymbol){
 
 // This function prints the content of our symbolTable
 // and we used it for debugging purposes
-void printSymbols(){
+void printSymbolTable(){
     int index = 0;
     symbol* temp = symbolTable->head;
 

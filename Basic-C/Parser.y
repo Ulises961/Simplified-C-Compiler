@@ -23,10 +23,10 @@ int yylex(void);
 }
 
 
-%token <integer>  NUM //
+%token <integer>  NUM
 %token <lexeme> ID
-%token POW
 
+%token POW
 %token AND
 %token OR
 %token NOT
@@ -78,11 +78,11 @@ program: program stmt
 
 stmt : varDeclInit ';'
       | simpleExp ';' { $$ = $1->value; printf("Result: %d\n", $1->value); }
-      | IF '(' simpleExp ')' '{'stmt'}' { if($3->value){printf("\nThe condition is true\n");} }
-      | IF '(' simpleExp ')' '{'stmt'}' ELSE '{'stmt'}' {if($3){printf("\nThe condition is true\n");} else{ printf("\nThis is the else branch executed;\n");}}
-      | WHILE '(' simpleExp ')' DO '{'stmt'}' {printf("\n The while loop should execute here\n");} 
-      | RETURN ';' { printf("\nExiting program\n"); exit(0);}
-      | RETURN simpleExp ';' {printf("%d\n", $2->value); exit(0);}
+      | IF '(' simpleExp ')' '{'stmt'}' { if($3->value){printf("The condition is true\n");} }
+      | IF '(' simpleExp ')' '{'stmt'}' ELSE '{'stmt'}' {if($3->value){printf("The condition is true\n");} else{ printf("This is the else branch executed;\n");}}
+      | WHILE '(' simpleExp ')' DO '{'stmt'}' { printf("The while loop should execute here\n");} 
+      | RETURN ';' { printf("Exiting program\n"); exit(0);}
+      | RETURN simpleExp ';' { printf("%d\n", $2->value); return $2->value;}
       | PRINT simpleExp ';' { printf("%d\n", $2->value); }
       ;
 
@@ -97,7 +97,7 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
                   $$ = x->value ;
             }
             addSymbol(x);
-            //printSymbols();
+            //printSymbolTable();
       }
       | varDeclId ':' simpleExp {
             symbol* out = lookup($1);  
@@ -133,7 +133,7 @@ simpleExp : simpleExp OR andExp  {
                   symbol* x = createSymbol(11120, "temp", res);
                   $$ = x; 
             }
-      | andExp 
+      | andExp { $$ = $1; }
       ;
 
 andExp : andExp AND unaryRelExp { 
@@ -155,11 +155,11 @@ unaryRelExp : NOT unaryRelExp {
                   $$ = x; 
                   // $$ = !($2); 
             }
-      | relExp
+      | relExp { $$ = $1; }
       ;
 
 relExp : sumExp relOp sumExp { symbol * x = compare($1, $2, $3); $$ = x; }
-      | sumExp
+      | sumExp { $$ = $1; }
       ;
 
 relOp : GR { $$ = 11111 ; }
@@ -192,7 +192,7 @@ mulExp : mulExp mulOp unaryExp {
 
             $$ = multiply($1->value, $2, $3->value); 
       }
-      | unaryExp
+      | unaryExp { $$ = $1; }
       ;
 
 mulOp : '*' { $$ = 11121; }

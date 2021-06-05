@@ -7,6 +7,10 @@
 
 int power(int, int);
 
+
+// Evaluates the type of operation based on a specific integer code and outputs the result
+// of that operation, in this case the type of operation is comparing the
+// values given as input, codes for the operations are defined in the Parser.y file
 symbol* compare(symbol* a, int b, symbol* c){
       bool res;
       switch (b){
@@ -35,6 +39,8 @@ symbol* compare(symbol* a, int b, symbol* c){
       return result;
 }
 
+
+// Same as compare but with sum or subtraction operations
 symbol* sum ( int a, int op, int c){
       int res = 0;
       switch (op){
@@ -51,6 +57,8 @@ symbol* sum ( int a, int op, int c){
       return result;
 }
 
+
+// Same as compare but with multiplication, division and power operations
 symbol* multiply ( int a, int op, int c){
       int res;
       switch (op){
@@ -75,3 +83,5 @@ int power(int num, int pow){
       
       return power(num * num, pow - 1);
 }
+
+
