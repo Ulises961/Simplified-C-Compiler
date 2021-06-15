@@ -18,8 +18,7 @@ int yylex(void);
 %union {
        char* lexeme;			//identifier
        int integer;			//value of an identifier of type int
-       bool boolean;
-      struct symbol* symbol;       
+       struct symbol* symbol;       
 }
 
 
