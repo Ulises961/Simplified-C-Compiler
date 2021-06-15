@@ -92,11 +92,11 @@ varDeclInit :   typeSpec varDeclId ':' simpleExp  {
                   $$ = x -> value ;
             else{
                   x = createSymbol($1,$2,$4->value);
-                  //printf( "\n Name of node is: %s\n Value of node is: %d \n Type of node is: %d\n", x-> name, x->value, x->type);
+            
                   $$ = x->value ;
             }
             addSymbol(x);
-            //printSymbolTable();
+
       }
       | varDeclId ':' simpleExp {
             symbol* out = lookup($1);  
