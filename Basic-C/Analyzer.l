@@ -52,7 +52,7 @@ ID          {LETTER}({LETTER}|{DIGIT})*
 
 "int"   {return INT;}
 "bool"  {return BOOLEAN;}
-            
+
 {ID}     {yylval.lexeme = strdup(yytext);
           return ID;}
 
